@@ -177,7 +177,7 @@ export const OSM = [
 @Injectable({ providedIn: 'root' })
 export class AppInfo extends Info {
   private DEV_SERVER = {
-    host: 'localhost', //'192.168.86.32', // host name || ip address
+    host: '192.168.3.1', //'192.168.86.32', // host name || ip address
     port: 3000, // port number
     ssl: false
   };

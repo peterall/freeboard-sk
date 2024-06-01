@@ -118,6 +118,18 @@ id: string - resource id
             CLEAR
           </button>
         </div>
+        } @if(ctrl.showAutorouteButton) {
+        <div class="popover-action-button">
+        <button
+            mat-button
+            (click)="emitAutoroute()"
+            [matTooltip]="'Autoroute to Waypoint'"
+            matTooltipPosition="after"
+          >
+            <mat-icon>near_me</mat-icon>
+            ROUTE
+          </button>
+        </div>
         } @if(ctrl.showRelatedButton) {
         <div class="popover-action-button">
           <button
@@ -186,6 +198,7 @@ export class ResourcePopoverComponent {
   @Output() modify: EventEmitter<void> = new EventEmitter();
   @Output() delete: EventEmitter<void> = new EventEmitter();
   @Output() addNote: EventEmitter<void> = new EventEmitter();
+  @Output() autoroute: EventEmitter<void> = new EventEmitter();
   @Output() activated: EventEmitter<void> = new EventEmitter();
   @Output() deactivated: EventEmitter<void> = new EventEmitter();
   @Output() related: EventEmitter<string> = new EventEmitter();
@@ -204,6 +217,7 @@ export class ResourcePopoverComponent {
     showRelatedButton: false,
     showPointsButton: false,
     showNotesButton: false,
+    showAutorouteButton: false,
     canActivate: false,
     isActive: false,
     activeText: 'ACTIVE'
@@ -250,6 +264,7 @@ export class ResourcePopoverComponent {
     this.ctrl.showAddNoteButton = false;
     this.ctrl.showPointsButton = false;
     this.ctrl.showRelatedButton = false;
+    this.ctrl.showAutorouteButton = false;
     this.properties = [];
     if (this.resource[1].name) {
       this.properties.push(['Name', this.resource[1].name]);
@@ -279,6 +294,7 @@ export class ResourcePopoverComponent {
     this.ctrl.showAddNoteButton = false;
     this.ctrl.showPointsButton = false;
     this.ctrl.showRelatedButton = false;
+    this.ctrl.showAutorouteButton = true;
     this.properties = [];
     if (this.resource[1].name) {
       this.properties.push(['Name', this.resource[1].name]);
@@ -308,6 +324,7 @@ export class ResourcePopoverComponent {
       this.ctrl.showAddNoteButton = false;
       this.ctrl.showRelatedButton = false;
       this.ctrl.showDeleteButton = false;
+      this.ctrl.showAutorouteButton = false;
     } else {
       this.ctrl.isActive =
         this.active && this.active === this.resource[0] ? true : false;
@@ -319,6 +336,7 @@ export class ResourcePopoverComponent {
       this.ctrl.showNotesButton = true;
       this.ctrl.showAddNoteButton = false;
       this.ctrl.showRelatedButton = false;
+      this.ctrl.showAutorouteButton = false;
       this.ctrl.showDeleteButton = this.ctrl.isActive ? false : true;
     }
     this.properties = [];
@@ -346,6 +364,7 @@ export class ResourcePopoverComponent {
     this.ctrl.showAddNoteButton = false;
     this.ctrl.showNotesButton = false;
     this.ctrl.showPointsButton = false;
+    this.ctrl.showAutorouteButton = false;
     this.ctrl.showRelatedButton =
       this.resource[1].group && this.app.config.resources.notes.groupNameEdit
         ? true
@@ -366,6 +385,7 @@ export class ResourcePopoverComponent {
     this.ctrl.showNotesButton = true;
     this.ctrl.showPointsButton = false;
     this.ctrl.showRelatedButton = false;
+    this.ctrl.showAutorouteButton = false;
     this.properties = [];
     this.properties.push(['Name', this.resource[1].name]);
     this.properties.push(['Description', this.resource[1].description]);
@@ -391,6 +411,10 @@ export class ResourcePopoverComponent {
     } else {
       this.deactivated.emit();
     }
+  }
+
+  emitAutoroute() {
+    this.autoroute.emit();
   }
 
   emitPoints() {

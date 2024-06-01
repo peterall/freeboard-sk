@@ -581,6 +581,13 @@ export class FBMapComponent implements OnInit, OnDestroy {
       case 'measure':
         this.measureStart.emit(true);
         break;
+      case 'autoroute':
+        this.app.showMessage("Autorouting...");
+        this.skres.autoroute({
+          latitude: e[1],
+          longitude: e[0]
+        });
+        break;
       default:
         this.menuItemSelected.emit(action);
         break;
@@ -1422,6 +1429,13 @@ export class FBMapComponent implements OnInit, OnDestroy {
       this.skres.navigateToWaypoint({ id: this.overlay.id });
     } else {
       this.activate.emit(this.overlay.id);
+    }
+  }
+
+  public autoroute() {
+    if (this.overlay.type === 'waypoint') {
+      this.app.showMessage("Autorouting...");
+      this.skres.autoroute(this.overlay.id);
     }
   }
 

@@ -362,6 +362,7 @@
       (notes)="
         skres.showRelatedNotes(overlay.id, overlay.type); popoverClosed()
       "
+      (autoroute)="autoroute(); popoverClosed()"
       (info)="skres.resourceProperties(overlay); popoverClosed()"
       (points)="itemInfo(overlay.id, overlay.type); popoverClosed()"
       (closed)="popoverClosed()"
@@ -539,6 +540,14 @@
       <mat-icon color="primary">near_me</mat-icon>
       Navigate to here
     </button>
+    <button
+    mat-menu-item
+    (contextmenu)="$event.preventDefault()"
+    (click)="onContextMenuAction('autoroute', item)"
+  >
+    <mat-icon>near_me</mat-icon>
+    Autoroute to here
+  </button>
     <mat-divider></mat-divider>
     <button
       mat-menu-item

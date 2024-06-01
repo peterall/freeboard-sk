@@ -382,6 +382,62 @@ export class SKResources {
       );
   }
 
+
+  autoroute(waypoint_id: string, activeId?: string);
+  autoroute(pt: SKPosition, activeId?: string);
+  autoroute(value, activeId?: string) {
+    const context = activeId ? activeId : 'self';
+    let v;
+    if (typeof value === 'string') {
+      //href
+      v = { id: value };
+    } else {
+      // position
+      v = { position: value };
+    }
+
+    this.signalk.api
+    .putWithContext(
+      this.app.skApiVersion,
+      context,
+      'navigation/autoroute',
+      v
+    )
+    .subscribe(
+      () => {
+        this.app.debug('res.autoroute()');
+        this.getRoutes();
+      },
+      (err: HttpErrorResponse) => {
+        if (err.status && err.status === 401) {
+          this.showAuth().subscribe((res) => {
+            if (res.cancel) {
+              this.authResult();
+            } else {
+              // ** authenticate
+              this.signalk.login(res.user, res.pwd).subscribe(
+                (r) => {
+                  // ** authenticated
+                  this.authResult(r['token']);
+                  this.autoroute(value, activeId);
+                },
+                () => {
+                  // ** auth failed
+                  this.authResult();
+                  this.showAuth();
+                }
+              );
+            }
+          });
+        } else {
+          this.app.showAlert(
+            'ERROR:',
+            `Server could not activate route!\n${err.error.message}`
+          );
+        }
+      }
+    );
+  }
   // ** course.destination **
   setDestination(href: string, activeId?: string);
   setDestination(pt: SKPosition, activeId?: string);
