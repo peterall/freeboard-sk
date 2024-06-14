@@ -9,6 +9,7 @@ import {
   MouseWheelZoom,
   PinchZoom
 } from 'ol/interaction';
+import LongTouch from 'ol-ext/interaction/LongTouch';
 import { MapComponent } from './map.component';
 
 @Directive({
@@ -24,7 +25,8 @@ export class InteractionsDirective implements OnInit {
     keyboardpan: KeyboardPan,
     keyboardzoom: KeyboardZoom,
     mousewheelzoom: MouseWheelZoom,
-    pinchzoom: PinchZoom
+    pinchzoom: PinchZoom,
+    longtouch: LongTouch
   };
 
   constructor(
@@ -37,6 +39,8 @@ export class InteractionsDirective implements OnInit {
   @Input()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   set olInteractions(value: any[]) {
+    console.log('olInteractions', value);
+    console.trace();
     this.interactions = value;
     this.setInteractions();
   }

@@ -54,6 +54,8 @@ export class MapComponent implements OnInit, OnDestroy {
     new EventEmitter<MapBrowserEvent<UIEvent>>();
   @Output() mapDblClick: EventEmitter<MapBrowserEvent<UIEvent>> =
     new EventEmitter<MapBrowserEvent<UIEvent>>();
+    @Output() mapLongTouch: EventEmitter<MapBrowserEvent<UIEvent>> =
+    new EventEmitter<MapBrowserEvent<UIEvent>>();
   @Output() mapMoveStart: EventEmitter<MapEvent> = new EventEmitter<MapEvent>();
   @Output() mapMoveEnd: EventEmitter<MapEvent> = new EventEmitter<MapEvent>();
   @Output() mapPointerDrag: EventEmitter<MapBrowserEvent<UIEvent>> =
@@ -109,6 +111,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map.un('postcompose', this.emitPostComposeEvent);
     this.map.un('postrender', this.emitPostRenderEvent);
     this.map.un('precompose', this.emitPreComposeEvent);
+    this.map.un('longtouch' as any, this.emitLongTouchEvent);
 
     window.removeEventListener('resize', this.updateSizeThrottle);
     window.removeEventListener('orientationchange', this.updateSizeThrottle);
@@ -137,6 +140,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map.on('postcompose', this.emitPostComposeEvent);
     this.map.on('postrender', this.emitPostRenderEvent);
     this.map.on('precompose', this.emitPreComposeEvent);
+    this.map.on('longtouch' as any, this.emitLongTouchEvent);
 
     // react on window events
     window.addEventListener('resize', this.updateSizeThrottle, false);
@@ -199,6 +203,10 @@ export class MapComponent implements OnInit, OnDestroy {
   };
   private emitDblClickEvent = (event: MapBrowserEvent<UIEvent>) => {
     this.mapDblClick.emit(this.augmentClickEvent(event));
+  };
+
+  private emitLongTouchEvent = (event: MapBrowserEvent<UIEvent>) => {
+    this.mapLongTouch.emit(this.augmentClickEvent(event));
   };
 
   // ** add {lonlat, features}fields to event

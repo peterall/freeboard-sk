@@ -9,7 +9,7 @@
   ],
   "signalk": {
     "appIcon": "./assets/icons/icon-72x72.png",
-    "displayName": "Freeboard-SK"
+    "displayName": "Freeboard-SK Autoroute Edition"
   },
   "repository": "https://github.com/SignalK/freeboard-sk",
   "main": "plugin/index.js",
@@ -63,6 +63,7 @@
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^20.4.5",
+    "@types/ol-ext": "npm:@siedlerchr/types-ol-ext@^3.4.0",
     "@types/topojson-specification": "^1.0.2",
     "@types/xml2js": "^0.4.14",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
@@ -80,6 +81,7 @@
     "ng-packagr": "^17.3.0",
     "ngeohash": "^0.6.3",
     "ol": "9.1.0",
+    "ol-ext": "^4.0.0",
     "ol-mapbox-style": "^12.2.1",
     "pmtiles": "^2.7.0",
     "prettier": "^2.5.1",

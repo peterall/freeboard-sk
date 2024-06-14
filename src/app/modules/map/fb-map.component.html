@@ -5,10 +5,11 @@
   [olControls]="fbMap.controls"
   [setFocus]="fbMap.focus"
   (mapSingleClick)="onMapMouseClick($event)"
+  (mapLongTouch)="onMapRightClickOrLongTouch($event)"
   (mapMoveEnd)="onMapMove($event)"
   (mapPointerMove)="onMapPointerMove($event)"
   (mapPointerDrag)="onMapPointerDrag()"
-  (contextmenu)="onMapRightClick($event)"
+  (contextmenu)="onMapRightClickOrLongTouch($event)"
   olView
   [zoom]="fbMap.zoomLevel"
   [center]="fbMap.center"

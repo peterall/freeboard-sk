@@ -167,8 +167,8 @@ export class SKStreamFacade {
           { path: 'mmsi', period: 1000, policy: 'fixed' },
           { path: 'port', period: 1000, policy: 'fixed' },
           { path: 'flag', period: 1000, policy: 'fixed' },
-          { path: 'navigation.*', period: 1000, policy: 'fixed' },
-          { path: 'environment.wind.*', period: 1000, policy: 'fixed' },
+          { path: 'navigation.*', period: 200, policy: 'fixed' },
+          { path: 'environment.wind.*', period: 200, policy: 'fixed' },
           { path: 'environment.mode', period: 1000, policy: 'fixed' },
           { path: 'resources.*', period: 1000, policy: 'fixed' },
           { path: 'steering.autopilot.*', period: 1000, policy: 'fixed' }

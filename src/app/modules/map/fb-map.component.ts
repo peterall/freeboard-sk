@@ -594,14 +594,19 @@ export class FBMapComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ** handle mouse right click - show context menu **
-  public onMapRightClick(e) {
+  // ** handle mouse right click or long touch- show context menu **
+  public onMapRightClickOrLongTouch(e) {
     if (this.app.data.map.suppressContextMenu) {
       return;
     }
-    e.preventDefault();
-    this.contextMenuPosition.x = e.clientX + 'px';
-    this.contextMenuPosition.y = e.clientY + 'px';
+    if(e.preventDefault) {
+      e.preventDefault();
+      this.contextMenuPosition.x = e.clientX + 'px';
+      this.contextMenuPosition.y = e.clientY + 'px';
+    } else {
+      this.contextMenuPosition.x = e.originalEvent.clientX + 'px';
+      this.contextMenuPosition.y = e.originalEvent.clientY + 'px';
+    }
     this.contextMenu.menuData = { item: this.mouse.coords };
     if (this.measureMode && this.measure.coords.length !== 0) {
       this.onMeasureClick(this.mouse.xy.lonlat);
