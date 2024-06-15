@@ -594,19 +594,14 @@ export class FBMapComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ** handle mouse right click or long touch- show context menu **
-  public onMapRightClickOrLongTouch(e) {
+  // ** handle mouse right click - show context menu **
+  public onMapRightClick(e) {
     if (this.app.data.map.suppressContextMenu) {
       return;
     }
-    if(e.preventDefault) {
-      e.preventDefault();
-      this.contextMenuPosition.x = e.clientX + 'px';
-      this.contextMenuPosition.y = e.clientY + 'px';
-    } else {
-      this.contextMenuPosition.x = e.originalEvent.clientX + 'px';
-      this.contextMenuPosition.y = e.originalEvent.clientY + 'px';
-    }
+    e.preventDefault();
+    this.contextMenuPosition.x = e.clientX + 'px';
+    this.contextMenuPosition.y = e.clientY + 'px';
     this.contextMenu.menuData = { item: this.mouse.coords };
     if (this.measureMode && this.measure.coords.length !== 0) {
       this.onMeasureClick(this.mouse.xy.lonlat);
@@ -614,6 +609,27 @@ export class FBMapComponent implements OnInit, OnDestroy {
       if (!this.mouse.xy) {
         return;
       }
+      this.contextMenu.openMenu();
+      document
+        .getElementsByClassName('cdk-overlay-backdrop')[0]
+        .addEventListener('contextmenu', (offEvent) => {
+          offEvent.preventDefault(); // prevent default context menu for overlay
+          this.contextMenu.closeMenu();
+        });
+    }
+  }
+
+  // ** handle long touch- show context menu **
+  public onMapLongTouch(e) {
+    if (this.app.data.map.suppressContextMenu) {
+      return;
+    }
+    this.contextMenuPosition.x = e.originalEvent.clientX + 'px';
+    this.contextMenuPosition.y = e.originalEvent.clientY + 'px';
+    this.contextMenu.menuData = { item: e.lonlat };
+    if (this.measureMode && this.measure.coords.length !== 0) {
+      this.onMeasureClick(e.lonlat);
+    } else if (!this.modifyMode) {
       this.contextMenu.openMenu();
       document
         .getElementsByClassName('cdk-overlay-backdrop')[0]
