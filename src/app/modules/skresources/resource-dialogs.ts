@@ -22,6 +22,7 @@ import {
   SKRoute
 } from './resource-classes';
 import { SKResourceSet } from './sets/resource-set';
+import { GeoUtils } from 'src/app/lib/geoutils';
 
 /********* ResourceDialog **********
 	data: {
@@ -793,33 +794,55 @@ export class AircraftPropertiesModal {
                 </div>
                 <div style="flex: 1 1 auto;">
                   <div style="display:flex;">
-                    <div class="key-label">Lat:</div>
-                    <div
-                      style="flex: 1 1 auto;"
-                      [innerText]="
-                        pt[1]
-                          | coords : app.config.selections.positionFormat : true
-                      "
-                    ></div>
-                  </div>
-                  <div style="display:flex;">
-                    <div class="key-label">Lon:</div>
-                    <div
-                      style="flex: 1 1 auto;"
-                      [innerText]="
-                        pt[0] | coords : app.config.selections.positionFormat
-                      "
-                    ></div>
-                  </div>
-                  @if(i < pointNames.length) {
-                  <div style="display:flex;">
                     <div class="key-label">Name:</div>
                     <div
                       style="flex: 1 1 auto;"
-                      [innerText]="pointNames[i]"
+                      [innerText]="pointMeta[i].name"
+                    ></div>
+                  </div>
+
+                  @if(pointMeta[i].description) {
+                  <div style="display:flex;">
+                    <div class="key-label">Desc:</div>
+                    <div
+                      style="flex: 1 1 auto;"
+                      [innerText]="pointMeta[i].description"
                     ></div>
                   </div>
                   }
+
+                  <div style="display:flex;">
+                    <div class="key-label">
+                      <mat-icon [color]="i === 0 ? 'primary' : ''"
+                        >square_foot</mat-icon
+                      >
+                    </div>
+                    <div style="flex: 1 1 auto;">
+                      <span [innerText]="legs[i].bearing"></span>
+                      &nbsp;
+                      <span [innerText]="legs[i].distance"></span>
+                    </div>
+                  </div>
+                  <!--
+                  <div style="display:flex;">
+                    <div class="key-label"></div>
+                    <div
+                      style="flex: 1 1 auto;">
+                      <span
+                        [innerText]="
+                          pt[1]
+                            | coords : app.config.selections.positionFormat : true
+                        "
+                      ></span>
+                      &nbsp;
+                      <span
+                        [innerText]="
+                          pt[0] | coords : app.config.selections.positionFormat
+                        "
+                      ></span>
+                    </div>
+                  </div>
+                  -->
                 </div>
                 <div cdkDragHandle matTooltip="Drag to re-order points">
                   @if(data.type === 'route') {
@@ -863,11 +886,12 @@ export class AircraftPropertiesModal {
   ]
 })
 export class ActiveResourcePropertiesModal implements OnInit {
-  public points: Array<Position> = [];
-  public pointNames: Array<string> = [];
-  public selIndex = -1;
-  public clearButtonText = 'Clear';
-  public showClearButton = false;
+  protected points: Array<Position> = [];
+  protected pointMeta: Array<{ name: string; description: string }> = [];
+  protected legs: { bearing: string; distance: string }[] = [];
+  protected selIndex = -1;
+  protected clearButtonText = 'Clear';
+  protected showClearButton = false;
 
   constructor(
     public app: AppInfo,
@@ -891,6 +915,7 @@ export class ActiveResourcePropertiesModal implements OnInit {
         this.points = [].concat(
           this.data.resource[1].feature.geometry.coordinates
         );
+        this.legs = this.getLegs();
 
         this.data.title = this.data.resource[1].name
           ? `${this.data.resource[1].name} Points`
@@ -900,50 +925,59 @@ export class ActiveResourcePropertiesModal implements OnInit {
           this.selIndex = this.app.data.navData.pointIndex;
           this.showClearButton = true;
         }
-        if (
-          this.data.resource[1].feature.properties.coordinatesMeta &&
-          Array.isArray(
-            this.data.resource[1].feature.properties.coordinatesMeta
-          )
-        ) {
-          this.pointNames = this.getPointNames(
-            this.data.resource[1].feature.properties.coordinatesMeta
-          );
-        }
+        this.pointMeta = this.getPointMeta();
       }
-      /*else {
-          if(this.app.data.activeRoute) {
-              const rte= this.app.data.routes.filter(i=> { 
-                  return (i[0]===this.app.data.activeRoute) ? true : false;
-              })[0];
-              if(rte.length!=0) {
-                  this.points= rte[1].feature.geometry.coordinates;
-                  this.data.title= (rte[1].name) ? `${rte[1].name} Points` : 'Active Route Points';
-                  this.selIndex= this.app.data.navData.pointIndex;
-              }
-          }
-          else { 
-              this.data.title= (this.data.title) ? this.data.title : 'Destination';
-              this.points= [this.data.resource[1].feature.geometry.coordinates];
-              this.clearButtonText= 'Clear Destination';
-          }
-      }*/
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getPointNames(pointsMeta: any[]): string[] {
-    return pointsMeta.map((pt) => {
-      if (pt.href) {
-        const id = pt.href.split('/').slice(-1);
-        const wpt = this.app.data.waypoints.filter((i) => {
-          return i[0] === id[0] ? true : false;
-        });
-        return wpt.length !== 0 ? `* ${wpt[0][1].name}` : '!wpt reference!';
-      } else {
-        return pt.name ?? '';
-      }
+  getLegs() {
+    const pos = this.app.data.vessels.self.position;
+    return GeoUtils.routeLegs(this.points, pos).map((l) => {
+      return {
+        bearing: this.app.formatValueForDisplay(l.bearing, 'deg'),
+        distance: this.app.formatValueForDisplay(l.distance, 'm')
+      };
     });
+  }
+
+  getPointMeta() {
+    if (
+      this.data.resource[1].feature.properties.coordinatesMeta &&
+      Array.isArray(this.data.resource[1].feature.properties.coordinatesMeta)
+    ) {
+      const pointsMeta =
+        this.data.resource[1].feature.properties.coordinatesMeta;
+      let idx = 0;
+      return pointsMeta.map((pt) => {
+        idx++;
+        if (pt.href) {
+          const id = pt.href.split('/').slice(-1);
+          const wpt = this.data.skres.fromCache('waypoints', id[0]);
+          return wpt
+            ? {
+                name: `* ${wpt[1].name}`,
+                description: `* ${wpt[1].description}`
+              }
+            : {
+                name: '!wpt reference!',
+                description: ''
+              };
+        } else {
+          return {
+            name: pt.name ?? `RtePt-${('000' + String(idx)).slice(-3)}`,
+            description: pt.description ?? ``
+          };
+        }
+      });
+    } else {
+      let idx = 0;
+      return this.points.map(() => {
+        return {
+          name: `RtePt-${('000' + String(++idx)).slice(-3)}`,
+          description: ''
+        };
+      });
+    }
   }
 
   selectPoint(idx: number) {
@@ -960,19 +994,16 @@ export class ActiveResourcePropertiesModal implements OnInit {
     if (this.data.type === 'route') {
       const selPosition = this.points[this.selIndex];
       moveItemInArray(this.points, e.previousIndex, e.currentIndex);
-      if (
-        this.data.type === 'route' &&
-        this.data.resource[1].feature.properties.coordinatesMeta
-      ) {
+      this.legs = this.getLegs();
+      if (this.data.resource[1].feature.properties.coordinatesMeta) {
         moveItemInArray(
           this.data.resource[1].feature.properties.coordinatesMeta,
           e.previousIndex,
           e.currentIndex
         );
-        this.pointNames = this.getPointNames(
-          this.data.resource[1].feature.properties.coordinatesMeta
-        );
       }
+      this.pointMeta = this.getPointMeta();
+
       this.updateFlag(selPosition);
       this.data.skres.updateRouteCoords(
         this.data.resource[0],
@@ -1364,6 +1395,7 @@ export class TracksModal implements OnInit {
 }
 
 /********* ResourceSetModal **********
+ * Fetches ResouorceSets from server for selection
 	data: {
         path: "<string>" resource path
         skres: SKResource
@@ -1556,5 +1588,97 @@ export class ResourceSetModal implements OnInit {
         ? true
         : false;
     });
+  }
+}
+
+/********* ResourceSetFeatureModal **********
+ * Displays information about a ResourceSet feature
+	data: {
+    id: string
+    skres: SKResourceSet;
+  }
+***********************************/
+@Component({
+  selector: 'ap-resourceset-feature-modal',
+  template: `
+    <div class="_ap-resource-set-feature">
+      <mat-toolbar style="background-color: transparent">
+        <span> </span>
+        <span style="flex: 1 1 auto; padding-left:20px;text-align:center;">
+          {{ title }}
+        </span>
+        <span>
+          <button
+            mat-icon-button
+            (click)="closeModal()"
+            matTooltip="Close"
+            matTooltipPosition="left"
+          >
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </button>
+        </span>
+      </mat-toolbar>
+
+      <mat-card>
+        <mat-card-content>
+          <signalk-details-list [details]="properties"></signalk-details-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  `,
+  styles: [
+    `
+      ._ap-resource-set-feature {
+        font-family: arial;
+        min-width: 300px;
+      }
+      ._ap-resource-set-feature .key-label {
+        font-weight: 500;
+      }
+      ._ap-resource-set-feature .key-desc {
+        font-style: italic;
+      }
+    `
+  ]
+})
+export class ResourceSetFeatureModal implements OnInit {
+  protected properties = {};
+  protected title = 'ResourceSet Feature: ';
+
+  constructor(
+    public app: AppInfo,
+    private cdr: ChangeDetectorRef,
+    public modalRef: MatBottomSheetRef<ResourceSetFeatureModal>,
+    @Inject(MAT_BOTTOM_SHEET_DATA)
+    public data: {
+      id: string;
+      skres: SKResourceSet;
+    }
+  ) {}
+
+  ngOnInit() {
+    this.parse();
+  }
+
+  closeModal() {
+    this.modalRef.dismiss();
+  }
+
+  parse() {
+    const t = this.data.id.split('.');
+    const fIndex = Number(t[t.length - 1]);
+    const features = this.data.skres.values.features;
+    const feature = fIndex < features.length ? features[fIndex] : features[0];
+
+    this.title = feature.properties.name ?? 'Feature';
+    this.properties = {
+      name: feature.properties.name ?? '',
+      description: feature.properties.description ?? '',
+      'position.latitude': feature.geometry.coordinates[1],
+      'position.longitude': feature.geometry.coordinates[0],
+      'resourceset.name': this.data.skres.name,
+      'resourceset.description': this.data.skres.description,
+      'resourceset.collection': t[1]
+    };
   }
 }

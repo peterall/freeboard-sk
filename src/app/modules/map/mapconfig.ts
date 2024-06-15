@@ -306,7 +306,8 @@ export const aisVesselStyles = {
     text: new Text({
       text: '',
       offsetY: -12
-    })
+    }),
+    zIndex: 500
   }),
   buddy: new Style({
     image: new Icon({

@@ -13,12 +13,14 @@ import { Layer } from 'ol/layer';
 import { Feature } from 'ol';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { Style, Stroke, Fill, Circle } from 'ol/style';
+import { Style } from 'ol/style';
 import { LineString } from 'ol/geom';
 import { MapComponent } from '../map.component';
 import { Extent, Coordinate } from '../models';
 import { fromLonLatArray, mapifyCoords } from '../util';
 import { AsyncSubject } from 'rxjs';
+import { Convert } from 'src/app/lib/convert';
+import { Angle } from 'src/app/lib/geoutils';
 
 // ** Freeboard Layline component **
 @Component({
@@ -41,6 +43,9 @@ export class LaylineComponent implements OnInit, OnDestroy, OnChanges {
   @Input() mapZoom = 10;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Input() laylineStyles: { [key: string]: any };
+  @Input() heading: number;
+  @Input() bearing: number;
+  @Input() awa: number;
   @Input() opacity: number;
   @Input() visible: boolean;
   @Input() extent: Extent;
@@ -81,7 +86,12 @@ export class LaylineComponent implements OnInit, OnDestroy, OnChanges {
       const properties: { [index: string]: any } = {};
 
       for (const key in changes) {
-        if (key === 'lines') {
+        if (
+          key === 'lines' ||
+          key === 'heading' ||
+          key === 'bearing' ||
+          key === 'awa'
+        ) {
           this.parseValues();
           if (this.source) {
             this.source.clear();
@@ -109,8 +119,24 @@ export class LaylineComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   parseValues() {
+    if (
+      typeof this.bearing !== 'number' ||
+      typeof this.heading !== 'number' ||
+      typeof this.awa !== 'number'
+    ) {
+      this.features = [];
+      return;
+    }
+
     const fa: Feature[] = [];
     let idx = 0;
+    // is destination upwind
+    const awd = Angle.add(this.heading, Convert.radiansToDegrees(this.awa));
+    if (Math.abs(Angle.difference(this.bearing, awd)) >= 90) {
+      this.features = [];
+      return;
+    }
+
     if (this.lines) {
       if (this.lines.port && Array.isArray(this.lines.port)) {
         this.lines.port.forEach((l: Coordinate[]) => {
