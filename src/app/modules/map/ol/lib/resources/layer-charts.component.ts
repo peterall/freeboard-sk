@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 
 import TileLayer from 'ol/layer/Tile';
-import VectorTileLayer from 'ol/layer/VectorTile';
 import { TileWMS, XYZ, TileJSON, WMTS } from 'ol/source';
 import { optionsFromCapabilities } from 'ol/source/WMTS';
 import WMTSCapabilities from 'ol/format/WMTSCapabilities';
@@ -22,10 +21,12 @@ import { VectorLayerStyleFactory } from '../vectorLayerStyleFactory';
 
 import DataTile from 'ol/source/DataTile';
 import WebGLTileLayer from 'ol/layer/WebGLTile';
+import VectorTileLayer from 'ol/layer/VectorTile';
 import * as pmtiles from 'pmtiles';
 import { SKChart } from 'src/app/modules';
 import LayerGroup from 'ol/layer/Group';
-import { apply, applyStyle, applyBackground } from 'ol-mapbox-style';
+import { apply } from 'ol-mapbox-style';
+import { FeatureLike } from 'ol/Feature';
 
 // ** Freeboard resource collection format **
 @Component({
@@ -191,7 +192,7 @@ export class FreeboardChartLayerComponent
                 : charts[i][1].minZoom;
             const maxZ = charts[i][1].maxZoom;
 
-            if (charts[i][1].type === 'mapstyleJSON') {
+            if (charts[i][1].type.toLowerCase() === 'mapboxstyle') {
               const lg = new LayerGroup({
                 zIndex: this.zIndex + parseInt(i)
               });
@@ -202,12 +203,12 @@ export class FreeboardChartLayerComponent
               charts[i][1].format === 'pbf' ||
               charts[i][1].format === 'mvt'
             ) {
-              let styleFactory =
+              const styleFactory =
                 this.vectorLayerStyleFactory.CreateVectorLayerStyler(
                   charts[i][1]
                 );
               layer = styleFactory.CreateLayer();
-              styleFactory.ApplyStyle(layer as VectorTileLayer);
+              styleFactory.ApplyStyle(layer as VectorTileLayer<never>);
               layer.setZIndex(this.zIndex + parseInt(i));
             } else {
               // raster tile
@@ -265,7 +266,8 @@ export class FreeboardChartLayerComponent
               ) {
                 // tileJSON
                 source = new TileJSON({
-                  url: charts[i][1].url
+                  url: charts[i][1].url,
+                  crossOrigin: 'anonymous'
                 });
               } else {
                 // XYZ tilelayer

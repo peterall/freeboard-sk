@@ -19,8 +19,7 @@ import { MapComponent } from '../map.component';
 import { Extent, Coordinate } from '../models';
 import { fromLonLatArray, mapifyCoords } from '../util';
 import { AsyncSubject } from 'rxjs';
-import { Convert } from 'src/app/lib/convert';
-import { Angle } from 'src/app/lib/geoutils';
+import { Position } from 'src/app/types';
 
 // ** Freeboard Layline component **
 @Component({
@@ -43,9 +42,8 @@ export class LaylineComponent implements OnInit, OnDestroy, OnChanges {
   @Input() mapZoom = 10;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Input() laylineStyles: { [key: string]: any };
-  @Input() heading: number;
-  @Input() bearing: number;
-  @Input() awa: number;
+  @Input() position: Position; //(change trigger)
+  @Input() twd: number; //(change trigger)
   @Input() opacity: number;
   @Input() visible: boolean;
   @Input() extent: Extent;
@@ -86,12 +84,7 @@ export class LaylineComponent implements OnInit, OnDestroy, OnChanges {
       const properties: { [index: string]: any } = {};
 
       for (const key in changes) {
-        if (
-          key === 'lines' ||
-          key === 'heading' ||
-          key === 'bearing' ||
-          key === 'awa'
-        ) {
+        if (key === 'lines' || key === 'twd' || key === 'position') {
           this.parseValues();
           if (this.source) {
             this.source.clear();
@@ -119,23 +112,8 @@ export class LaylineComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   parseValues() {
-    if (
-      typeof this.bearing !== 'number' ||
-      typeof this.heading !== 'number' ||
-      typeof this.awa !== 'number'
-    ) {
-      this.features = [];
-      return;
-    }
-
     const fa: Feature[] = [];
     let idx = 0;
-    // is destination upwind
-    const awd = Angle.add(this.heading, Convert.radiansToDegrees(this.awa));
-    if (Math.abs(Angle.difference(this.bearing, awd)) >= 90) {
-      this.features = [];
-      return;
-    }
 
     if (this.lines) {
       if (this.lines.port && Array.isArray(this.lines.port)) {

@@ -9,7 +9,6 @@ import {
   MouseWheelZoom,
   PinchZoom
 } from 'ol/interaction';
-import LongTouch from 'ol-ext/interaction/LongTouch';
 import { MapComponent } from './map.component';
 
 @Directive({
@@ -26,7 +25,6 @@ export class InteractionsDirective implements OnInit {
     keyboardzoom: KeyboardZoom,
     mousewheelzoom: MouseWheelZoom,
     pinchzoom: PinchZoom,
-    longtouch: LongTouch
   };
 
   constructor(

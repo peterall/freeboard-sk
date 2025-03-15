@@ -71,8 +71,10 @@ export class SKNote {
   mimeType: string;
   url: string;
   group: string;
-  authors: Array<unknown>;
-  properties: { [key: string]: unknown };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  authors: Array<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  properties: { [key: string]: any };
 
   constructor(note?: NoteResource) {
     this.name = note?.name ?? '';
@@ -127,6 +129,7 @@ export class SKChart {
   maxZoom = 24;
   type: string;
   url: string;
+  source: string;
 
   constructor(chart?: ChartResource) {
     this.identifier = chart?.identifier ? chart.identifier : undefined;
@@ -145,7 +148,7 @@ export class SKChart {
       typeof chart?.scale !== 'undefined' && !isNaN(chart?.scale)
         ? chart.scale
         : this.scale;
-    this.url = chart?.url ? chart.url : undefined;
+    this.source = chart?.$source ?? undefined;
   }
 }
 
@@ -166,10 +169,25 @@ export class SKTrack {
   }
 }
 
-// ** Vessel Data **
-export class SKVessel {
+// ** SK Target Base class **
+class SKTargetBase {
   id: string;
+  name: string;
+  mmsi: string;
   position: Position = [0, 0];
+  state: string;
+  type: { id: number; name: string } = { id: -1, name: '' };
+  virtual?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  properties: { [key: string]: any } = {};
+  lastUpdated = new Date();
+  callsignVhf: string;
+  callsignHf: string;
+  orientation = 0;
+}
+
+// ** Vessel Data **
+export class SKVessel extends SKTargetBase {
   heading: number;
   headingTrue: number = null;
   headingMagnetic: number = null;
@@ -177,10 +195,8 @@ export class SKVessel {
   cogTrue: number = null;
   cogMagnetic: number = null;
   sog: number;
-  name: string;
-  mmsi: string;
-  callsign: string;
-  state: string;
+  registrations: { [key: string]: string } = {};
+  type: { id: number; name: string } = { id: -1, name: '' };
   wind = {
     direction: null,
     mwd: null,
@@ -191,8 +207,6 @@ export class SKVessel {
     awa: null,
     aws: null
   };
-  lastUpdated = new Date();
-  orientation = 0;
   buddy = false;
   closestApproach = null;
   mode = 'day';
@@ -207,41 +221,33 @@ export class SKVessel {
     nextPoint: {},
     previousPoint: {}
   };
-  properties = {};
-}
-
-// ** AIS Base class **
-class AISBase {
-  id: string;
-  lastUpdated = new Date();
-  name: string;
-  mmsi: string;
-  position: Position = [0, 0];
-  properties = {};
-  state: string;
+  performance = {
+    beatAngle: null,
+    gybeAngle: null
+  };
+  racing: { [key: string]: string };
+  vectors = {
+    cog: [] // cog vector
+  };
 }
 
 // ** AtoN class **
-export class SKAtoN extends AISBase {
-  type: { id: number; name: string } = { id: -1, name: '' };
+export class SKAtoN extends SKTargetBase {
   constructor() {
     super();
   }
 }
 
 // ** SaR class **
-export class SKSaR extends SKAtoN {
-  callsign: string;
+export class SKSaR extends SKTargetBase {
   constructor() {
     super();
   }
 }
 
 // ** Aircraft Data **
-export class SKAircraft extends AISBase {
-  orientation = 0;
+export class SKAircraft extends SKTargetBase {
   sog = 0;
-  callsign: string;
   track: Array<Position[]> = [];
   constructor() {
     super();
@@ -250,7 +256,6 @@ export class SKAircraft extends AISBase {
 
 // ** Meteo / weather class **
 export class SKMeteo extends SKAtoN {
-  callsign: string;
   twd: number;
   tws: number;
   temperature: number;

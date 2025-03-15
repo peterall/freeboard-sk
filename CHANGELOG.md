@@ -1,10 +1,136 @@
 # CHANGELOG: Freeboard
 
+### v2.13.2
+
+- **Added**: Data loading progress indicator. (#240)
+- **Added**: Ability to edit waypoint coordinates in details dialog. (#238)
+- **Added**: Additional operating modes for anchor watch. (#248)
+- **Change**: Main menu style / layout. (#243)
+- **Change**: CSS style of links in note descriptions. (#245)
+- **Change**: Track list layout. (#251)
+- **Fixed**: Read-only flag not respected by Region Details dialog and formatting. (#244, #258)
+- **Fixed**: "Navigate To" not correctly determining pointer location on IOS devices. (#241)
+- **Fixed**: Heading up setting sometimes not applied at startup. (#254)
+- **Fixed**: Regions not being fetched after initial app load. (#256)
+- **Fixed**: Route point drag / drop re-ordering.
+
+### v2.13.1
+
+- **Change**: `Load GPX` and `Load GeoJSON` menu options have been combined as `Import` option in the Resource Layers menu.
+- **Change**: To support context menu display on all touch devices, on non-touch devices the menu is now only displayed by clicking and holding down the mouse button.
+- **Fixed**: Issue where context menu is not displayed on IOS devices. (#219)
+- **Fixed**: ETA display formatting. (#227)
+- **Fixed**: Issue where notes not being fetched on zoom change. (#232)
+- **Fixed**: handling of negative `gybeAngle` values. (#234)
+- **Fixed**: Error which prevents track from being deleted. (#237)
+- **Added**: Addidtional POI icons. (#233)
+- **New**: Mark vessel as a buddy _(requires signalk-buddylist-plugin >1.2.0)_. (#229)
+
+### v2.13.0
+- **New**: Support for Signal K [Autopilot API](https://demo.signalk.org/documentation/develop/rest-api/open_api.html).
+- **New**: Use of maritime icons from [OpenBridge](https://www.figma.com/community/file/1445713209741917748)
+- **New**: Display specific Note icons when "skIcon" property matches a POI type.
+- **Fixed**: Notes popover and dialog formatting. (#214, #223)
+- **Fixed**: Navigation data panel alignment on smaller screens. (#212)
+- **Fixed**: Update TTG display format based on magnitude of value. (#226)
+- **Updated**: Resource Set feature popover formatting. (#213)
+- **Updated**: Show more / less ui icons in AIS properties. (#217)
+- **Updated**: Relocated close button on resource lists. (#218)
+- **Updated**: Additional aisCogLine length options. (#209)
+- **Added**: %map:zoom% token for use in Notes fetch filter (#222)
+
+### v2.12.2
+- **Fixed**: Issue applying URL query parameters. (#201)
+- **Fixed**: S57 symbol display issue. (#202)
+- **Added**: Watch for SK login info token changes.
+
+
+### v2.12.1
+- **Added**: WMS sources to the type of chart sources that can be defined.
+- **Fixed**: Date / time formating in weather forecast. (#193)
+- **Fixed**: Fix issue where anchor watch controls are not visible on small screens. (#198)
+- **Fixed**: Vessel Call sign not displayed correctly in AIS Properties screen. (#199)
+
+
+### v2.12.0
+
+- **Added**: Define chart sources from within the Charts List including: WMTS, Mapbox Style and TileJSON.
+- **Updated**: Measure distances < 1km are displayed in meters and < 0.5NM uses depth units (#194). 
+- **Updated**: Ensure weather forecast times use 24 hr format. (#193)
+- **Updated**: OpenSea Map min / max zoom levels.
+- **Updated**: OpenLayers v10. 
+- **Fixed**: gybeAngle null value handling.
+
+### v2.11.5
+
+- **Fixed**: Issue when moving waypoint.
+- **Fixed**: Downwind mark laylines. 
+- **Fixed**: Chart type metadata value processing. 
+
+### v2.11.4
+
+- **Updated**: Style waypoints using defined list of "type" attribute values.
+- **Added**: Debug data capture option to experiments. 
+
+### v2.11.3
+
+- **Fixed**: VMG not being displayed in course data when destination is active. 
+
+### v2.11.2
+
+- **Updated**: Proxy mode operation is now the default and configuration option removed. (#159)
+- **Added**: Setting to mute all sounds regardless of notification ALARM_METHOD value.(#178)
+- **Updated**: Show total length of Route when editing. (#171)
+- **Updated**: When editing a route (on a touch device) `long-press` on a route point to delete it. (#169)
+- **Added**: Toggle charts on/of by clicking chart boundaries on map.
+- **Added**: Lock in `Follow Vessel` setting to remain in this mode when map is panned. (#185)
+- **Fixed**: Not rendering laylines when preferred path is `environment.wind.directionMagnetic`. (#184)
+- **Fixed**: Cursor position display formatting issue when using `028°15.345'S` format. (#188)
+
+### v2.11.1
+
+- **Fixed**: Display of AIS COG vector does not honor setting value. (#180)
+- **Added**: Separate setting for AIS COG vector.
+
+### v2.11.0
+
+- **Added**: COG vector for AIS vessels. (#180)
+- **Added**: Flag / Un-flag AIS vessels. (#165)
+- **Added**: Initial support for `navigation.racing`. _(Display start line)_
+- **Updated**: Improved AIS target processing.
+- **Fixed**: AIS vessels not correctly oriented when preferred path is not available. (#182)
+
+### v2.10.0
+
+- **Updated**: Scale up AIS icon sizes (#180).
+- **Updated**: Scale down AtoN icon sizes (#179).
+- **Added**: Option to filter out vessels without an IMO registration (#174).
+- **Updated**: Compass widget in Weather Station popover (#173).
+- **Updated**: Add waypoint styles to routes (#168).
+- **Updated**: S57 chart styles (@wdantuma).
+- **Updated**: Angular framework to v18 & Material 3
+
+### v2.9.1
+
+- **Added**: Ability to filter vessels by `AIS Ship Type` (#163).
+- **Added**: Display `performance.beatAngle` and `performance.gybeAngle` vectors on the map.
+- **Fixed**: Meteo properties `environment.water.waves` display formatting.
+- **Fixed**: Anchor watch not available when plugin is installed and enabled.
+- **Fixed**: Laylines not displayed if performance paths do not contain values.
+- **Updated**: Don't show internet map service dialog in kiosk mode. (#166)
+
+### v2.8.4
+
+- **Fixed**: shore.basestation popover & properties not displayed.
+- **Fixed**: Use performance data values to control layline display (#149).
+- **Updated**: Display moored vessels with different image (#164).
+- **Updated**: Color AIS vessels based on value of `design.asiShipType` (#162).
+
 ### v2.8.3
 
 - **Fixed**: Laylines being shown when vessel is upwind (#149).
 - **Fixed**: True wind vector display when using `angleTrueGround` or `angleTrueWater`.
-- **Fixed**: Focussed AIS target hidden behind other vessels (#165).
+- **Fixed**: Focussed AIS target hidden behind other vessels.
 - **Updated**: Display position in preferred format in properties modals.
 - **Updated**: Meteo popover to display wind & temperature values. 
 

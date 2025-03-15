@@ -5,29 +5,33 @@ import { Injectable, isDevMode } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 
 import { State } from './state.service';
-import { FBAppConfig, FBAppData, AppUpdateMessage } from 'src/app/types';
+import { FBAppData, AppUpdateMessage } from '../../types';
+import { IAppConfig } from '../../app.settings';
 
+export interface SettingsSignals {
+  fetchNotes?: boolean;
+  suppressTrailFetch?: boolean;
+}
 export interface SettingsMessage {
   action: 'save' | 'load';
   setting: 'data' | 'config';
+  signals?: SettingsSignals;
 }
 
 @Injectable()
 export class Info {
-  public id = 'appId';
-  public name = 'appName';
-  public shortName = 'appShortName';
-  public description = `appDescription`;
-  public version = '17.12.05';
-  public released = '17/12/2017';
-  public url = 'http://panazzolo.com';
-  public bitlyUrl = 'http://bit.ly/HbOf0b';
+  public id = '';
+  public name = '';
+  public shortName = '';
+  public description = ``;
+  public version = '';
+  public url = '';
   public logo = './assets/img/app_logo.png';
 
   protected devMode: boolean;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public config!: FBAppConfig; //** holds app configuration settings **
+  public config!: IAppConfig; //** holds app configuration settings **
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public data: FBAppData; //** holds app data **
   public state: State;
@@ -80,7 +84,7 @@ export class Info {
       if (this.version.indexOf(cv.version) === -1) {
         value.result = 'update';
         this.debug(
-          `AppInfo: Version update detected.. (${cv.version} -> ${this.version})`,
+          `AppFacade: Version update detected.. (${cv.version} -> ${this.version})`,
           'info'
         );
         this.upgradedSource.next(value);
@@ -89,7 +93,7 @@ export class Info {
       // **  new install **
       value.result = 'new';
       this.saveInfo();
-      this.debug(`AppInfo: New Install detected.. (${this.version})`, 'info');
+      this.debug(`AppFacade: New Install detected.. (${this.version})`, 'info');
       this.upgradedSource.next(value);
     }
     return value;
@@ -121,9 +125,9 @@ export class Info {
   }
 
   //** persist app config **
-  saveConfig() {
+  saveConfig(signals?: SettingsSignals) {
     this.state.saveConfig(this.config);
-    this.settings.next({ action: 'save', setting: 'config' });
+    this.settings.next({ action: 'save', setting: 'config', signals: signals });
   }
 
   //** persist app data **

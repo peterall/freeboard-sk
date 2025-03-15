@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { SKChart } from 'src/app/modules';
 import { S57Service } from './s57.service';
+import { S57Style } from './s57Style';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import VectorTileSource from 'ol/source/VectorTile';
+import { Extent, applyTransform } from 'ol/extent';
+import { transformExtent } from 'ol/proj';
 import { MVT } from 'ol/format';
 import { Style, Fill, Stroke } from 'ol/style';
 import * as pmtiles from 'pmtiles';
+import { FeatureLike } from 'ol/Feature';
+import { Coordinate } from 'ol/coordinate';
 
 export abstract class VectorLayerStyler {
   public MinZ: number;
@@ -19,8 +24,8 @@ export abstract class VectorLayerStyler {
     this.MaxZ = chart.maxZoom;
   }
 
-  public abstract ApplyStyle(vectorLayer: VectorTileLayer);
-  public abstract CreateLayer(): VectorTileLayer;
+  public abstract ApplyStyle(vectorLayer: VectorTileLayer<never>);
+  public abstract CreateLayer(): VectorTileLayer<never>;
 }
 
 class S57LayerStyler extends VectorLayerStyler {
@@ -28,25 +33,31 @@ class S57LayerStyler extends VectorLayerStyler {
     super(chart);
   }
 
-  public CreateLayer(): VectorTileLayer {
-    return new VectorTileLayer();
+  public CreateLayer(): VectorTileLayer<never> {
+    let extent: Extent = null;
+    if (this.chart.bounds && this.chart.bounds.length > 0) {
+      extent = transformExtent(this.chart.bounds, 'EPSG:4326', 'EPSG:3857');
+    }
+    return new VectorTileLayer({ declutter: true, extent: extent });
   }
 
-  public ApplyStyle(vectorLayer: VectorTileLayer) {
-    vectorLayer.set('declutter', true);
+  public ApplyStyle(vectorLayer: VectorTileLayer<never>) {
     const source = new VectorTileSource({
       url: this.chart.url,
       minZoom: this.chart.minZoom,
       maxZoom: this.chart.maxZoom,
-      format: new MVT({})
+      format: new MVT({}),
+      tileSize: 256
     });
 
-    vectorLayer.setSource(source);
+    const style = new S57Style(this.s57service);
+
+    vectorLayer.setSource(source as never);
     vectorLayer.setPreload(0);
-    vectorLayer.setStyle(this.s57service.getStyle);
-    vectorLayer.setMinZoom(13);
+    vectorLayer.setStyle(style.getStyle);
+    vectorLayer.setMinZoom(this.chart.minZoom);
     vectorLayer.setMaxZoom(23);
-    vectorLayer.setRenderOrder(this.s57service.renderOrder);
+    vectorLayer.setRenderOrder(style.renderOrder);
 
     this.s57service.refresh.subscribe(() => {
       source.refresh();
@@ -59,7 +70,7 @@ class DefaultLayerStyler extends VectorLayerStyler {
     super(chart);
   }
 
-  public CreateLayer(): VectorTileLayer {
+  public CreateLayer(): VectorTileLayer<never> {
     return new VectorTileLayer();
   }
 
@@ -76,7 +87,7 @@ class DefaultLayerStyler extends VectorLayerStyler {
     });
   }
 
-  public ApplyStyle(vectorLayer: VectorTileLayer) {
+  public ApplyStyle(vectorLayer: VectorTileLayer<never>) {
     // mbtiles source
     const source = new VectorTileSource({
       url: this.chart.url,
@@ -88,7 +99,7 @@ class DefaultLayerStyler extends VectorLayerStyler {
       })
     });
 
-    vectorLayer.setSource(source);
+    vectorLayer.setSource(source as never);
     vectorLayer.setPreload(0);
     vectorLayer.setStyle(this.applyVectorStyle);
     vectorLayer.setMinZoom(this.MinZ);
@@ -101,11 +112,11 @@ class PMLayerStyler extends DefaultLayerStyler {
     super(chart);
   }
 
-  public CreateLayer(): VectorTileLayer {
+  public CreateLayer(): VectorTileLayer<never> {
     return new VectorTileLayer({ declutter: true });
   }
 
-  public ApplyStyle(vectorLayer: VectorTileLayer) {
+  public ApplyStyle(vectorLayer: VectorTileLayer<never>) {
     vectorLayer.set('declutter', true);
     const tiles = new pmtiles.PMTiles(this.chart.url);
 
@@ -143,7 +154,7 @@ class PMLayerStyler extends DefaultLayerStyler {
       tileLoadFunction: loader
     });
 
-    vectorLayer.setSource(source);
+    vectorLayer.setSource(source as never);
     vectorLayer.setPreload(0);
     vectorLayer.setStyle(this.applyVectorStyle);
     vectorLayer.setMinZoom(this.chart.minZoom);
@@ -159,7 +170,7 @@ export class VectorLayerStyleFactory {
   public CreateVectorLayerStyler(chart: SKChart): VectorLayerStyler {
     if (chart.url.indexOf('.pmtiles') !== -1) {
       return new PMLayerStyler(chart);
-    } else if (chart.type === 'S-57') {
+    } else if (chart.type === 'S-57' || chart.type === 's-57') {
       return new S57LayerStyler(chart, this.s57service);
     } else {
       return new DefaultLayerStyler(chart);

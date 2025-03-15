@@ -27,11 +27,7 @@ import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
         }
       </mat-dialog-content>
       <mat-dialog-actions align="center">
-        <button
-          mat-raised-button
-          color="accent"
-          (click)="dialogRef.close(true)"
-        >
+        <button mat-raised-button (click)="dialogRef.close(true)">
           {{ data.buttonText }}
         </button>
       </mat-dialog-actions>
@@ -63,28 +59,23 @@ export class MsgBox implements OnInit {
 
 /********* AlertDialog ************
 	data: {
-        message: "<string>" text to display,
-        title: "<string>" title text,
-        buttonText"<string>" button text,
-        image: "<string>" path to image file
-    }
+      message: "<string>" text to display,
+      title: "<string>" title text,
+      buttonText"<string>" button text,
+  }
 ***********************************/
 @Component({
   selector: 'ap-alertdialog',
   template: `
     <div class="_ap-alert">
       <div>
-        <h1 mat-dialog-title>{{ data.title }}</h1>
+        <h1 mat-dialog-title>
+          <mat-icon style="color: orange;">warning</mat-icon>
+          &nbsp;{{ data.title }}
+        </h1>
       </div>
       <mat-dialog-content>
         <div style="display:flex;">
-          <div class="ap-alert-icon">
-            @if(image) {
-            <img [src]="image" style="width:90%" />
-            } @else {
-            <mat-icon>warning</mat-icon>
-            }
-          </div>
           <div style="padding-left: 10px;">
             @for(line of msglines; track line) {
             <div>
@@ -95,11 +86,7 @@ export class MsgBox implements OnInit {
         </div>
       </mat-dialog-content>
       <mat-dialog-actions align="center">
-        <button
-          mat-raised-button
-          color="accent"
-          (click)="dialogRef.close(true)"
-        >
+        <button mat-raised-button (click)="dialogRef.close(true)">
           {{ data.buttonText }}
         </button>
       </mat-dialog-actions>
@@ -108,23 +95,7 @@ export class MsgBox implements OnInit {
   styles: [
     `
       ._ap-alert {
-        font-family: Roboto;
         min-width: 150px;
-      }
-      .ap-alert-icon {
-        min-width: 35px;
-        max-width: 35px;
-        color: darkorange;
-        text-align: left;
-      }
-
-      @media only screen and (min-device-width: 768px) and (max-device-width: 1024px),
-        only screen and (min-width: 800px) {
-        .ap-alert-icon {
-          min-width: 25%;
-          max-width: 25%;
-          text-align: center;
-        }
       }
     `
   ]
@@ -142,9 +113,6 @@ export class AlertDialog implements OnInit {
   ngOnInit() {
     this.data.buttonText = this.data.buttonText || 'OK';
     this.msglines = this.data.message.split('\n');
-    if (this.data.image) {
-      this.image = this.data.image;
-    }
   }
 }
 
@@ -162,13 +130,13 @@ export class AlertDialog implements OnInit {
   template: `
     <div class="_ap-confirm">
       <div>
-        <h1 mat-dialog-title>{{ data.title }}</h1>
+        <h1 mat-dialog-title>
+          <mat-icon style="color:orange;">help</mat-icon>
+          &nbsp;{{ data.title }}
+        </h1>
       </div>
       <mat-dialog-content style="overflow:unset">
         <div style="display:flex;">
-          <div class="ap-confirm-icon">
-            <mat-icon>help</mat-icon>
-          </div>
           <div style="padding-left: 10px;">
             @for(line of msglines; track line) {
             <div>
@@ -178,7 +146,6 @@ export class AlertDialog implements OnInit {
           </div>
         </div>
         <div style="display:flex;">
-          <div class="ap-confirm-icon"></div>
           @if(data.checkText) {
           <div style="padding-left: 10px;">
             <div style="font-weight: 500;">
@@ -193,7 +160,6 @@ export class AlertDialog implements OnInit {
       <mat-dialog-actions align="center">
         <button
           mat-raised-button
-          color="accent"
           (click)="dialogRef.close({ ok: true, checked: checked })"
         >
           {{ data.button1Text }}
@@ -209,20 +175,6 @@ export class AlertDialog implements OnInit {
       ._ap-confirm {
         font-family: Roboto;
         min-width: 150px;
-      }
-      .ap-confirm-icon {
-        min-width: 35px;
-        max-width: 35px;
-        color: darkorange;
-        text-align: left;
-      }
-
-      @media only screen and (min-device-width: 768px) and (max-device-width: 1024px),
-        only screen and (min-width: 800px) {
-        .ap-confirm-icon {
-          min-width: 25%;
-          max-width: 25%;
-        }
       }
     `
   ]
@@ -256,8 +208,8 @@ export class ConfirmDialog implements OnInit {
 @Component({
   selector: 'ap-about-dialog',
   template: `
-    <div class="about">
-      <h1 mat-dialog-title>About:</h1>
+    <div>
+      <h1 mat-dialog-title><mat-icon>info</mat-icon>&nbsp;About</h1>
       <mat-dialog-content>
         <div class="about-row">
           <div class="item"><img [src]="data.logo" /></div>
@@ -272,20 +224,14 @@ export class ConfirmDialog implements OnInit {
             <br /><br />
           </div>
         </div>
-        @if(data.url) {
-        <div class="about-row">
-          <div class="item stretch">
-            <a [href]="data.url" target="_web" rel="noopener">Visit Website</a>
-          </div>
-        </div>
-        }
       </mat-dialog-content>
       <mat-dialog-actions align="center">
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="dialogRef.close(false)"
+        @if(data.url) {
+        <a mat-button [href]="data.url" target="_web" rel="noopener"
+          >Visit Website</a
         >
+        &nbsp; }
+        <button mat-raised-button (click)="dialogRef.close(false)">
           Close
         </button>
       </mat-dialog-actions>
@@ -301,12 +247,8 @@ export class ConfirmDialog implements OnInit {
         align-content: stretch;
         font-family: roboto;
       }
-      .about-row .item.stretch {
-        text-align: center;
-        width: 100%;
-      }
       .about-row .item {
-        padding-left: 5px;
+        padding-left: 10px;
       }
       .about-row img {
         width: 42px;
@@ -370,7 +312,6 @@ export class AboutDialog {
           <button
             default
             mat-raised-button
-            color="primary"
             [disabled]="username.value.length === 0"
             (click)="login(username.value, password.value)"
           >
@@ -438,7 +379,7 @@ export class LoginDialog implements OnInit {
 /********* MessageBarComponent ****************
     data: {
         message: '',  
-        sound: 'Log in'
+        sound: boolean
     }
 ***************************************/
 @Component({
@@ -487,7 +428,6 @@ export class MessageBarComponent {
                 <button
                   mat-icon-button
                   (click)="currentPage = currentPage - 1"
-                  color="primary"
                   matStepperPrevious
                 >
                   <mat-icon>keyboard_arrow_left</mat-icon>
@@ -500,7 +440,6 @@ export class MessageBarComponent {
                 <button
                   mat-icon-button
                   (click)="currentPage = currentPage + 1"
-                  color="primary"
                   matStepperNext
                 >
                   <mat-icon>keyboard_arrow_right</mat-icon>
@@ -514,7 +453,10 @@ export class MessageBarComponent {
         <div style="text-align:center;font-size:10pt;font-family:roboto;">
           @for(c of data.content; track c; let i = $index) {
           <mat-icon
-            [style.color]="currentPage - 1 === i ? 'blue' : 'gray'"
+            [ngClass]="{
+              'step-current': currentPage - 1 === i,
+              'step-other': currentPage - 1 !== i
+            }"
             style="font-size:8pt;width:12px;"
           >
             fiber_manual_record
@@ -522,11 +464,7 @@ export class MessageBarComponent {
           }
         </div>
         <div style="text-align:center;">
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="dialogRef.close(data.showPrefs)"
-          >
+          <button mat-raised-button (click)="dialogRef.close(data.showPrefs)">
             {{ data.buttonText }}
           </button>
           <br />&nbsp;
@@ -582,8 +520,8 @@ export class WelcomeDialog {
     const sh = document.getElementsByClassName(
       'mat-horizontal-stepper-header-container'
     );
-    sh[0]['style']['display'] = 'none';
-    const dc = document.getElementsByClassName('mat-dialog-container');
-    dc[0]['style']['padding'] = 0;
+    if (sh) {
+      sh[0]['style']['display'] = 'none';
+    }
   }
 }

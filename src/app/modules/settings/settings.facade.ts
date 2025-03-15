@@ -3,8 +3,8 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { AppInfo } from 'src/app/app.info';
-import { SettingsMessage } from 'src/app/lib/services';
+import { AppFacade } from 'src/app/app.facade';
+import { SettingsMessage, SettingsSignals } from 'src/app/lib/services';
 import { SignalKClient } from 'signalk-client-angular';
 import { SKStreamFacade } from 'src/app/modules/skstream/skstream.facade';
 import { Position } from 'src/app/types';
@@ -61,19 +61,20 @@ export class SettingsFacade {
       [true, 'Wind Apparent']
     ]),
     coords: [
-      ['XY', '-28.12345'],
-      ['SHDd', `S-28.12345${this.symDegree}`],
-      ['DMdH', `028${this.symDegree} 15.345' S`],
-      ['HDd', `S 28.12345${this.symDegree}`],
-      ['HDMS', `S 28${this.symDegree}15'46"123`],
-      ['DHMS', `28S15'46"123`]
+      ['XY', '-128.12345'],
+      ['SHDd', `W-128.12345${this.symDegree}`],
+      ['DMdH', `128${this.symDegree} 15.34567' W`],
+      ['HDd', `W 128.12345${this.symDegree}`],
+      ['HDMS', `W 128${this.symDegree}15'46"123`],
+      ['DHMS', `128W15'46"123`]
     ]
   };
 
   list = {
     nextPointTriggers: ['perpendicularPassed', 'arrivalCircleEntered'],
     minZoom: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-    resourceRadius: [5, 10, 20, 50, 100, 150, 200, 500],
+    resourceRadius: [0, 5, 10, 20, 50, 100, 150, 200, 500],
+    noteRadius: [5, 10, 20, 50, 100, 150, 200, 500],
     applications: [],
     favourites: [],
     resourcePaths: [],
@@ -97,6 +98,12 @@ export class SettingsFacade {
       [50000, '25 NM (50km)'],
       [75000, '40 NM (75km)'],
       [100000, '55 NM (100km)']
+    ]),
+    aisCogLine: new Map([
+      [0, 'Off'],
+      [10, '10 min'],
+      [30, '30 min'],
+      [60, '60 min']
     ]),
     aisProfiles: new Map([[0, 'Default']]) //,[1,'Navigation'] ])
   };
@@ -198,7 +205,7 @@ export class SettingsFacade {
   // *******************************************************
 
   constructor(
-    private app: AppInfo,
+    private app: AppFacade,
     public signalk: SignalKClient,
     private stream: SKStreamFacade
   ) {
@@ -321,9 +328,9 @@ export class SettingsFacade {
     }
   }
 
-  applySettings() {
+  applySettings(signals?: SettingsSignals) {
     this.app.debug('Saving Settings..');
-    if (!this.app.config.vessel.trail) {
+    if (!this.app.config.selections.vessel.trail) {
       this.app.config.selections.trailFromServer = false;
     }
     if (
@@ -336,7 +343,6 @@ export class SettingsFacade {
           this.fixedPosition.slice() as Position;
       }
     }
-    this.stream.emitVesselsUpdate();
-    this.app.saveConfig();
+    this.app.saveConfig(signals ?? {});
   }
 }

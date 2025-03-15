@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { GPXLoadFacade } from './gpxload-dialog.facade';
-import { AppInfo } from 'src/app/app.info';
+import { AppFacade } from 'src/app/app.facade';
 
 //** GPXLoad dialog **
 @Component({
@@ -42,7 +42,7 @@ export class GPXImportDialog implements OnInit {
   private unsubscribe = [];
 
   constructor(
-    public app: AppInfo,
+    public app: AppFacade,
     public facade: GPXLoadFacade,
     public dialogRef: MatDialogRef<GPXImportDialog>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -107,14 +107,30 @@ export class GPXImportDialog implements OnInit {
       this.display.allRoutesChecked = true;
       this.display.expand.routes = true;
       this.display.loadRoutesOK = true;
+      this.display.selCount.routes = 1;
     }
 
     this.gpxData.waypoints.forEach(() => {
       this.selWaypoints.push(false);
     });
+    if (this.selWaypoints.length === 1) {
+      this.selWaypoints[0] = true;
+      this.display.allWaypointsChecked = true;
+      this.display.expand.waypoints = true;
+      this.display.loadWaypointsOK = true;
+      this.display.selCount.waypoints = 1;
+    }
+
     this.gpxData.tracks.forEach(() => {
       this.selTracks.push(false);
     });
+    if (this.selTracks.length === 1) {
+      this.selTracks[0] = true;
+      this.display.allTracksChecked = true;
+      this.display.expand.tracks = true;
+      this.display.loadTracksOK = true;
+      this.display.selCount.tracks = 1;
+    }
   }
 
   // ** select Route idx=-1 -> check all

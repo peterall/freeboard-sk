@@ -4,12 +4,14 @@
   [olInteractions]="fbMap.interactions"
   [olControls]="fbMap.controls"
   [setFocus]="fbMap.focus"
-  (mapSingleClick)="onMapMouseClick($event)"
-  (mapLongTouch)="onMapLongTouch($event)"
-  (mapMoveEnd)="onMapMove($event)"
+  (mapMoveEnd)="onMapMoveEnd($event)"
+  (mapSingleClick)="onMapSingleClick($event)"
+  (mapRightClick)="onMapRightClick($event)"
+  (mapPointerDown)="onMapPointerDown($event)"
   (mapPointerMove)="onMapPointerMove($event)"
   (mapPointerDrag)="onMapPointerDrag()"
-  (contextmenu)="onMapRightClick($event)"
+  (mapContextMenu)="onMapContextMenu($event)"
+  (contextmenu)="onContextMenu($event)"
   olView
   [zoom]="fbMap.zoomLevel"
   [center]="fbMap.center"
@@ -50,6 +52,7 @@
     <ol-content>
       <div class="ol-zoom">
         <button
+          class="button-accent"
           mat-mini-fab
           (click)="zoomMap(false)"
           [disabled]="fbMap.zoomLevel <= app.MAP_ZOOM_EXTENT.min"
@@ -59,6 +62,7 @@
         </button>
         &nbsp;
         <button
+          class="button-accent"
           mat-mini-fab
           (click)="zoomMap(true)"
           [disabled]="fbMap.zoomLevel >= app.MAP_ZOOM_EXTENT.max"
@@ -112,7 +116,7 @@
   @if(app.config.resources.paths.includes('tracks')) {
   <fb-tracks
     [darkMode]="app.config.map.invertColor"
-    [tracks]="dfeat.tracks"
+    [tracks]="tracks()"
     [labelMinZoom]="0"
     [mapZoom]="fbMap.zoomLevel"
     [zIndex]="50"
@@ -121,34 +125,36 @@
   }
 
   <!-- AIS target tracks -->
-  @if(app.config.aisTargets) {
-  <sk-target-tracks
+  @if(app.config.aisTargets && app.config.selections.aisShowTrack) {
+  <ais-targets-track
     [tracks]="app.data.vessels.aisTracks"
+    [tracksMinZoom]="10"
+    targetContext="vessels"
     [updateIds]="aisMgr.updateList"
     [removeIds]="aisMgr.removeList"
-    [showTracks]="app.config.selections.aisShowTrack"
-    [minZoom]="10"
     [mapZoom]="fbMap.zoomLevel"
     zIndex="51"
   >
-  </sk-target-tracks>
+  </ais-targets-track>
   }
 
   <!-- Resource Sets -->
-  <div *ngFor="let resSet of app.data.resourceSets | keyvalue; let idx = index">
-    @if(resSet.key !== 'tracks') {
+  @for(resSet of dfeat.resourceSets; track resSet[0]; let idx = $index) {
+  <div>
+    @if(resSet[0] !== 'tracks') {
     <fb-resource-sets
       [darkMode]="app.config.map.invertColor"
-      [collection]="resSet.key"
-      [resourceSets]="resSet.value"
-      [selected]="app.config.selections.resourceSets[resSet.key]"
-      [labelMinZoom]="this.app.config.selections.labelsMinZoom"
+      [collection]="resSet[0]"
+      [resourceSets]="resSet[1]"
+      [selected]="app.config.selections.resourceSets[resSet[0]]"
+      [labelMinZoom]="app.config.selections.labelsMinZoom"
       [mapZoom]="fbMap.zoomLevel"
       [zIndex]="52 + idx"
     >
     </fb-resource-sets>
     }
   </div>
+  }
 
   <!-- Routes -->
   <fb-routes
@@ -187,40 +193,42 @@
 
   <!-- Signal K targets -->
   <!-- AtoN targets -->
-  <sk-targets
+  <sk-ais-targets
     [darkMode]="app.config.map.invertColor"
     [targets]="dfeat.atons"
-    [targetStyles]="featureStyles.aton"
-    targetType="aton"
-    [updateIds]="aisMgr.updateList"
-    [removeIds]="aisMgr.removeList"
+    targetContext="atons"
     [labelMinZoom]="this.app.config.selections.labelsMinZoom"
     [mapZoom]="fbMap.zoomLevel"
+    [updateIds]="aisMgr.updateList"
+    [staleIds]="aisMgr.staleList"
+    [removeIds]="aisMgr.removeList"
+    [inactiveTime]="app.config.selections.aisStaleAge"
     [zIndex]="45"
   >
-  </sk-targets>
+  </sk-ais-targets>
 
   <!-- shore.basestations targets -->
-  <sk-targets
+  <sk-ais-targets
     [darkMode]="app.config.map.invertColor"
     [targets]="dfeat.atons"
     [targetStyles]="featureStyles.basestation"
-    targetType="shore.basestations"
-    [updateIds]="aisMgr.updateList"
-    [removeIds]="aisMgr.removeList"
+    targetContext="shore.basestations"
     [labelMinZoom]="this.app.config.selections.labelsMinZoom"
     [mapZoom]="fbMap.zoomLevel"
-    [zIndex]="45"
+    [updateIds]="aisMgr.updateList"
+    [staleIds]="aisMgr.staleList"
+    [removeIds]="aisMgr.removeList"
+    [inactiveTime]="app.config.selections.aisStaleAge"
+    [zIndex]="46"
   >
-  </sk-targets>
+  </sk-ais-targets>
 
   <!-- Meteo targets -->
   @if(app.config.aisTargets) {
-  <sk-targets
+  <sk-ais-targets
     [darkMode]="app.config.map.invertColor"
     [targets]="dfeat.meteo"
-    [targetStyles]="featureStyles.meteo"
-    targetType="meteo"
+    targetContext="meteo"
     [labelMinZoom]="this.app.config.selections.labelsMinZoom"
     [mapZoom]="fbMap.zoomLevel"
     [updateIds]="aisMgr.updateList"
@@ -229,29 +237,68 @@
     [inactiveTime]="app.config.selections.aisStaleAge"
     [zIndex]="122"
   >
-  </sk-targets>
+  </sk-ais-targets>
   }
 
   <!-- AIS Vessel targets -->
   @if(app.config.aisTargets) {
   <div>
-    @if(app.config.selections.aisProfile === 0) {
+    @if(app.config.selections.aisProfile === 0) { @if( fbMap.zoomLevel >=
+    app.config.selections.aisWindMinZoom) {
+    <sk-ais-wind
+      [targetContext]="'vessels'"
+      [targets]="dfeat.ais"
+      [vectorApparent]="app.config.selections.aisWindApparent"
+      [mapZoom]="fbMap.zoomLevel"
+      [labelMinZoom]="this.app.config.selections.labelsMinZoom"
+      [focusId]="app.data.vessels.activeId"
+      [filterIds]="app.config.selections.aisTargets"
+      [filterByShipType]="app.config.selections.aisFilterByShipType"
+      [filterShipTypes]="app.config.selections.aisTargetTypes"
+      [updateIds]="aisMgr.updateList"
+      [staleIds]="aisMgr.staleList"
+      [removeIds]="aisMgr.removeList"
+      [inactiveTime]="app.config.selections.aisStaleAge"
+      [zIndex]="221"
+      [darkMode]="app.config.map.invertColor"
+    >
+    </sk-ais-wind>
+    }
+    <sk-ais-flags
+      [flagged]="app.data.vessels.flagged"
+      [targetContext]="'vessels'"
+      [targets]="dfeat.ais"
+      [mapZoom]="fbMap.zoomLevel"
+      [labelMinZoom]="this.app.config.selections.labelsMinZoom"
+      [focusId]="app.data.vessels.activeId"
+      [filterIds]="app.config.selections.aisTargets"
+      [filterByShipType]="app.config.selections.aisFilterByShipType"
+      [filterShipTypes]="app.config.selections.aisTargetTypes"
+      [updateIds]="aisMgr.updateList"
+      [staleIds]="aisMgr.staleList"
+      [removeIds]="aisMgr.removeList"
+      [inactiveTime]="app.config.selections.aisStaleAge"
+      [zIndex]="221"
+      [darkMode]="app.config.map.invertColor"
+    >
+    </sk-ais-flags>
     <sk-ais-vessels
       [darkMode]="app.config.map.invertColor"
       [targets]="dfeat.ais"
       [targetStyles]="featureStyles.aisVessel"
-      [mapZoom]="fbMap.zoomLevel"
+      targetContext="vessels"
       [labelMinZoom]="this.app.config.selections.labelsMinZoom"
-      [showVector]="true"
-      [vectorMinZoom]="app.config.selections.aisWindMinZoom"
-      [vectorApparent]="app.config.selections.aisWindApparent"
-      [focusId]="app.data.vessels.activeId"
-      [filterIds]="app.config.selections.aisTargets"
+      [mapZoom]="fbMap.zoomLevel"
       [updateIds]="aisMgr.updateList"
       [staleIds]="aisMgr.staleList"
       [removeIds]="aisMgr.removeList"
       [inactiveTime]="app.config.selections.aisStaleAge"
       [zIndex]="220"
+      [focusId]="app.data.vessels.activeId"
+      [filterIds]="app.config.selections.aisTargets"
+      [filterByShipType]="app.config.selections.aisFilterByShipType"
+      [filterShipTypes]="app.config.selections.aisTargetTypes"
+      [cogLineLength]="app.config.selections.vessel.aisCogLine"
     >
     </sk-ais-vessels>
     }
@@ -260,11 +307,11 @@
 
   <!-- Aircraft targets -->
   @if(app.config.aisTargets) {
-  <sk-targets
+  <sk-ais-targets
     [darkMode]="app.config.map.invertColor"
     [targets]="dfeat.aircraft"
     [targetStyles]="featureStyles.aircraft"
-    targetType="aircraft"
+    targetContext="aircraft"
     [labelMinZoom]="this.app.config.selections.labelsMinZoom"
     [mapZoom]="fbMap.zoomLevel"
     [updateIds]="aisMgr.updateList"
@@ -273,16 +320,16 @@
     [inactiveTime]="app.config.selections.aisStaleAge"
     [zIndex]="121"
   >
-  </sk-targets>
+  </sk-ais-targets>
   }
 
   <!-- SAR targets -->
   @if(app.config.aisTargets) {
-  <sk-targets
+  <sk-ais-targets
     [darkMode]="app.config.map.invertColor"
     [targets]="dfeat.sar"
     [targetStyles]="featureStyles.sar"
-    targetType="sar"
+    targetContext="sar"
     [labelMinZoom]="this.app.config.selections.labelsMinZoom"
     [mapZoom]="fbMap.zoomLevel"
     [updateIds]="aisMgr.updateList"
@@ -291,15 +338,27 @@
     [inactiveTime]="app.config.selections.aisStaleAge"
     [zIndex]="122"
   >
-  </sk-targets>
+  </sk-ais-targets>
   }
   <!-- /Signal K targets -->
 
+  <!-- Racing -->
+  <racing-start-line
+    [startLine]="app.data.racing.startLine"
+    [racecourseStyles]="featureStyles.raceCourse"
+    [darkMode]="app.config.map.invertColor"
+    [labelMinZoom]="this.app.config.selections.labelsMinZoom"
+    [mapZoom]="fbMap.zoomLevel"
+    [zIndex]="123"
+  >
+  </racing-start-line>
+  <!-- /Racing -->
+
   <!-- Regions -->
   <fb-regions
+    [regions]="skres.regions()"
+    [regionStyles]="featureStyles.region"
     [darkMode]="app.config.map.invertColor"
-    [regions]="dfeat.regions"
-    [regionStyles]=""
     [labelMinZoom]="this.app.config.selections.labelsMinZoom"
     [mapZoom]="fbMap.zoomLevel"
     [zIndex]="120"
@@ -308,12 +367,7 @@
 
   <!-- Notes -->
   @if(display.layer.notes) {
-  <fb-notes
-    [notes]="dfeat.notes"
-    [noteStyles]="featureStyles.note"
-    [zIndex]="121"
-  >
-  </fb-notes>
+  <fb-notes [notes]="dfeat.notes" [zIndex]="121"> </fb-notes>
   }
 
   <!-- Popovers -->
@@ -349,7 +403,7 @@
       "
       [featureCount]="overlay.featureCount"
       [units]="this.app.config.units.distance"
-      (modify)="startModify(); popoverClosed()"
+      (modify)="startModify(overlay.type); popoverClosed()"
       (delete)="deleteFeature(overlay.id, overlay.type); popoverClosed()"
       (addNote)="
         skres.showNoteEditor({
@@ -362,7 +416,8 @@
       (deactivated)="clearActiveFeature(); popoverClosed()"
       (related)="skres.showRelatedNotes($event, 'group'); popoverClosed()"
       (notes)="
-        skres.showRelatedNotes(overlay.id, overlay.type); popoverClosed()
+        skres.showRelatedNotes(overlay.id, overlay.type, overlay.readOnly);
+        popoverClosed()
       "
       (autoroute)="autoroute(); popoverClosed()"
       (info)="skres.resourceProperties(overlay); popoverClosed()"
@@ -375,7 +430,7 @@
       [canClose]="app.config.popoverMulti"
       [title]="overlay.title"
       [resource]="overlay.resource"
-      (modify)="startModify(); popoverClosed()"
+      (modify)="startModify(overlay.type); popoverClosed()"
       (delete)="deleteFeature(overlay.id, overlay.type); popoverClosed()"
       (info)="itemInfo(overlay.id, overlay.type); popoverClosed()"
       (closed)="popoverClosed()"
@@ -467,8 +522,8 @@
   }
 
   <!-- Vessel / destination -->
-  @if(dfeat.navData.startPosition && dfeat.navData.position &&
-  app.data.anchor.raised) {
+  @if (app.data.anchor.raised && dfeat.navData.position) {
+  @if(dfeat.navData.startPosition) {
   <fb-xte-path
     [color]=""
     [lineCoords]="vesselLines.xtePath"
@@ -477,18 +532,26 @@
     [layerProperties]=""
   >
   </fb-xte-path>
-  } @if(dfeat.navData.position && app.config.vessel.laylines) {
+  } @if(app.config.selections.vessel.laylines) {
+  <fb-target-angle
+    [line]="vesselLines.targetAngle"
+    [lineStyle]="featureStyles.targetAngle"
+    [position]="app.data.vessels.active.position"
+    [twd]="app.data.vessels.self.wind.direction"
+    [mapZoom]="fbMap.zoomLevel"
+    [zIndex]="212"
+  >
+  </fb-target-angle>
   <fb-layline
     [lines]="vesselLines.laylines"
     [laylineStyles]="featureStyles.layline"
-    [heading]="app.data.vessels.self.heading"
-    [bearing]="app.data.navData.bearing.value"
-    [awa]="app.data.vessels.self.wind.awa"
+    [position]="app.data.vessels.active.position"
+    [twd]="app.data.vessels.self.wind.direction"
     [mapZoom]="fbMap.zoomLevel"
     [zIndex]="212"
   >
   </fb-layline>
-  } @if(dfeat.navData.position && app.data.anchor.raised) {
+  }
   <fb-bearing-line
     [marker]="dfeat.navData.position"
     [lineCoords]="vesselLines.bearing"
@@ -500,14 +563,14 @@
     [zIndex]="212"
   >
   </fb-bearing-line>
-  } @if(app.data.navData.arrivalCircle && dfeat.navData.position) {
+  @if(app.data.navData.arrivalCircle) {
   <fb-arrival-circle
     [radius]="app.data.navData.arrivalCircle"
     [position]="dfeat.navData.position"
     [zIndex]="212"
   >
   </fb-arrival-circle>
-  }
+  } }
 
   <!-- Vessel (self) -->
   <fb-vessel
@@ -516,14 +579,14 @@
     [id]="'' + app.data.selfId"
     [activeId]="app.data.vessels.activeId"
     [vesselLines]="vesselLines"
-    [showWind]="app.config.vessel.windVectors"
+    [showWind]="app.config.selections.vessel.windVectors"
     [vesselStyles]="featureStyles.vessel"
     [fixedLocation]="app.config.fixedLocationMode"
     [zIndex]="250"
   >
   </fb-vessel>
 
-  @if(app.config.vessel.trail && app.data.vessels.showSelf) {
+  @if(app.config.selections.vessel.trail && app.data.vessels.showSelf) {
   <fb-vessel-trail
     [localTrail]="vesselLines.trail"
     [serverTrail]="dfeat.trail"
@@ -553,7 +616,7 @@
       (contextmenu)="$event.preventDefault()"
       (click)="onContextMenuAction('nav_to', item)"
     >
-      <mat-icon color="primary">near_me</mat-icon>
+      <mat-icon>near_me</mat-icon>
       Navigate to here
     </button>
     <button
@@ -570,7 +633,7 @@
       (click)="onContextMenuAction('add_wpt', item)"
       (contextmenu)="$event.preventDefault()"
     >
-      <mat-icon color="primary">add_location</mat-icon>
+      <mat-icon class="icon-waypoint">add_location</mat-icon>
       Add Waypoint here
     </button>
 
@@ -580,7 +643,7 @@
       (click)="onContextMenuAction('add_note', item)"
       (contextmenu)="$event.preventDefault()"
     >
-      <mat-icon style="color: orange">local_offer</mat-icon>
+      <mat-icon>local_offer</mat-icon>
       Add Note here
     </button>
     }
@@ -596,7 +659,7 @@
     </button>
     <mat-divider></mat-divider>
 
-    @if(app.config.vessel.trail && app.data.trail.length !== 0) {
+    @if(app.config.selections.vessel.trail && app.data.trail.length !== 0) {
     <button mat-menu-item (click)="onContextMenuAction('cleartrail', item)">
       <mat-icon>clear_all</mat-icon>
       <span>{{ app.data.serverTrail ? 'Refresh' : 'Clear' }} Trail</span>
@@ -611,6 +674,20 @@
       <mat-icon>insights</mat-icon>
       Trail to Route
     </button>
+    @if(app.data.navData.position){
+    <button
+      mat-menu-item
+      (click)="onContextMenuAction('cleardestination', item)"
+    >
+      <mat-icon>clear_all</mat-icon>
+      @if(app.data.activeRoute) {
+      <span>Clear Active Route</span>
+      } @else {
+      <span>Clear Destination</span>
+      }
+    </button>
+    }
+
     <mat-divider></mat-divider>
     <button
       mat-menu-item

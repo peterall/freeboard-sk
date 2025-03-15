@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { AppInfo } from 'src/app/app.info';
+import { AppFacade } from 'src/app/app.facade';
 import { Position } from 'src/app/types';
 import { getGreatCircleBearing } from 'geolib';
 import { GeoUtils } from '../geoutils';
@@ -31,9 +31,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   ],
   template: `
     <div class="_ap_measurements">
-      <mat-toolbar
-        style="background-color: #00796b; color: white; padding: 0 5px;"
-      >
+      <mat-toolbar class="bg-primary">
         <div class="_ap_row">
           <div class="_ap_row">
             <div class="icon-label">
@@ -41,6 +39,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
             </div>
             <div class="value">{{ totalDistance }}<br /></div>
           </div>
+          @if(!totalOnly) {
           <div class="_ap_row">
             <div class="_ap_row">
               <div style="font-size: 12pt;">
@@ -59,6 +58,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
               </div>
             </div>
           </div>
+          }
           <div>
             <button
               matTooltip="Cancel"
@@ -78,7 +78,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
       ._ap_measurements {
         position: fixed;
         top: 0;
-        width: 500px;
+        min-width: 200px;
       }
 
       ._ap_row {
@@ -109,6 +109,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 export class Measurements {
   @Input() coords: Array<Position> = [];
   @Input() index = -1;
+  @Input() totalOnly = false;
   @Output() cancel: EventEmitter<boolean> = new EventEmitter();
 
   protected totalDistance: string;
@@ -119,7 +120,7 @@ export class Measurements {
     next: false
   };
 
-  constructor(public app: AppInfo) {
+  constructor(public app: AppFacade) {
     this.init();
   }
 

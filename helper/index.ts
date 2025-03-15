@@ -54,8 +54,8 @@ const CONFIG_SCHEMA = {
     },
     pypilot: {
       type: 'object',
-      title: 'PyPilot.',
-      description: 'PyPilot host connection settings.',
+      title: 'PyPilot (deprecated).',
+      description: 'Please use pypilot-autopilot-provider plugin instead.',
       properties: {
         enable: {
           type: 'boolean',
@@ -228,9 +228,8 @@ module.exports = (server: FreeboardHelperApp): OpenApiPlugin => {
         msg = `Started - Providing: weather`;
         initWeather(server, plugin.id, settings.weather);
       }
-      if (settings.pypilot.enable) {
-        initPyPilot(server, plugin.id, settings.pypilot);
-      }
+      // *** DEPRECATED ***
+      initPyPilot(server, plugin.id, settings.pypilot);
 
       server.setPluginStatus(msg);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

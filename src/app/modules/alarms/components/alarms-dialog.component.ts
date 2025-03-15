@@ -3,11 +3,21 @@
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { Subscription } from 'rxjs';
 import { SignalKClient } from 'signalk-client-angular';
 import { AlarmsFacade } from '../alarms.facade';
-import { AppInfo } from 'src/app/app.info';
+import { AppFacade } from 'src/app/app.facade';
 
 /********* AlarmsDialog *********
 	data: {
@@ -16,6 +26,15 @@ import { AppInfo } from 'src/app/app.info';
 ***********************************/
 @Component({
   selector: 'ap-alarmsdialog',
+  standalone: true,
+  imports: [
+    MatDialogModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    MatTooltipModule,
+    MatToolbarModule
+  ],
   template: `
     <div class="_ap-alarms">
       <mat-toolbar style="background-color: transparent">
@@ -43,12 +62,20 @@ import { AppInfo } from 'src/app/app.info';
               <mat-card-content> </mat-card-content>
               <mat-card-actions>
                 @if(!i.cancel) {
-                <button mat-raised-button color="warn" (click)="raise(i.key)">
+                <button
+                  class="button-warn"
+                  mat-raised-button
+                  (click)="raise(i.key)"
+                >
                   <mat-icon>alarm_on</mat-icon>
                   RAISE ALARM
                 </button>
                 } @else {
-                <button mat-raised-button color="accent" (click)="clear(i.key)">
+                <button
+                  class="button-accent"
+                  mat-raised-button
+                  (click)="clear(i.key)"
+                >
                   <mat-icon>alarm_off</mat-icon>
                   CANCEL ALARM
                 </button>
@@ -91,7 +118,7 @@ export class AlarmsDialog implements OnInit {
   private obs: Subscription;
 
   constructor(
-    private app: AppInfo,
+    private app: AppFacade,
     private signalk: SignalKClient,
     private facade: AlarmsFacade,
     public dialogRef: MatDialogRef<AlarmsDialog>,

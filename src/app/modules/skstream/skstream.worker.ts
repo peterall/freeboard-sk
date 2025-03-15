@@ -100,6 +100,8 @@ const aisMgr = {
   maxTrack: 20 // max point count in track
 };
 
+let vesselPrefs = { cogLine: 10, aisCogLine: 10 }; // selections.vessel
+
 // ** Vessel trail management **
 const trailMgr: VesselTrailConfig = {
   trailDuration: 24,
@@ -168,11 +170,11 @@ function handleStreamEvent({ action, msg }) {
       });
       break;
     case 'onClose':
-      console.warn('streamEvent: ', msg);
+      //console.warn('streamEvent: ', msg);
       closeStream(false);
       break;
     case 'onError':
-      console.warn('streamEvent: ', msg);
+      //console.warn('streamEvent: ', msg);
       postMessage({
         action: 'error',
         playback: playbackMode,
@@ -204,33 +206,33 @@ function handleCommand(data: MsgFromApp) {
   switch (data.cmd) {
     // { cmd: 'open', options: { url: string, subscribe: string, token: string} }
     case 'open':
-      console.log('Worker control: opening stream...');
+      //console.log('Worker control: opening stream...');
       applySettings(data.options);
       openStream(data.options);
       break;
     //** { cmd: 'close', options: {terminate: boolean} }
     case 'close':
-      console.log('Worker control: closing stream...');
+      //console.log('Worker control: closing stream...');
       closeStream(true);
       break;
     //** { cmd: 'subscribe' , options: {context: string, path: Array<any>} }
     case 'subscribe':
-      console.log('Worker control: subscribing to paths...');
+      //console.log('Worker control: subscribing to paths...');
       stream.subscribe(data.options.context, data.options.path);
       break;
     //** { cmd: 'settings' , options: {..}
     case 'settings':
-      console.log('Worker control: settings...');
+      //console.log('Worker control: settings...');
       applySettings(data.options);
       break;
     //** { cmd: 'alarm', options: {raise: boolean, type: string, msg: string, state: string} }
     case 'alarm':
-      console.log('Worker control: alarm action...');
+      //console.log('Worker control: alarm action...');
       actionAlarm(data.options);
       break;
     //** { cmd: 'vessel', options: {context: string, name: string} }
     case 'vessel':
-      console.log('Worker control: vessel setting...');
+      //console.log('Worker control: vessel setting...');
       if (data.options) {
         let v: SKVessel;
         if (data.options.context === 'self') {
@@ -245,7 +247,7 @@ function handleCommand(data: MsgFromApp) {
       break;
     //** { cmd: 'auth', options: {token: string} }
     case 'auth':
-      console.log('Worker control: auth token...');
+      //console.log('Worker control: auth token...');
       if (data.options && typeof data.options.token !== 'undefined') {
         skToken = data.options.token;
       }
@@ -261,7 +263,7 @@ function handleCommand(data: MsgFromApp) {
           }
       */
     case 'trail':
-      console.log('Worker control: Fetch vessel trail from server...');
+      //console.log('Worker control: Fetch vessel trail from server...');
       if (data.options) {
         trailMgr.trailDuration = data.options.trailDuration ?? 24;
         if (data.options.trailResolution) {
@@ -313,7 +315,10 @@ function applySettings(opt: { [key: string]: any } = {}) {
     ) {
       targetFilter.aisState = opt.selections.aisState;
     }
-    console.log('Worker: AIS Filter...', targetFilter);
+
+    vesselPrefs = opt.selections.vessel;
+
+    //console.log('Worker: AIS Filter...', targetFilter);
   }
 }
 
@@ -369,13 +374,13 @@ function getAISTracks() {
     })
     .catch(() => {
       hasTrackPlugin = false;
-      console.warn('Unable to fetch AIS tracks!');
+      //console.warn('Unable to fetch AIS tracks!');
     });
 }
 
 // fetch vessel trail from server
 function getVesselTrail(opt: VesselTrailConfig) {
-  console.info('Worker: Fetching vessel trail from server', opt);
+  //console.info('Worker: Fetching vessel trail from server', opt);
   const url = apiUrl + '/self/track?';
   const req = [];
   const tolerance = 0.0005; //0.0001
@@ -600,6 +605,9 @@ function parseStreamMessage(data) {
           case 'vessels': // vessels
             if (stream.isSelf(data)) {
               // self
+              if (!vessels.self.id) {
+                vessels.self.id = data.context;
+              }
               processVessel(vessels.self, v, true), processNotifications(v);
             } else {
               // other vessels
@@ -639,7 +647,7 @@ function filterContext(
     let obj = group.get(context);
     // filter on state
     if (obj && state.includes(obj?.state)) {
-      console.log(`state match => ${state}, ${context}`);
+      //console.log(`state match => ${state}, ${context}`);
       targetStatus.expired[context] = true;
       obj = null; // skip subsequent filters
     }
@@ -715,7 +723,7 @@ function startTimers() {
   }
   timers.push(
     setInterval(() => {
-      console.warn('hasTrackPlugin', hasTrackPlugin);
+      //console.warn('hasTrackPlugin', hasTrackPlugin);
       if (hasTrackPlugin) {
         getAISTracks();
       }
@@ -735,6 +743,7 @@ function clearTimers() {
 function selectVessel(id: string): SKVessel {
   if (!vessels.aisTargets.has(id)) {
     const vessel = new SKVessel();
+    vessel.id = id;
     vessel.position = null;
     vessels.aisTargets.set(id, vessel);
   }
@@ -754,6 +763,10 @@ function processVessel(d: SKVessel, v, isSelf = false) {
     if (prefSourcePaths.indexOf(cp) !== -1) {
       vessels.paths[cp] = null;
     }
+    // racing properties
+    if (v.path.includes('navigation.racing')) {
+      d.properties[v.path] = v.value;
+    }
   }
 
   if (v.path === '') {
@@ -763,11 +776,26 @@ function processVessel(d: SKVessel, v, isSelf = false) {
     if (typeof v.value.mmsi !== 'undefined') {
       d.mmsi = v.value.mmsi;
     }
+    if (typeof v.value.registrations !== 'undefined') {
+      d.registrations = v.value.registrations;
+    }
     if (typeof v.value.buddy !== 'undefined') {
       d.buddy = v.value.buddy;
     }
+    if (typeof v.value.communication !== 'undefined') {
+      d.callsignVhf = v.value.communication.callsignVhf ?? '';
+      d.callsignHf = v.value.communication.callsignHf ?? '';
+    }
   } else if (v.path === 'communication.callsignVhf') {
-    d.callsign = v.value;
+    d.callsignVhf = v.value;
+  } else if (v.path === 'communication.callsignHf') {
+    d.callsignHf = v.value;
+  } else if (v.path === 'performance.beatAngle') {
+    d.performance.beatAngle = v.value;
+  } else if (v.path === 'performance.gybeAngle') {
+    d.performance.gybeAngle = v.value;
+  } else if (v.path === 'design.aisShipType') {
+    d.type = v.value;
   } else if (v.path === 'navigation.position' && v.value) {
     // position is not null
     if (
@@ -788,20 +816,6 @@ function processVessel(d: SKVessel, v, isSelf = false) {
     d.state = v.value;
   } else if (v.path === 'navigation.speedOverGround') {
     d.sog = v.value;
-  }
-
-  // ** cog **
-  else if (v.path === 'navigation.courseOverGroundTrue') {
-    d.cogTrue = v.value;
-  } else if (v.path === 'navigation.courseOverGroundMagnetic') {
-    d.cogMagnetic = v.value;
-  }
-
-  // ** heading **
-  else if (v.path === 'navigation.headingTrue') {
-    d.headingTrue = v.value;
-  } else if (v.path === 'navigation.headingMagnetic') {
-    d.headingMagnetic = v.value;
   }
 
   // ** environment.wind **
@@ -879,7 +893,22 @@ function processVessel(d: SKVessel, v, isSelf = false) {
   ) {
     d.autopilot.enabled = v.value;
   } else if (v.path === 'steering.autopilot.defaultPilot') {
+    d.autopilot.default = v.value;
     apDeviceId = v.value;
+  }
+
+  // ** cog **
+  else if (v.path === 'navigation.courseOverGroundTrue') {
+    d.cogTrue = v.value;
+  } else if (v.path === 'navigation.courseOverGroundMagnetic') {
+    d.cogMagnetic = v.value;
+  }
+
+  // ** heading **
+  else if (v.path === 'navigation.headingTrue') {
+    d.headingTrue = v.value;
+  } else if (v.path === 'navigation.headingMagnetic') {
+    d.headingMagnetic = v.value;
   }
 
   // use preferred heading value for orientation **
@@ -889,6 +918,7 @@ function processVessel(d: SKVessel, v, isSelf = false) {
   ) {
     d.orientation = v.value;
   }
+
   // use preferred path value for tws **
   if (
     typeof preferredPaths['tws'] !== 'undefined' &&
@@ -906,6 +936,17 @@ function processVessel(d: SKVessel, v, isSelf = false) {
       v.path === 'environment.wind.angleTrueWater'
         ? Convert.angleToDirection(v.value, d.orientation ?? 0)
         : v.value;
+  }
+
+  // ** cog vector **
+  const cog = d.cogTrue ?? d.cogMagnetic ?? undefined;
+  if (typeof cog !== 'undefined' && d.position) {
+    const cogLen = isSelf ? vesselPrefs.cogLine : vesselPrefs.aisCogLine;
+    const cvlen = (d.sog ?? 0) * (cogLen * 60);
+    d.vectors.cog = [
+      d.position,
+      GeoUtils.destCoordinate(d.position, cog, cvlen)
+    ];
   }
 }
 
@@ -1050,6 +1091,8 @@ function processAtoN(id: string, v): string {
     }
   } else if (v.path === 'atonType') {
     d.type = v.value;
+  } else if (v.path === 'virtual') {
+    d.virtual = v.value;
   } else if (v.path === 'navigation.position') {
     d.position = [v.value.longitude, v.value.latitude];
     d['positionReceived'] = true;
@@ -1080,8 +1123,14 @@ function processSaR(id: string, v) {
     if (typeof v.value.mmsi !== 'undefined') {
       d.mmsi = v.value.mmsi;
     }
+    if (typeof v.value.communication !== 'undefined') {
+      d.callsignVhf = v.value.communication.callsignVhf ?? '';
+      d.callsignHf = v.value.communication.callsignHf ?? '';
+    }
   } else if (v.path === 'communication.callsignVhf') {
-    d.callsign = v.value;
+    d.callsignVhf = v.value;
+  } else if (v.path === 'communication.callsignHf') {
+    d.callsignHf = v.value;
   } else if (v.path === 'navigation.position' && v.value) {
     d.position = GeoUtils.normaliseCoords([
       v.value.longitude,
@@ -1110,8 +1159,14 @@ function processMeteo(id: string, v) {
       const nid = id.split(':').slice(-2); //meteo extended id
       d.mmsi = nid.length === 2 ? `${nid[0]}:${nid[1]}` : v.value.mmsi;
     }
+    if (typeof v.value.communication !== 'undefined') {
+      d.callsignVhf = v.value.communication.callsignVhf ?? '';
+      d.callsignHf = v.value.communication.callsignHf ?? '';
+    }
   } else if (v.path === 'communication.callsignVhf') {
-    d.callsign = v.value;
+    d.callsignVhf = v.value;
+  } else if (v.path === 'communication.callsignHf') {
+    d.callsignHf = v.value;
   } else if (v.path === 'environment.outside.temperature') {
     d.temperature = v.value;
   } else if (v.path === 'environment.wind.directionTrue') {
@@ -1142,8 +1197,14 @@ function processAircraft(id: string, v) {
     if (typeof v.value.mmsi !== 'undefined') {
       d.mmsi = v.value.mmsi;
     }
+    if (typeof v.value.communication !== 'undefined') {
+      d.callsignVhf = v.value.communication.callsignVhf ?? '';
+      d.callsignHf = v.value.communication.callsignHf ?? '';
+    }
   } else if (v.path === 'communication.callsignVhf') {
-    d.callsign = v.value;
+    d.callsignVhf = v.value;
+  } else if (v.path === 'communication.callsignHf') {
+    d.callsignHf = v.value;
   } else if (v.path === 'navigation.position' && v.value) {
     d.position = GeoUtils.normaliseCoords([
       v.value.longitude,

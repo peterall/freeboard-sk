@@ -25,8 +25,9 @@ interface PiPVideoElement extends HTMLVideoElement {
     <div style="border: gray 1px solid;border-radius:5px;display:none;">
       <video #vid [src]="vidUrl" [muted]="muted" autoplay></video>
     </div>
-    <div>
+    <div style="padding-left: 5px;">
       <button
+        class="button-toolbar"
         mat-mini-fab
         [style.display]="src ? 'block' : 'none'"
         matTooltip="Show Video"
@@ -37,7 +38,6 @@ interface PiPVideoElement extends HTMLVideoElement {
         <mat-icon>videocam</mat-icon>
       </button>
       <!--<button mat-mini-fab [style.display]="pipMode ? 'block' : 'none'"
-                [color]="''"
                 matTooltip="Mute Audio"
                 (click)="toggleMute()">
                 <mat-icon>{{muted ? 'volume_off' : 'volume_mute'}}</mat-icon>

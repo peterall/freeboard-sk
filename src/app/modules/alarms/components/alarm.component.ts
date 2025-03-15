@@ -2,7 +2,14 @@
  ********************************/
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AppInfo } from 'src/app/app.info';
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TimerButtonComponent } from './timer-button.component';
+
+import { AppFacade } from 'src/app/app.facade';
 
 interface AlarmData {
   key: string;
@@ -21,6 +28,14 @@ interface AlarmData {
 /********* AlarmComponent ********/
 @Component({
   selector: 'ap-alarm',
+  standalone: true,
+  imports: [
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    MatTooltipModule,
+    TimerButtonComponent
+  ],
   template: `
     @if(alarm.value.acknowledged) {
     <span class="alarmAck" (click)="minClick(alarm.key)">
@@ -30,8 +45,11 @@ interface AlarmData {
     <mat-card style="padding:5px;">
       <mat-card-title-group>
         <img width="30px" [src]="iconUrl" />
-        <mat-card-title>{{ alarm.value.message }}</mat-card-title>
+        <mat-card-title>{{ alarm.title }}</mat-card-title>
       </mat-card-title-group>
+      <mat-card-content>
+        {{ alarm.value.message }}
+      </mat-card-content>
       <mat-card-actions>
         <div style="display:flex;flex-wrap: wrap;">
           <div>
@@ -47,7 +65,7 @@ interface AlarmData {
               (click)="muteAlarm(alarm.key)"
               [disabled]="alarm.value.muted"
             >
-              <mat-icon color="warn">volume_off</mat-icon>
+              <mat-icon>volume_off</mat-icon>
               {{ alarm.value.muted ? 'MUTED' : 'MUTE' }}
             </button>
             } @if(app.data.activeRoute && alarm.key === 'arrivalCircleEntered')
@@ -141,7 +159,7 @@ export class AlarmComponent implements OnInit {
   private source: MediaElementAudioSourceNode;
   nextPointClicked = false;
 
-  constructor(public app: AppInfo) {}
+  constructor(public app: AppFacade) {}
 
   ngOnInit() {
     this.canUnAck =

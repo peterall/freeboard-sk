@@ -3,149 +3,91 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges,
-  SimpleChange
+  SimpleChange,
+  SimpleChanges
 } from '@angular/core';
-import { Layer } from 'ol/layer';
 import { Feature } from 'ol';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
 import { Style, Stroke, Fill, Text } from 'ol/style';
 import { Polygon, MultiPolygon } from 'ol/geom';
 import { MapComponent } from '../map.component';
-import { Extent } from '../models';
 import { fromLonLatArray, mapifyCoords } from '../util';
-import { AsyncSubject } from 'rxjs';
-import { SKRegion } from 'src/app/modules';
-import { LightTheme, DarkTheme } from '../themes';
+import { FBFeatureLayerComponent } from '../sk-feature.component';
+import { FBRegions, Regions } from 'src/app/types';
 
-// ** Signal K resource collection format **
 @Component({
-  selector: 'ol-map > sk-regions',
+  selector: 'ol-map > sk-regions-base',
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RegionLayerComponent implements OnInit, OnDestroy, OnChanges {
-  protected layer: Layer;
-  public source: VectorSource;
-  protected features: Array<Feature>;
-  protected theme = LightTheme;
-
-  /**
-   * This event is triggered after the layer is initialized
-   * Use this to have access to the layer and some helper functions
-   */
-  @Output() layerReady: AsyncSubject<Layer> = new AsyncSubject(); // AsyncSubject will only store the last value, and only publish it when the sequence is completed
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @Input() regions: { [key: string]: any };
+export class RegionsBaseComponent extends FBFeatureLayerComponent {
   @Input() regionStyles: { [key: string]: Style };
-  @Input() darkMode = false;
-  @Input() labelMinZoom = 10;
-  @Input() mapZoom = 10;
-  @Input() opacity: number;
-  @Input() visible: boolean;
-  @Input() extent: Extent;
-  @Input() zIndex: number;
-  @Input() minResolution: number;
-  @Input() maxResolution: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @Input() layerProperties: { [index: string]: any };
 
   constructor(
-    protected changeDetectorRef: ChangeDetectorRef,
-    protected mapComponent: MapComponent
+    protected mapComponent: MapComponent,
+    protected changeDetectorRef: ChangeDetectorRef
   ) {
-    this.changeDetectorRef.detach();
+    super(mapComponent, changeDetectorRef);
   }
 
   ngOnInit() {
-    this.theme = this.darkMode ? DarkTheme : LightTheme;
-    this.parseRegions(this.regions);
-    this.source = new VectorSource({ features: this.features });
-    this.layer = new VectorLayer(
-      Object.assign(this, { ...this.layerProperties })
-    );
-
-    const map = this.mapComponent.getMap();
-    if (this.layer && map) {
-      map.addLayer(this.layer);
-      map.render();
-      this.layerReady.next(this.layer);
-      this.layerReady.complete();
-    }
+    super.ngOnInit();
+    this.labelPrefixes = ['region'];
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.layer) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const properties: { [index: string]: any } = {};
+    super.ngOnChanges(changes);
+    if (this.source && 'regions' in changes) {
+      this.source.clear();
+      this.parseRegions(changes['regions']);
+    }
+  }
 
-      for (const key in changes) {
-        if (key === 'regions') {
-          this.parseRegions(changes[key].currentValue);
-          if (this.source) {
-            this.source.clear();
-            this.source.addFeatures(this.features);
-          }
-        } else if (key === 'regionStyles') {
-          // handle region style change
-        } else if (
-          key === 'labelMinZoom' ||
-          key === 'mapZoom' ||
-          key === 'darkMode'
-        ) {
-          if (key === 'darkMode') {
-            this.theme = changes[key].currentValue ? DarkTheme : LightTheme;
-          }
-          this.handleLabelZoomChange(key, changes[key]);
-        } else if (key === 'layerProperties') {
-          this.layer.setProperties(properties, false);
-        } else {
-          properties[key] = changes[key].currentValue;
-        }
+  parseRegions(change: SimpleChange) {
+    // overridable function
+  }
+
+  // build region feature style
+  buildStyle(id: string, reg: any): Style {
+    // default style
+    let theStyle = this.setTextLabel(
+      new Style({
+        fill: new Fill({
+          color: 'rgba(255,0,255,0.1)'
+        }),
+        stroke: new Stroke({
+          color: 'purple',
+          width: 1
+        }),
+        text: new Text({
+          text: '',
+          offsetY: 0
+        })
+      }),
+      reg.name
+    );
+
+    if (this.regionStyles) {
+      if (
+        reg.feature.properties?.skIcon &&
+        this.regionStyles[reg.feature.properties.skIcon]
+      ) {
+        theStyle = this.setTextLabel(
+          this.regionStyles[reg.feature.properties.skIcon],
+          reg.name
+        );
+      } else if (this.regionStyles.default) {
+        theStyle = this.setTextLabel(this.regionStyles.default, reg.name);
       }
-      this.layer.setProperties(properties, false);
+    } else if (this.layerProperties && this.layerProperties.style) {
+      theStyle = this.setTextLabel(this.layerProperties.style, reg.name);
     }
+
+    return theStyle;
   }
 
-  ngOnDestroy() {
-    const map = this.mapComponent.getMap();
-    if (this.layer && map) {
-      map.removeLayer(this.layer);
-      map.render();
-      this.layer = null;
-    }
-  }
-
+  // mapify and transform MultiLineString coordinates
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  parseRegions(regions: { [key: string]: any } = this.regions) {
-    const fa: Feature[] = [];
-    for (const w in regions) {
-      const c = this.parseCoordinates(
-        regions[w].feature.geometry.coordinates,
-        regions[w].feature.geometry.type
-      );
-      const f = new Feature({
-        geometry:
-          regions[w].feature.geometry.type === 'MultiPolygon'
-            ? new MultiPolygon(c)
-            : new Polygon(c),
-        name: regions[w].name
-      });
-      f.setId('region.' + w);
-      f.setStyle(this.buildStyle(w, regions[w]));
-      fa.push(f);
-    }
-    this.features = fa;
-  }
-
-  // ** mapify and transform MultiLineString coordinates
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  parseCoordinates(coords: Array<any>, geomType) {
+  parseCoordinates(coords: Array<any>, geomType: 'Polygon' | 'MultiPolygon') {
     if (geomType === 'MultiPolygon') {
       const multipoly = [];
       coords.forEach((mpoly) => {
@@ -162,118 +104,102 @@ export class RegionLayerComponent implements OnInit, OnDestroy, OnChanges {
       return fromLonLatArray(lines);
     }
   }
+}
 
-  // ** assess attribute change **
-  handleLabelZoomChange(key: string, change: SimpleChange) {
-    if (key === 'labelMinZoom') {
-      if (typeof this.mapZoom !== 'undefined') {
-        this.updateLabels();
-      }
-    } else if (key === 'mapZoom') {
-      if (typeof this.labelMinZoom !== 'undefined') {
-        if (
-          (change.currentValue >= this.labelMinZoom &&
-            change.previousValue < this.labelMinZoom) ||
-          (change.currentValue < this.labelMinZoom &&
-            change.previousValue >= this.labelMinZoom)
-        ) {
-          this.updateLabels();
-        }
-      }
-    } else if (key === 'darkMode') {
-      this.updateLabels();
-    }
+// ** Signal K resource collection format **
+@Component({
+  selector: 'ol-map > sk-regions',
+  template: '<ng-content></ng-content>',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class RegionLayerComponent extends RegionsBaseComponent {
+  @Input() regions: Regions;
+
+  constructor(
+    protected mapComponent: MapComponent,
+    protected changeDetectorRef: ChangeDetectorRef
+  ) {
+    super(mapComponent, changeDetectorRef);
   }
 
-  // build region style
-  buildStyle(id: string, reg): Style {
-    if (typeof this.regionStyles !== 'undefined') {
-      if (reg.feature.properties.skType) {
-        return this.setTextLabel(
-          this.regionStyles[reg.feature.properties.skType],
-          reg.name
-        );
-      } else {
-        return this.setTextLabel(this.regionStyles.default, reg.name);
-      }
-    } else if (this.layerProperties && this.layerProperties.style) {
-      return this.setTextLabel(this.layerProperties.style, reg.name);
-    } else {
-      // default styles
-      return this.setTextLabel(
-        new Style({
-          fill: new Fill({
-            color: 'rgba(255,0,255,0.1)'
-          }),
-          stroke: new Stroke({
-            color: 'purple',
-            width: 1
-          }),
-          text: new Text({
-            text: '',
-            offsetY: 0
-          })
-        }),
-        reg.name
+  ngOnInit() {
+    super.ngOnInit();
+    this.parseSKRegions(this.regions);
+  }
+
+  override parseRegions(change: SimpleChange) {
+    this.parseSKRegions(change.currentValue);
+  }
+
+  parseSKRegions(regions: Regions = this.regions) {
+    const fa: Feature[] = [];
+    for (const r in regions) {
+      const c = this.parseCoordinates(
+        regions[r].feature.geometry.coordinates,
+        regions[r].feature.geometry.type
       );
+      const f = new Feature({
+        geometry:
+          regions[r].feature.geometry.type === 'MultiPolygon'
+            ? new MultiPolygon(c)
+            : new Polygon(c),
+        name: regions[r].name
+      });
+      f.setId('region.' + r);
+      f.set('name', regions[r].name);
+      f.set('icon', 'region');
+      f.setStyle(this.buildStyle(r, regions[r]));
+      fa.push(f);
     }
-  }
-
-  // update feature labels
-  updateLabels() {
-    this.source.getFeatures().forEach((f: Feature) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const s: any = f.getStyle();
-      f.setStyle(this.setTextLabel(s, f.get('name')));
-    });
-  }
-
-  // return a Style with label text
-  setTextLabel(s: Style, text = ''): Style {
-    const cs = s.clone();
-    const ts = cs.getText();
-    if (ts) {
-      ts.setText(Math.abs(this.mapZoom) >= this.labelMinZoom ? text : '');
-      ts.setFill(new Fill({ color: this.theme.labelText.color }));
-    }
-    return cs;
+    this.source.addFeatures(fa);
   }
 }
 
-// ** Freeboard resource collection format **
+// Freeboard resource collection format
 @Component({
   selector: 'ol-map > fb-regions',
   template: '<ng-content></ng-content>',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FreeboardRegionLayerComponent extends RegionLayerComponent {
-  @Input() regions: Array<[string, SKRegion, boolean]> = [];
+export class FreeboardRegionLayerComponent extends RegionsBaseComponent {
+  @Input() regions: FBRegions = [];
 
   constructor(
-    protected changeDetectorRef: ChangeDetectorRef,
-    protected mapComponent: MapComponent
+    protected mapComponent: MapComponent,
+    protected changeDetectorRef: ChangeDetectorRef
   ) {
-    super(changeDetectorRef, mapComponent);
+    super(mapComponent, changeDetectorRef);
   }
 
-  parseRegions(regions: Array<[string, SKRegion, boolean]> = this.regions) {
+  ngOnInit() {
+    super.ngOnInit();
+    this.parseFBRegions(this.regions);
+  }
+
+  override parseRegions(regions: SimpleChange) {
+    this.parseFBRegions(regions.currentValue);
+  }
+
+  parseFBRegions(regions: FBRegions = this.regions) {
     const fa: Feature[] = [];
-    for (const w of regions) {
+    for (const r of regions) {
       const c = this.parseCoordinates(
-        w[1].feature.geometry.coordinates,
-        w[1].feature.geometry.type
+        r[1].feature.geometry.coordinates,
+        r[1].feature.geometry.type
       );
       const f = new Feature({
         geometry:
-          w[1].feature.geometry.type === 'MultiPolygon'
+          r[1].feature.geometry.type === 'MultiPolygon'
             ? new MultiPolygon(c)
             : new Polygon(c),
-        name: w[1].name
+        name: r[1].name
       });
-      f.setId('region.' + w[0]);
-      f.setStyle(this.buildStyle(w[0], w[1]));
+      f.setId('region.' + r[0]);
+      f.set('name', r[1].name);
+      f.set('icon', 'region');
+      f.setStyle(this.buildStyle(r[0], r[1]));
       fa.push(f);
     }
-    this.features = fa;
+    this.source.addFeatures(fa);
   }
 }

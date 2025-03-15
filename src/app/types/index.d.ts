@@ -62,129 +62,6 @@ export interface AppUpdateMessage {
   new: string;
 }
 
-export interface FBAppConfig {
-  chartApi: number; // temp: use v{1|2}/api/resources/charts
-  experiments: boolean;
-  version: string;
-  darkMode: { enabled: boolean; source: 0 | 1 | -1 }; // source: 0= browser default, 1= Signal K mode, -1=manual)
-  map: {
-    // ** map config
-    zoomLevel: number;
-    center: Position;
-    rotation: number;
-    moveMap: boolean;
-    northUp: boolean;
-    animate: boolean;
-    limitZoom: boolean;
-    invertColor: boolean;
-  };
-  fixedLocationMode: boolean;
-  fixedPosition: Position;
-  aisTargets: boolean; // display ais targets
-  courseData: boolean; // show/hide course data
-  toolBarButtons: boolean; // show/hide toolbar buttons
-  notes: boolean; // display notes
-  popoverMulti: boolean; // close popovers using cose button
-  mapDoubleClick: boolean; // true=zoom
-  depthAlarm: { enabled: boolean; smoothing: number };
-  anchorRadius: number; // most recent anchor radius setting
-  plugins: {
-    instruments: string;
-    startOnOpen: boolean;
-    parameters: string | null;
-  };
-  units: {
-    // ** display units
-    distance: 'm' | 'ft';
-    depth: 'm' | 'ft';
-    speed: 'kn' | 'msec' | 'kmh' | 'mph';
-    temperature: 'c' | 'f';
-  };
-  vessel: {
-    trail: boolean; // display trail
-    windVectors: boolean; // display vessel TWD, AWD vectors
-    laylines: boolean;
-    cogLine: number; // (minutes) length = cogLine * sog
-    headingLineSize: number; // mode for display of heading line -1 = default
-  };
-  selections: {
-    // ** saved selections
-    routes: string[];
-    waypoints: string[];
-    tracks: string[];
-    charts: string[];
-    notes: string[];
-    chartOrder: string[]; // chart layer ordering
-    headingAttribute: 'navigation.headingTrue' | 'navigation.headingMagnetic';
-    preferredPaths: {
-      tws: string;
-      twd: string;
-      heading: string;
-      course: string;
-    };
-    positionFormat: 'XY' | 'SHDd' | 'HDd' | 'DMdH' | 'HDMS' | 'DHMS';
-    aisTargets: string[];
-    aisWindApparent: boolean;
-    aisWindMinZoom: number;
-    aisShowTrack: boolean;
-    aisMaxAge: number; // time since last update in ms (9 min)
-    aisStaleAge: number; // time since last update in ms (6 min)
-    aisProfile: number; // ais display profile
-    aisState: string[]; // list of ais state values used to filter targets
-    notesMinZoom: number;
-    labelsMinZoom: number;
-    pluginFavourites: string[];
-    trailFromServer: boolean;
-    trailDuration: number; // number of hours of trail to fetch from server
-    trailResolution: {
-      // resolution of server trail at defined time horizons
-      lastHour: string;
-      next23: string;
-      beyond24: string;
-    };
-    s57Options: {
-      graphicsStyle: 'Simplified' | 'Paper';
-      boundaries: 'Symbolized' | 'Plain';
-      colors: 2 | 4;
-      shallowDepth: number;
-      safetyDepth: number;
-      deepDepth: number;
-    };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resourceSets: { [key: string]: any }; // additional resources
-    signalk: {
-      // signal k connection options
-      vessels: boolean;
-      atons: boolean;
-      aircraft: boolean;
-      sar: boolean;
-      meteo: boolean;
-      maxRadius: number; // max radius within which AIS targets are displayed
-      proxied: boolean; // server behind a proxy server
-    };
-    wakeLock: boolean;
-    course: {
-      autoNextPointOnArrival: boolean;
-      autoNextPointDelay: number;
-      autoNextPointTrigger: 'perpendicularPassed' | 'arrivalCircleEntered';
-    };
-  };
-  resources: {
-    // ** resource options
-    notes: {
-      rootFilter: string; // param string to provide record filtering
-      getRadius: number; // radius (NM/km) within which to return notes
-      groupNameEdit: boolean;
-      groupRequiresPosition: boolean;
-    };
-    video: {
-      enable: boolean;
-      url: string | null;
-    };
-    paths: string[];
-  };
-}
-
 export interface FBAppData {
   firstRun: boolean;
   updatedRun: AppUpdateMessage;
@@ -204,8 +81,6 @@ export interface FBAppData {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   alarms: Map<string, SKNotification>;
   notes: FBNotes;
-  regions: FBRegions;
-  tracks: SKTrack[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resourceSets: { [key: string]: any }; // additional resource sets
   selfId: string;
@@ -222,6 +97,11 @@ export interface FBAppData {
   lastGet: Position; // map position of last resources GET
   map: {
     suppressContextMenu: boolean;
+    atClick: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      features: any[];
+      lonlat: Position;
+    };
   };
   vessels: {
     // received vessel data
@@ -238,6 +118,7 @@ export interface FBAppData {
       position: Position;
     };
     prefAvailablePaths: { [key: string]: string }; // preference paths available from source
+    flagged: string[];
   };
   aircraft: Map<string, SKAircraft>; // received AIS aircraft data
   atons: Map<string, SKAtoN>; // received AIS AtoN data
@@ -267,6 +148,10 @@ export interface FBAppData {
     activeRoutePoints: LineString;
     destPointName: string;
   };
+  racing: {
+    startLine: LineString;
+    finishLine: LineString;
+  };
   anchor: {
     // ** anchor watch
     raised: boolean;
@@ -277,6 +162,13 @@ export interface FBAppData {
   autopilot: {
     console: boolean; // display Autopilot console
     hasApi: boolean; // Server implements Autopilot API
+    isLocal: boolean; // true if FB plugin AP API is enabled
+  };
+  buddyList: {
+    hasApi: boolean; // Server has buddy list plugin
+  };
+  skIcons: {
+    hasApi: boolean; // Server implements SignalK Icon resources endpoint
   };
   buildRoute: {
     show: boolean;

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, effect } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -6,7 +6,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Observable, Subject } from 'rxjs';
 
-import { AppInfo } from './app.info';
+import { AppFacade } from './app.facade';
 import { SettingsMessage } from './lib/services';
 import {
   AboutDialog,
@@ -17,8 +17,15 @@ import {
   GPXImportDialog,
   GPXExportDialog
 } from 'src/app/lib/components/dialogs';
-import { CourseSettingsModal } from 'src/app/lib/components';
+
 import {
+  AISPropertiesModal,
+  AtoNPropertiesModal,
+  AircraftPropertiesModal,
+  ActiveResourcePropertiesModal,
+  ResourceImportDialog,
+  ResourceSetModal,
+  ResourceSetFeatureModal,
   SettingsDialog,
   SKStreamFacade,
   SKSTREAM_MODE,
@@ -32,15 +39,8 @@ import {
   SKAtoN,
   SKOtherResources,
   SKRegion,
-  AISPropertiesModal,
-  AtoNPropertiesModal,
-  AircraftPropertiesModal,
-  ActiveResourcePropertiesModal,
-  TracksModal,
-  ResourceSetModal,
-  ResourceSetFeatureModal,
-  ResourceImportDialog,
-  WeatherForecastModal
+  WeatherForecastModal,
+  CourseSettingsModal
 } from 'src/app/modules';
 
 import { SignalKClient } from 'signalk-client-angular';
@@ -86,6 +86,7 @@ export class AppComponent {
     waypointList: false,
     chartList: false,
     noteList: false,
+    trackList: false,
     aisList: false,
     anchorWatch: false,
     navDataPanel: {
@@ -104,19 +105,20 @@ export class AppComponent {
     mode: null,
     type: null,
     modify: false,
+    modifyMode: null,
     forSave: null,
     properties: {}
   };
 
   public measure = { enabled: false };
 
-  // ** APP features / mode **
+  // APP features / mode
   public features = { playbackAPI: true };
   public mode: SKSTREAM_MODE = SKSTREAM_MODE.REALTIME; // current mode
 
   private timers = [];
 
-  // ** external resources **
+  // external resources
   private lastInstUrl: string;
   private lastInstParams: string;
   public instUrl: SafeResourceUrl;
@@ -129,7 +131,7 @@ export class AppComponent {
   private streamOptions = { options: null, toMode: null };
 
   constructor(
-    public app: AppInfo,
+    public app: AppFacade,
     public alarmsFacade: AlarmsFacade,
     private stream: SKStreamFacade,
     public skres: SKResources,
@@ -142,6 +144,11 @@ export class AppComponent {
   ) {
     // set self to active vessel
     this.app.data.vessels.active = this.app.data.vessels.self;
+
+    // handle signals
+    effect(() => {
+      this.app.debug('** sMapNorthUp:', this.app.sMapNorthUp());
+    });
   }
 
   // ********* LIFECYCLE ****************
@@ -205,6 +212,14 @@ export class AppComponent {
 
     // ********************* SUBSCRIPTIONS *****************
     // ** SIGNAL K STREAM **
+    this.obsList.push(
+      this.app.skLogin$.subscribe({
+        next: (token: string) => {
+          this.app.debug('SK Login Event', token);
+          this.handleSKLoginEvent();
+        }
+      })
+    );
     this.obsList.push(
       this.stream
         .delta$()
@@ -407,6 +422,9 @@ export class AppComponent {
       case 'trail2route':
         this.trailToRoute();
         break;
+      case 'cleardestination':
+        this.clearDestination();
+        break;
       case 'anchor':
         this.displayLeftMenu('anchorWatch', true);
         break;
@@ -445,19 +463,25 @@ export class AppComponent {
     }
   }
 
-  // ** display selected experiment UI **
-  public openExperiment(e) {
+  // display selected experiment UI
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public openExperiment(e: { choice: string; value?: any }) {
     switch (e.choice) {
-      case 'tracks': // tracks
-        this.bottomSheet
-          .open(TracksModal, {
-            disableClose: true,
-            data: { title: 'Tracks', skres: this.skres }
-          })
-          .afterDismissed()
-          .subscribe(() => {
-            this.focusMap();
-          });
+      case 'debugCapture':
+        if (window.isSecureContext) {
+          navigator.clipboard.writeText(
+            JSON.stringify({
+              data: this.app.data,
+              config: this.app.config
+            })
+          );
+          this.app.showMessage('Debug data catpured to clipboard.');
+        } else {
+          this.app.showAlert(
+            'Feature Unavailable',
+            'This feature is only available in a secure context!\n e.g. https, http://localhost, http://127.0.0.1'
+          );
+        }
         break;
       default:
         // resource set
@@ -489,6 +513,25 @@ export class AppComponent {
   }
 
   // ************************************************
+  handleSKLoginEvent() {
+    this.signalk.getLoginStatus().subscribe((r) => {
+      this.app.data.loginRequired = r.authenticationRequired ?? false;
+      this.app.data.loggedIn = r.status === 'loggedIn' ? true : false;
+      // ** Request using cached auth token and display badge
+      this.signalk.get('/plugins/freeboard-sk').subscribe(
+        () => {
+          this.app.debug('User Authenticated');
+          this.app.data.loggedIn = true;
+        },
+        (err: HttpErrorResponse) => {
+          if (err.status === 401) {
+            this.app.debug('User NOT Authenticated');
+            this.app.data.loggedIn = false;
+          }
+        }
+      );
+    });
+  }
 
   // ** establish connection to server
   private connectSignalKServer() {
@@ -499,24 +542,9 @@ export class AppComponent {
       .connect(this.app.hostName, this.app.hostPort, this.app.hostSSL)
       .subscribe(
         () => {
-          this.signalk.authToken = this.app.getToken();
-
-          this.signalk.getLoginStatus().subscribe((r) => {
-            this.app.data.loginRequired = r.authenticationRequired ?? false;
-            this.app.data.loggedIn = r.status === 'loggedIn' ? true : false;
-            // ** Request using cached auth token and display badge
-            this.signalk.get('/plugins/freeboard-sk').subscribe(
-              () => {
-                this.app.debug('User Authenticated');
-                this.app.data.loggedIn = true;
-              },
-              (err: HttpErrorResponse) => {
-                if (err.status === 401) {
-                  this.app.data.loggedIn = false;
-                }
-              }
-            );
-          });
+          this.signalk.authToken = this.app.getFBToken();
+          this.app.watchSKLogin();
+          this.handleSKLoginEvent();
 
           this.app.loadSettingsfromServer().subscribe((r) => {
             const msg = r
@@ -533,15 +561,12 @@ export class AppComponent {
           this.openSKStream();
         },
         () => {
-          this.app
-            .showAlert(
-              'Connection Error:',
-              'Unable to contact Signal K server!',
-              'Try Again'
-            )
-            .subscribe(() => {
-              this.connectSignalKServer();
-            });
+          this.app.showMessage(
+            'Unable to contact Signal K server! (Retrying in 5 secs)',
+            false,
+            5000
+          );
+          setTimeout(() => this.connectSignalKServer(), 5000);
         }
       );
   }
@@ -556,20 +581,53 @@ export class AppComponent {
       }) => {
         // detect apis
         this.app.data.weather.hasApi = res.apis.includes('weather');
+        this.app.data.autopilot.hasApi = res.apis.includes('autopilot');
+
+        // prefer FB Autopilot API if enabled
+        this.signalk.api
+          .get(this.app.skApiVersion, 'vessels/self/steering/autopilot')
+          .subscribe(
+            () => {
+              const sap = this.app.data.autopilot.hasApi;
+              this.app.data.autopilot.hasApi = true;
+              this.app.data.autopilot.isLocal = true;
+              if (sap && this.app.data.autopilot.isLocal) {
+                setTimeout(() =>
+                  this.app.showMessage(
+                    'Built-in PyPilot support is deprecated! See Help for more.',
+                    true,
+                    5000
+                  )
+                ),
+                  10000;
+              }
+            },
+            () => {
+              this.app.debug('No local AP API found.');
+            }
+          );
 
         // detect plugins
         const hasPlugin = {
           charts: false,
           pmTiles: false
         };
+        this.app.data.anchor.hasApi = false;
         res.plugins.forEach((p: { id: string; version: string }) => {
           // anchor alarm
           if (p.id === 'anchoralarm') {
             this.app.debug('*** found anchoralarm plugin');
             this.app.data.anchor.hasApi = true;
-          } else {
-            this.app.debug('*** anchoralarm plugin not found!');
-            this.app.data.anchor.hasApi = false;
+          }
+          // buddy list
+          if (p.id === 'signalk-buddylist-plugin') {
+            this.app.debug('*** found buddylist plugin');
+            this.app.data.buddyList.hasApi = semver.satisfies(
+              p.version,
+              '>1.2.0'
+            )
+              ? true
+              : false;
           }
           // charts v2 api support
           if (p.id === 'charts') {
@@ -598,18 +656,6 @@ export class AppComponent {
         this.app.data.anchor.hasApi = true;
       }
     );
-
-    // check for Autopilot API
-    this.signalk.api
-      .get(this.app.skApiVersion, 'vessels/self/steering/autopilot')
-      .subscribe(
-        () => {
-          this.app.data.autopilot.hasApi = true;
-        },
-        () => {
-          this.app.data.autopilot.hasApi = false;
-        }
-      );
   }
 
   // ** start trail / AIS timers
@@ -631,7 +677,7 @@ export class AppComponent {
 
   // ** process local vessel trail **
   private processTrail(trailData?) {
-    if (!this.app.config.vessel.trail) {
+    if (!this.app.config.selections.vessel.trail) {
       return;
     }
     // ** update vessel trail **
@@ -740,7 +786,7 @@ export class AppComponent {
         );
       }
       // ** trail **
-      if (this.app.config.vessel.trail) {
+      if (this.app.config.selections.vessel.trail) {
         // show trail
         if (this.app.config.selections.trailFromServer) {
           this.skres.getVesselTrail();
@@ -770,12 +816,6 @@ export class AppComponent {
 
   // ********* SIDENAV ACTIONS *************
 
-  public leftSideNavAction(e: boolean) {
-    if (!e) {
-      this.focusMap();
-    } // set when closed
-  }
-
   public rightSideNavAction(e: boolean) {
     this.display.instrumentPanelOpen = e;
     if (this.app.config.plugins.startOnOpen) {
@@ -792,6 +832,7 @@ export class AppComponent {
     this.display.waypointList = false;
     this.display.chartList = false;
     this.display.noteList = false;
+    this.display.trackList = false;
     this.display.aisList = false;
     this.display.anchorWatch = false;
     switch (menulist) {
@@ -806,6 +847,9 @@ export class AppComponent {
         break;
       case 'noteList':
         this.display.noteList = show;
+        break;
+      case 'trackList':
+        this.display.trackList = show;
         break;
       case 'anchorWatch':
         this.display.anchorWatch = show;
@@ -858,14 +902,28 @@ export class AppComponent {
       });
   }
 
-  // ** GPX File processing **
-  public processGPX(e) {
+  /** GPX / GeoJSON imports */
+  public importFile(f: { data: string | ArrayBuffer; name: string }) {
+    if ((f.data as string).indexOf('<gpx ') !== -1) {
+      this.processGPX(f);
+    } else if (
+      (f.data as string).indexOf(`"type": "FeatureCollection",`) !== -1
+    ) {
+      this.processGeoJSON(f);
+    } else {
+      this.app.showAlert('Import', 'File format not supported!');
+    }
+    this.focusMap();
+  }
+
+  /** process GPX file */
+  public processGPX(f: { data: string | ArrayBuffer; name: string }) {
     this.dialog
       .open(GPXImportDialog, {
         disableClose: true,
         data: {
-          fileData: e.data,
-          fileName: e.name
+          fileData: f.data,
+          fileName: f.name
         }
       })
       .afterClosed()
@@ -891,8 +949,8 @@ export class AppComponent {
       });
   }
 
-  // ** Save resources to GPX File **
-  public saveToGPX() {
+  /** Export resources to GPX file */
+  public exportToGPX() {
     this.dialog
       .open(GPXExportDialog, {
         disableClose: true,
@@ -921,14 +979,14 @@ export class AppComponent {
       });
   }
 
-  // process GeoJSON file
-  processGeoJSON(e) {
+  /** process GeoJSON file */
+  processGeoJSON(f: { data: string | ArrayBuffer; name: string }) {
     this.dialog
       .open(GeoJSONImportDialog, {
         disableClose: true,
         data: {
-          fileData: e.data,
-          fileName: e.name
+          fileData: f.data,
+          fileName: f.name
         }
       })
       .afterClosed()
@@ -952,8 +1010,8 @@ export class AppComponent {
       });
   }
 
-  // Upload Resources
-  uploadResources() {
+  /** Import ResourceSet */
+  importResourceSet() {
     this.dialog
       .open(ResourceImportDialog, {
         disableClose: true,
@@ -1086,18 +1144,10 @@ export class AppComponent {
   // ********** TOOLBAR ACTIONS **********
 
   public openAlarmsDialog() {
-    if (this.app.data.loginRequired && !this.app.data.loggedIn) {
-      this.showLogin(null, false, false).subscribe((r) => {
-        if (r) {
-          this.openAlarmsDialog();
-        }
-      });
-    } else {
-      this.dialog
-        .open(AlarmsDialog, { disableClose: true })
-        .afterClosed()
-        .subscribe(() => this.focusMap());
-    }
+    this.dialog
+      .open(AlarmsDialog, { disableClose: true })
+      .afterClosed()
+      .subscribe(() => this.focusMap());
   }
 
   public toggleMoveMap(exit = false) {
@@ -1109,8 +1159,11 @@ export class AppComponent {
   }
 
   public toggleNorthUp() {
-    this.app.config.map.northUp = !this.app.config.map.northUp;
-    this.app.saveConfig();
+    this.app.sMapNorthUp.update((nup) => {
+      this.app.config.map.northUp = !nup;
+      this.app.saveConfig();
+      return this.app.config.map.northUp;
+    });
   }
 
   // ***** EDIT MENU ACTONS *******
@@ -1224,7 +1277,7 @@ export class AppComponent {
   }
 
   // ** clear active destination **
-  public clearDestintation() {
+  public clearDestination() {
     this.skres.clearCourse(this.app.data.vessels.activeId);
   }
 
@@ -1260,7 +1313,7 @@ export class AppComponent {
           .afterDismissed()
           .subscribe((deactivate: boolean) => {
             if (deactivate) {
-              this.clearDestintation();
+              this.clearDestination();
             }
             this.focusMap();
           });
@@ -1478,13 +1531,20 @@ export class AppComponent {
   // ******** DRAW / EDIT EVENT HANDLERS ************
 
   // ** handle modify start event **
-  public handleModifyStart(id?: string) {
+  public handleModifyStart(e: { id: string; type: string }) {
     this.draw.type = null;
     this.draw.mode = null;
     this.draw.enabled = false;
     this.draw.modify = true;
-    this.draw.forSave = { id: id ?? null, coords: null };
+    this.draw.modifyMode = e.type;
+    this.draw.forSave = { id: e.type ?? null, coords: null };
     this.app.data.map.suppressContextMenu = true;
+    if (e.type === 'route') {
+      this.app.data.measurement.coords = this.skres.fromCache(
+        'routes',
+        e.id
+      )[1].feature.geometry.coordinates;
+    }
   }
 
   // ** handle modify end event **
@@ -1530,17 +1590,10 @@ export class AppComponent {
         break;
       case 'region':
         region = new SKRegion();
-        uuid = this.signalk.uuid;
         region.feature.geometry.coordinates = [
           GeoUtils.normaliseCoords(e.coordinates as Polygon)
         ];
-        this.skres.showRegionInfo({ id: uuid, region: region });
-        /* //region + note
-        this.skres.showNoteEditor({
-          type: 'region',
-          href: { id: uuid, data: region }
-        });
-        */
+        this.skres.createRegion(region);
         break;
     }
     // clean up
@@ -1629,7 +1682,7 @@ export class AppComponent {
     this.skres.getRoutes();
     this.skres.getWaypoints();
     this.skres.getCharts();
-    this.skres.getRegions();
+    //this.skres.getRegions();
     this.skres.getNotes();
     if (allTypes) {
       this.fetchOtherResources(true);
@@ -1638,7 +1691,7 @@ export class AppComponent {
 
   // ** fetch non-standard resources from server **
   fetchOtherResources(onlySelected = false) {
-    this.skres.getTracks(onlySelected);
+    this.skres.trackCacheRefresh();
     this.app.config.resources.paths.forEach((i) => {
       this.skresOther.getItems(i, onlySelected);
     });
@@ -1804,8 +1857,8 @@ export class AppComponent {
     }
 
     this.display.navDataPanel.apModeText = this.app.data.vessels.self.autopilot
-      .enabled
-      ? 'Autopilot: ' + this.app.data.vessels.self.autopilot.mode
+      .default
+      ? 'Autopilot: ' + this.app.data.vessels.self.autopilot.default
       : '';
   }
 }

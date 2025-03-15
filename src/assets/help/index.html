@@ -50,6 +50,7 @@
           <li><a href="#plugins">Plugins</a></li>
           <li><a href="#display">Display</a></li>
           <li><a href="#navdata">Navigation</a></li>
+          <li><a href="#autopilot">Autopilot</a></li>
           <li><a href="#resources">Resources</a></li>
           <li><a href="#menus">Menus</a></li>
           <li><a href="#aistargets">- Vessels</a></li>
@@ -118,6 +119,34 @@
           >
         </div>
 
+        <div
+          class="panel"
+          id="deprecations"
+          style="background-color: rgba(255, 0, 0, 0.4)"
+        >
+          <h3>Deprecations</h3>
+          <i
+            >Please note the following features that are marked for
+            deprecation:</i
+          ><br />
+          <ul>
+            <li>
+              <b>PyPilot - </b> Built-in PyPilot support is deprecated as of
+              v2.13.0 in preference of support for the Signal K Autopilot
+              APIwhich allows Freeboard-SK to operate with a wider range of
+              autopilot devices.<br />
+              To continue using autopilot functionality, install the
+              <a
+                href="https://www.npmjs.com/package/pypilot-autopilot-provider"
+                target="npmjs"
+                >pypilot-autopilot-provider</a
+              >
+              plugin.<br />
+              <b>PyPilot feature will be removed in v2.14.0</b>
+            </li>
+          </ul>
+        </div>
+
         <div class="panel" id="server">
           <h3>Signal K Server</h3>
 
@@ -130,6 +159,7 @@
               <b>Resources API:</b> for the storage and retrieval of resources
             </li>
             <li><b>Course API:</b> to set a destination or activate a route</li>
+            <li><b>Autopilot API:</b> to enable autopilot operations</li>
           </ul>
 
           Freeboard is a "stateless" application which can be used concurrently
@@ -500,13 +530,13 @@
             </div>
           </div>
 
-          <img src="../img/ais_active.png" style="height: 20px" alt="" />
+          <img src="../img/ais_active.svg" style="height: 20px" alt="" />
           <b>Active Vessel:</b> displays the current position and heading for a
           vessel where an update has been received within the time period
           selected in
           <i>Settings->Vessels->Mark AIS Target Inactive After</i> (default = 6
           mins).<br />
-          <img src="../img/ais_inactive.png" style="height: 20px" alt="" />
+          <img src="../img/ais_inactive.svg" style="height: 20px" alt="" />
           <b>Inactive Vessel:</b> displays the last received position and
           heading for a vessel for which an update has NOT been received within
           the time period selected in
@@ -521,6 +551,8 @@
           <br />
           Clicking on a vessel icon will display an information window
           containing vessel data and available actions.<br />
+          Vessels can be flagged to identify them when there is a large number
+          of vessels in the vicinity.<br />
           <img src="./img/vessel_popover.png" style="height: 150px" alt="" />
           &nbsp;&nbsp;
           <img src="./img/ais_popover.png" style="height: 150px" alt="" />
@@ -621,6 +653,27 @@
           </div>
         </div>
 
+        <div class="panel" id="autopilot">
+          <h4><i class="material-icons">alt_route</i> Autopilot</h4>
+
+          Freeboard-SK supports the Signal K Autopilot API which enables common
+          operations to be performed including:
+          <ul>
+            <li>Engage / Disengage the autopilot</li>
+            <li>Setting the operation mode e.g. compass, route, gps, etc.</li>
+            <li>Setting and adjusting the target heading</li>
+            <li>Dodging obstacles</li>
+          </ul>
+
+          The autopilot console can be opened via the
+          <i class="material-icons">alt_route</i> button on the map or course
+          data screen.<br />
+
+          <div>
+            <img src="./img/autopilot.png" style="max-width: 250px" alt="" />
+          </div>
+        </div>
+
         <div class="panel" id="resources">
           <h4><i class="material-icons">layers</i> Resources / Layers</h4>
 
@@ -636,8 +689,8 @@
           specified resources (Routes, Waypoints, Notes, Charts) as well as
           additional available resource paths enabled in Settings.
           <br />
-          Additionally resources can be saved to a GPX file by selecting the
-          <b><i class="material-icons">save</i> Save to GPX</b> menu.
+          Additionally resources can be exported to a GPX file by selecting the
+          <b><i class="material-icons">save</i> Export</b> menu.
           <hr />
           <ul>
             <li class="nobullet">
@@ -1020,6 +1073,17 @@
                   will be overlayed on the current map display.
                 </li>
                 <li>
+                  <b>Add Chart Source:</b> Click
+                  <i class="material-icons">add</i> to add a new chart source
+                  <i>(i.e. WMTS, WMS, TileJSON, Mapbox Style)</i>. See the
+                  <a
+                    href="https://github.com/SignalK/freeboard-sk/wiki/Chart-Sources"
+                  >
+                    Freeboard-SK Wiki
+                  </a>
+                  for more details.
+                </li>
+                <li>
                   <b>Properties:</b> Click
                   <i class="material-icons">info_outline</i> to display the
                   chart properties.
@@ -1044,15 +1108,15 @@
         </div>
 
         <div class="panel" id="gpxsave">
-          <h4><i class="material-icons">save</i>Save to GPX</h4>
+          <h4><i class="material-icons">save</i>Export (to GPX)</h4>
           <br />
           <ul>
             <li class="nobullet">
               Click the
               <i class="material-icons" style="color: green">layers</i>
               <b>Resources</b> toolbar button and select the
-              <i class="material-icons">save</i> <b>Save to GPX</b> option from
-              the menu.
+              <i class="material-icons">save</i> <b>Export</b> option from the
+              menu.
             </li>
           </ul>
           <div style="display: flex; flex-wrap: wrap">
@@ -1086,6 +1150,143 @@
               After selecting the required resources click <b>Save</b> to choose
               the name and location of the GPX file.
             </div>
+          </div>
+        </div>
+
+        <div class="panel" id="import">
+          <h4><i class="material-icons">upload</i>Import (GPX, GeoJSON)</h4>
+          <ul>
+            <li class="nobullet">
+              Click the
+              <i class="material-icons" style="color: green">layers</i>
+              <b>Resources</b> toolbar button and select the
+              <i class="material-icons">upload</i> <b>Import</b> option from the
+              menu.
+            </li>
+          </ul>
+          <div style="padding-left: 15px">
+            Select a GPX file or GeoJSON file containing a "FeatureCollection"
+            from the Open File dialog.<br />
+            Depending on the type of file selected, you will be presented with
+            one of the following.
+            <br />
+            &nbsp;
+          </div>
+          <h5>GPX File</h5>
+          <div>
+            <div>
+              <img src="./img/gpx_load.png" style="max-width: 250px" alt="" />
+            </div>
+            <div style="padding-left: 15px">
+              Select some or all of the Route and Waypoint resources contained
+              in the file.<br />
+              <ul>
+                <li>
+                  <b>Waypoints:</b> Click the checkbox to select all Waypoints
+                  or expand the list and select the Waypoints to import.
+                </li>
+                <li>
+                  <b>Routes:</b> Click the checkbox to select all Routes or
+                  expand the list and select the Routes to import.
+                </li>
+              </ul>
+              After selecting the resources click <b>Load Selected</b> to load
+              the resources onto the Signal K server.
+            </div>
+          </div>
+
+          <div>&nbsp;</div>
+
+          <h5>GeoJSON Feature Collection</h5>
+          <div>
+            A GeoJSON <i>FeatureCollection</i> is used to define the features to
+            import.<br />
+            The following GeoJSON features are supported and are mapped to one
+            of the Signal K resource types:
+            <table>
+              <thead>
+                <tr>
+                  <td>GeoJSON feature type</td>
+                  <td></td>
+                  <td>Signal K Resource type</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>LineString</td>
+                  <td><i class="material-icons">arrow_forward</i></td>
+                  <td>Route</td>
+                </tr>
+                <tr>
+                  <td>Point</td>
+                  <td><i class="material-icons">arrow_forward</i></td>
+                  <td>Waypoint</td>
+                </tr>
+                <tr>
+                  <td>Polygon</td>
+                  <td><i class="material-icons">arrow_forward</i></td>
+                  <td>Region</td>
+                </tr>
+                <tr>
+                  <td>MultiPolygon</td>
+                  <td><i class="material-icons">arrow_forward</i></td>
+                  <td>Region</td>
+                </tr>
+                <tr>
+                  <td>MultiLineString</td>
+                  <td><i class="material-icons">arrow_forward</i></td>
+                  <td>Track</td>
+                </tr>
+              </tbody>
+            </table>
+            <div>
+              Additionally the feature <i>properties</i> object can be used to
+              specify Signal K resource properties such as <i>name</i> or
+              <i>description</i>.<br />
+              <i
+                >Check out the Freeboard
+                <a
+                  target="_blank"
+                  href="https://github.com/SignalK/freeboard-sk/wiki"
+                  >WIKI</a
+                >
+                for more details.</i
+              >
+            </div>
+            <i>Example:</i><br />
+            <pre>
+<samp>
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [..]
+            },
+            "properties": {
+                "name": "myRoute",
+                "description": "a GeoJSON route"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [..]
+            },
+            "properties": {..}
+        }
+    ]
+}
+</samp>
+</pre>
+            <br />&nbsp;<br />
+            <i
+              >For Track data see <a href="#resourcepaths">Resource Paths</a></i
+            >
+            <br />&nbsp;<br />
           </div>
         </div>
 
@@ -1165,146 +1366,21 @@
           </div>
         </div>
 
-        <div class="panel" id="gpx">
-          <h4><i class="material-icons">streetview</i>Load from GPX</h4>
-          <ul>
-            <li class="nobullet">
-              <i class="material-icons">menu</i>
-              <b>Main Menu:</b>
-              Access the <i class="material-icons">streetview</i>
-              <b>Load from GPX</b> option from the Main menu.
-            </li>
-          </ul>
-          <div style="display: flex; flex-wrap: wrap">
-            <div>
-              <img src="./img/gpx_load.png" style="max-width: 250px" alt="" />
-            </div>
-            <div style="padding-left: 15px">
-              After selecting a GPX file from the Open File dialog you will be
-              presented with a screen that will allow you to select some or all
-              of the Route and Waypoint resources contained in the file.<br />
-              <ul>
-                <li>
-                  <b>Waypoints:</b> Click the checkbox to select all Waypoints
-                  or expand the list and select the Waypoints to import.
-                </li>
-                <li>
-                  <b>Routes:</b> Click the checkbox to select all Routes or
-                  expand the list and select the Routes to import.
-                </li>
-              </ul>
-              After selecting the resources click <b>Load Selected</b> to load
-              the resources onto the Signal K server.
-            </div>
-          </div>
-          <br />
-          <i>For Track data see <a href="#resourcepaths">Resource Paths</a></i>
-        </div>
-
-        <div class="panel" id="geojson">
-          <h4><i class="material-icons">public</i>Load from GeoJSON</h4>
-          Freeboard can import GeoJSON features contained in a
-          <i>FeatureCollection</i> as Signal K Route, Waypoint, Note, Region
-          resources using files containg data the format outlined below.<br />
-
-          A GeoJSON <i>FeatureCollection</i> is used to define the features to
-          import.<br />
-          The following GeoJSON features are supported and are mapped to one of
-          the Signal K resource types:
-          <table>
-            <thead>
-              <tr>
-                <td>GeoJSON feature type</td>
-                <td></td>
-                <td>Signal K Resource type</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>LineString</td>
-                <td><i class="material-icons">arrow_forward</i></td>
-                <td>Route</td>
-              </tr>
-              <tr>
-                <td>Point</td>
-                <td><i class="material-icons">arrow_forward</i></td>
-                <td>Waypoint</td>
-              </tr>
-              <tr>
-                <td>Polygon</td>
-                <td><i class="material-icons">arrow_forward</i></td>
-                <td>Region</td>
-              </tr>
-              <tr>
-                <td>MultiPolygon</td>
-                <td><i class="material-icons">arrow_forward</i></td>
-                <td>Region</td>
-              </tr>
-              <tr>
-                <td>MultiLineString</td>
-                <td><i class="material-icons">arrow_forward</i></td>
-                <td>Track</td>
-              </tr>
-            </tbody>
-          </table>
-
-          Additionally the feature <i>properties</i> object can be used to
-          specify Signal K resource properties such as <i>name</i> or
-          <i>description</i>. <br />&nbsp;<br />
-          <i>Example:</i><br />
-          <pre>
-<samp>
-{
-    "type": "FeatureCollection",
-    "features": [
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [..]
-            },
-            "properties": {
-                "name": "myRoute",
-                "description": "a GeoJSON route"
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [..]
-            },
-            "properties": {..}
-        }
-    ]
-}
-</samp>
-</pre>
-          <br />&nbsp;<br />
-          <i>For Track data see <a href="#resourcepaths">Resource Paths</a></i>
-          <br />&nbsp;<br />
-          Check out the Freeboard
-          <a target="_blank" href="https://github.com/SignalK/freeboard-sk/wiki"
-            >WIKI</a
-          >
-          for more details.
-        </div>
-
         <div class="panel" id="resourceset">
-          <h4><i class="material-icons">category</i>Load Resource</h4>
+          <h4><i class="material-icons">upload</i>Resource Set</h4>
           Freeboard allows you to upload resource data stored in files to
           `non-standard` resource paths that accept `PUT` or `POST` requests.
           <br />&nbsp;<br />
           To upload data:
           <ul>
             <li>
-              Select the <i class="material-icons">category</i>Load Resource
-              menu option.
+              Select the <i class="material-icons">upload</i>Resource Set menu
+              option.
             </li>
             <li>
               Select the desired destination path from the drop-down list.<br />
               <i
-                >Note: only paths detected under `signalk/v1/api/resources` are
+                >Note: only paths detected under `signalk/v2/api/resources` are
                 listed.</i
               >
             </li>
@@ -1312,7 +1388,7 @@
               Click and select (or drop) the file containing the resource data.
             </li>
             <li>
-              Click <b>Load</b> to upload the fiel contents to the server.
+              Click <b>Load</b> to upload the file contents to the server.
             </li>
             <b
               >Important:
@@ -1323,7 +1399,7 @@
               </i></b
             >
           </ul>
-          For information about using `ResourceSets` see
+          For information about using <i>ResourceSets</i> see
           <a href="#resourcepaths">Resource Paths</a> in in <i>Settings</i>.
         </div>
 
@@ -1337,33 +1413,26 @@
             <b>Anchor Watch</b> option from the Main menu.
           </div>
 
-          <div style="display: flex; flex-wrap: wrap">
-            <div>
+          <div>
+            <div style="padding-left: 15px">
+              The following modes of operation are available:
+              <ol>
+                <li>Drop and set (calculated radius using position)</li>
+                <li>Drop and set (specified radius)</li>
+                <li>Manual set (calculated radius using rode length)</li>
+              </ol>
+            </div>
+
+            <div style="padding-left: 15px">
+              <h5>1. Drop and set (calculated radius using position)</h5>
               <img
                 src="./img/anchor_watch.png"
                 style="max-width: 250px"
                 alt=""
               />
-
-              <img
-                src="./img/anchor_watch_rode.png"
-                style="max-width: 250px"
-                alt=""
-              />
-
-              <img
-                src="./img/anchor_watch_adjust.png"
-                style="max-width: 250px"
-                alt=""
-              />
-              <img
-                src="./img/anchor_circle.png"
-                style="max-width: 250px"
-                alt=""
-              />
-            </div>
-            <div style="padding-left: 15px">
-              After dropping the anchor, slide the toggle to <b>Drop</b> then:
+              <br />
+              In this mode of operation, after dropping the physical anchor,
+              slide the toggle to <b>Drop</b> then:
               <ol>
                 <li>
                   Let out the rode and when complete click <b>Set</b>. This will
@@ -1371,19 +1440,74 @@
                   will commence watching the vessel position and raise an alarm
                   if the vessel moves outside the maximum radius distance.
                 </li>
-                <li>
-                  The alarm radius can be adjusted by moving the
-                  <b>Set Radius</b> slider to the desired distance.<br />
-                  The <b>Anchor Position</b> can be shifted by using the arrow
-                  buttons <b>OR</b> on the map:
-                  <ul>
-                    <li>Click the anchor icon (to enter modify mode)</li>
-                    <li>Drag the anchor feature to the new location.</li>
-                    <li>Click <b>Finish</b> to exit modify mode.</li>
-                  </ul>
-                </li>
+              </ol>
+              <img
+                src="./img/anchor_watch_rode.png"
+                style="max-width: 250px"
+                alt=""
+              />
+            </div>
+            <div style="padding-left: 15px">
+              <h5>2. Drop and set (specified radius)</h5>
+              <img
+                src="./img/anchor_watch_2.png"
+                style="max-width: 250px"
+                alt=""
+              />
+              <br />
+              In this mode of operation, after dropping the physical anchor:
+              <ol>
+                <li>Check <b>Set Radius</b>.</li>
+                <li>Set the desired alarm radius (in meters).</li>
+                <li>Slide the toggle to <b>Drop</b></li>
               </ol>
             </div>
+            <div style="padding-left: 15px">
+              <h5>3. Manual set (calculated radius using rode length)</h5>
+              <img
+                src="./img/anchor_watch_3.png"
+                style="max-width: 250px"
+                alt=""
+              />
+              <br />
+              In this mode of operation, after dropping the anchor, and letting
+              out the rode:
+              <ol>
+                <li>Check the box next to the <b>Manual Set</b> button.</li>
+                <li>Set the rode length (in meters).</li>
+                <li>Click the <b>Manual Set</b> button.</li>
+              </ol>
+            </div>
+            <div>
+              Once set the anchor position and alarm radius are displayed on the
+              map.
+              <br />
+              <img
+                src="./img/anchor_circle.png"
+                style="max-width: 250px"
+                alt=""
+              />
+            </div>
+            <div>
+              <p>
+                The alarm radius can be adjusted by moving the
+                <b>Set Radius</b> slider to the desired distance.
+              </p>
+              <img
+                src="./img/anchor_watch_adjust.png"
+                style="max-width: 250px"
+                alt=""
+              />
+              <br />
+              The <b>Anchor Position</b> can be shifted by using the arrow
+              buttons <b>OR</b> on the map:
+              <ul>
+                <li>Click the anchor icon (to enter modify mode)</li>
+                <li>Drag the anchor feature to the new location.</li>
+                <li>Click <b>Finish</b> to exit modify mode.</li>
+              </ul>
+            </div>
+
             <div>
               <p>
                 When the server calculates that the maxumum radius has been
@@ -1510,21 +1634,77 @@
           </div>
           <div style="display: flex">
             <div style="width: 30px; text-align: center">
-              <img src="../img/ais_active.png" style="width: 24px" alt="" />
+              <img src="../img/ais_self.png" style="width: 12px" alt="" />
             </div>
-            <div>Vessel with updated data (&lt;6 mins since last update)</div>
+            <div>Focussed Vessel</div>
           </div>
           <div style="display: flex">
             <div style="width: 30px; text-align: center">
-              <img src="../img/ais_inactive.png" style="width: 24px" alt="" />
+              <img src="../img/ais_inactive.svg" style="width: 24px" alt="" />
             </div>
-            <div>Vessel with stale data (&gt;6 mins since last update)</div>
+            <div>
+              Vessel with stale data <i>(&gt;6 mins since last update)</i>
+            </div>
           </div>
           <div style="display: flex">
             <div style="width: 30px; text-align: center">
-              <img src="../img/ais_buddy.png" style="width: 24px" alt="" />
+              <img src="../img/ais_buddy.svg" style="width: 24px" alt="" />
             </div>
             <div>Vessel marked as "Buddy"</div>
+          </div>
+          <div style="display: flex">
+            <div style="width: 30px; text-align: center">
+              <img src="../img/ais_active.svg" style="width: 24px" alt="" />
+            </div>
+            <div>Unspecified <i>(AIS type 10-19)</i></div>
+          </div>
+          <div style="display: flex">
+            <div style="width: 30px; text-align: center">
+              <img src="../img/ais_active.svg" style="width: 24px" alt="" />
+            </div>
+            <div>Wing in Ground <i>(AIS type 20-29)</i></div>
+          </div>
+          <div style="display: flex">
+            <div style="width: 30px; text-align: center">
+              <img src="../img/ais_active.svg" style="width: 24px" alt="" />
+            </div>
+            <div>Pleasure <i>(AIS type 30-39)</i></div>
+          </div>
+          <div style="display: flex">
+            <div style="width: 30px; text-align: center">
+              <img src="../img/ais_highspeed.svg" style="width: 24px" alt="" />
+            </div>
+            <div>High Speed Vessel <i>(AIS type 40-49)</i></div>
+          </div>
+          <div style="display: flex">
+            <div style="width: 30px; text-align: center">
+              <img src="../img/ais_special.svg" style="width: 24px" alt="" />
+            </div>
+            <div>Special Vessel <i>(AIS type 50-59)</i></div>
+          </div>
+          <div style="display: flex">
+            <div style="width: 30px; text-align: center">
+              <img src="../img/ais_passenger.svg" style="width: 24px" alt="" />
+            </div>
+            <div>Passenger Vessel <i>(AIS type 60-69)</i></div>
+          </div>
+          <div style="display: flex">
+            <div style="width: 30px; text-align: center">
+              <img src="../img/ais_cargo.svg" style="width: 24px" alt="" />
+            </div>
+            <div>Cargo Vessel <i>(AIS type 70-79)</i></div>
+          </div>
+          <div style="display: flex">
+            <div style="width: 30px; text-align: center">
+              <img src="../img/ais_tanker.svg" style="width: 24px" alt="" />
+            </div>
+            <div>Tanker Vessel <i>(AIS type 80-89)</i></div>
+          </div>
+          <div style="display: flex">
+            <div style="width: 30px; text-align: center">
+              <img src="../img/ais_other.svg" style="width: 24px" alt="" />
+            </div>
+            <div>Other <i>(AIS type 90-99)</i></div>
           </div>
 
           Freeboard provides the ability to de-clutter the screen of vessels in
@@ -1565,9 +1745,37 @@
               <i class="material-icons">directions_boat</i> <b>Vessels</b>.
             </li>
           </ul>
+
+          <div>
+            From this screen you can filter and select the vessels you wish to
+            display on the map by:
+            <ol>
+              <li>Entering text to filter by vessel name.</li>
+              <li>
+                Toggling on <i>Ship type</i> to display based on their AIS Ship
+                Type.
+              </li>
+              <li>
+                Toggling <i>IMO Only</i> to show only vessels with IMO
+                registration data.
+                <i
+                  >(This can be used in conjunction with the previous to
+                  options.)</i
+                >
+              </li>
+            </ol>
+          </div>
+
           <div style="display: flex; flex-wrap: wrap">
             <div>
               <img src="./img/ais_list.png" style="max-width: 250px" alt="" />
+            </div>
+            <div>
+              <img
+                src="./img/ais_shiptypes.png"
+                style="max-width: 250px"
+                alt=""
+              />
             </div>
             <div style="padding-left: 15px">
               <ul>
@@ -1685,7 +1893,7 @@
 
           <b>DISPLAY:</b><br />
           This section provides choices about how information is displayed.<br />
-          <img src="./img/settings_display.png" style="width: 300px" alt="" />
+          <img src="./img/settings_display.png" style="width: 350px" alt="" />
           <ul>
             <li>
               <b>Instrument Panel App</b>: Select from a list of installed
@@ -1714,6 +1922,15 @@
               <i>Favourite</i>.<br />
               These selected Web App can be "switched in" for display in the
               <i>Instrument Panel</i>.
+            </li>
+            <li>
+              <b>Lock Follow Vessel</b>: Check this box to remain in "Follow
+              Vessel" mode when map is panned / moved.
+            </li>
+            <li>
+              <b>Do not Play Sounds</b>: Check this box if you do not want any
+              sounds played.
+              <i>(Overrides ALARM_METHOD in notification message.)</i>
             </li>
             <li>
               <b>Show DEPTH Alarm Messages</b>: Check this box if you want
@@ -1763,7 +1980,13 @@
             </li>
           </ul>
           <b>MAP:</b><br />
+          <img src="./img/settings_map.png" style="width: 300px" alt="" /><br />
           <ul>
+            <li>
+              <b>Feature label zoom level</b>: Select the zoom level at which
+              labels for features on the map appear. Labels will be hidden at
+              zoom levels below this value.
+            </li>
             <li>
               <b>Popover close with button</b>: Select this option in order to a
               close a popover using a button rather than just clicking outside
@@ -1988,6 +2211,11 @@
               <i>'anchored'</i>. Note: Display is updated when next vessel
               update is received.
             </li>
+            <li>
+              <b>COG Line</b>: Select to show / hide COG vector for AIS
+              vessels.<br />
+              <i>Note: COG line length is calculated for 10 mins duration.</i>
+            </li>
           </ul>
           <hr />
           <b>RESOURCES: NOTES</b><br />
@@ -2022,7 +2250,7 @@
               values.<br />
               <i
                 >e.g.
-                ?position=%map:longitude%,%map:latitude%&radius=%note:radius%</i
+                ?position=[%map:longitude%,%map:latitude%]&distance=%note:radius%</i
               >
             </li>
             <li>
@@ -2044,6 +2272,7 @@
           <ul>
             <li><b>map:latitude</b>: Latitude at centre of Map</li>
             <li><b>map:longitude</b>: Longitude at centre of Map</li>
+            <li><b>map:zoom</b>: Map zoom level</li>
             <li>
               <b>note:radius</b>: The value set in the
               <i>Fetch Notes within</i> field
@@ -2072,40 +2301,54 @@
           play and the video window can be moved, resized and playback
           controlled using the controls provided by the browser.
 
+          <hr />
           <span id="resourcepaths"></span>
-          <b>RESOURCES: PATHS</b><br />
+          <b>RESOURCES: LAYERS</b><br />
           Freeboard provides the ability display feature data contained in
           compliant JSON format layers on the map. The available resource paths
           are listed in this section and can be selected to enable them for use
-          with Freeboard.
+          with Freeboard.<br />
 
           <i
             >Note: This functionality requires that you have configured the
-            <b>sk-resources-fs</b> plugin to serve the required resource
+            <b>Resources Provider</b> plugin to serve the required resource
             paths.</i
           >
 
+          <img
+            src="./img/settings_resources_layers.png"
+            style="height: 200px"
+            alt=""
+          /><br />
+
           <br />&nbsp;<br />
-          Two types of resource data is supported:
+          Two types of resource layers are supported:
           <ol>
             <li>Tracks</li>
-            <li>ResourceSets</li>
+            <li>Resource Sets</li>
           </ol>
 
           <br />
+          <ul>
+            <li>
+              <b>Fetch Radius</b>: When set, will only fetch resource set
+              features with a position that is within the specified distance
+              from the current map center. Select <i>0</i> to retrieve all
+              features.
+            </li>
+          </ul>
 
           <h5>Tracks:</h5>
           The Track data structure supported by Freeboard is generated via the
           <b>Load from GPX</b> functionality.<br />
           What Freeboard requires is that the
-          <i>/signalk/vi/api/resources/tracks</i> path is available from which
+          <i>/signalk/v2/api/resources/tracks</i> path is available from which
           to write and retrieve track data.<br />
           This requires the following action:
           <ul>
             <li>
               Configure the
-              <b>sk-resources-fs</b> plugin (v1.3.0 or later) to serve the
-              <b>tracks</b> path.
+              <b>Resources Provider</b> plugin to serve the <b>tracks</b> path.
             </li>
             <li>Re-start the Signal K server</li>
             <li>
@@ -2121,7 +2364,7 @@
             </li>
           </ul>
           &nbsp;<br />
-          <h5>Resource Sets:</h5>
+
           Data from all other resource paths that you enable in Freeboard
           Settings will be treated as ResourceSets.<br />
 
@@ -2169,10 +2412,10 @@
             alt=""
           /><br />
 
-          <b>Signal K server is behind a proxy:</b><br />
+          <!--<b>Signal K server is behind a proxy:</b><br />
           Check this option when your browser is connecting to a Signal K server
           that is behind a proxy server. This enables Freeboard-SK to correctly
-          detect and connect to the endpoints exposed by the Signal K Server.<br />&nbsp;<br />
+          detect and connect to the endpoints exposed by the Signal K Server.<br />&nbsp;<br />-->
 
           <b>Filter Stream Data:</b>
           Use the options in this section to select which Signal K
