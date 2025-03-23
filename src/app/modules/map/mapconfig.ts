@@ -55,6 +55,28 @@ export const vesselStyles = {
       rotateWithView: true
     })
   }),
+  rtkFloat: new Style({
+    image: new Icon({
+      src: './assets/img/ship_yellow.png',
+      anchor: [9.5, 22.5],
+      anchorXUnits: 'pixels',
+      anchorYUnits: 'pixels',
+      size: [50, 50],
+      scale: 0.75,
+      rotateWithView: true
+    })
+  }),
+  rtkFixed: new Style({
+    image: new Icon({
+      src: './assets/img/ship_green.png',
+      anchor: [9.5, 22.5],
+      anchorXUnits: 'pixels',
+      anchorYUnits: 'pixels',
+      size: [50, 50],
+      scale: 0.75,
+      rotateWithView: true
+    })
+  }),
   fixed: new Style({
     image: new Icon({
       src: './assets/img/fixed_location.png',

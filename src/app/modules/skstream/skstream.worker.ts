@@ -90,7 +90,7 @@ let targetStatus: AisStatus; // per interval ais target status
 
 // ** settings **
 let preferredPaths = {};
-let msgInterval = 500;
+let msgInterval = 50;
 let playbackMode = false;
 let playbackTime: string;
 const aisMgr = {
@@ -816,6 +816,8 @@ function processVessel(d: SKVessel, v, isSelf = false) {
     d.state = v.value;
   } else if (v.path === 'navigation.speedOverGround') {
     d.sog = v.value;
+  } else if (v.path === 'navigation.gnss.methodQuality') {
+    d.signalQuality = v.value;
   }
 
   // ** environment.wind **

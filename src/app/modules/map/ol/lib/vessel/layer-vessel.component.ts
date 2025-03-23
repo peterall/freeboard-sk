@@ -42,6 +42,7 @@ export class VesselComponent implements OnInit, OnDestroy, OnChanges {
   @Input() activeId: string;
   @Input() position: Coordinate;
   @Input() heading = 0;
+  @Input() signalQuality: string;
   @Input() vesselStyles: { [key: string]: Style };
   @Input() vesselLines: { [key: string]: Array<Coordinate> };
   @Input() showWind = false;
@@ -203,6 +204,14 @@ export class VesselComponent implements OnInit, OnDestroy, OnChanges {
         if (this.activeId && this.activeId !== this.id) {
           if (this.vesselStyles.inactive) {
             cs = this.vesselStyles.inactive;
+          }
+        } else if (this.signalQuality === 'RTK float') {
+          if (this.vesselStyles.rtkFloat) {
+            cs = this.vesselStyles.rtkFloat;
+          }
+        } else if (this.signalQuality === 'RTK fixed integer') {
+          if (this.vesselStyles.rtkFixed) {
+            cs = this.vesselStyles.rtkFixed;
           }
         } else {
           if (this.vesselStyles.default) {

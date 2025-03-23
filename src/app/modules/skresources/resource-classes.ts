@@ -197,6 +197,7 @@ export class SKVessel extends SKTargetBase {
   sog: number;
   registrations: { [key: string]: string } = {};
   type: { id: number; name: string } = { id: -1, name: '' };
+  signalQuality: string = '';
   wind = {
     direction: null,
     mwd: null,
