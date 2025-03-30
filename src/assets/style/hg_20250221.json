@@ -1,0 +1,1042 @@
+{
+	"bounds": [
+		-9.667969,
+		-54.616716,
+		38.012695,
+		81.500429
+	],
+	"center": [
+		7.492676,
+		58.019735,
+		13
+	],
+	"description": "/data/out/hg/mbtiles/berthing-rest.mbtiles",
+	"maxzoom": 13,
+	"minzoom": 2,
+	"name": "/data/out/hg/mbtiles/general.mbtiles + /data/out/hg/mbtiles/coastal.mbtiles + /data/out/hg/mbtiles/approach-rocks.mbtiles + /data/out/hg/mbtiles/approach-lighthouses.mbtiles + /data/out/hg/mbtiles/approach-soundings.mbtiles",
+	"scheme": "xyz",
+	"tilejson": "3.0.0",
+	"tiles": [
+		"/signalk/v1/api/resources/charts/hg_diff_20250221/{z}/{x}/{y}"
+	],
+	"vector_layers": [
+		{
+			"description": "",
+			"fields": {
+				"CATACH": "String"
+			},
+			"id": "ACHARE_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATACH": "Mixed",
+				"OBJNAM": "String"
+			},
+			"id": "ACHARE_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATACH": "String"
+			},
+			"id": "ACHBRT_LINE",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATACH": "String",
+				"OBJNAM": "String"
+			},
+			"id": "ACHBRT_POINT",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATAIR": "String",
+				"OBJNAM": "String"
+			},
+			"id": "AIRARE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATAIR": "String",
+				"OBJNAM": "String"
+			},
+			"id": "AIRARE_LINE",
+			"maxzoom": 13,
+			"minzoom": 5
+		},
+		{
+			"description": "",
+			"fields": {
+				"BCNSHP": "Number",
+				"COLOUR": "String",
+				"COLOUR_TEXT": "String",
+				"CONRAD": "Number",
+				"LIGHTS_TEXT": "String",
+				"OBJNAM": "Mixed",
+				"STATUS_TEXT": "String"
+			},
+			"id": "BEACONS",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"OBJNAM": "String"
+			},
+			"id": "BERTHS",
+			"maxzoom": 13,
+			"minzoom": 11
+		},
+		{
+			"description": "",
+			"fields": {
+				"BOYSHP": "Number",
+				"COLOUR": "String",
+				"COLOUR_TEXT": "String",
+				"COLPAT": "Mixed",
+				"CONRAD": "Number",
+				"LIGHTS_TEXT": "String",
+				"OBJNAM": "String",
+				"STATUS_TEXT": "String"
+			},
+			"id": "BOYS",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATBRG": "String",
+				"HORCLR": "Number",
+				"VERCCL": "Number",
+				"VERCLR": "Mixed",
+				"VERCOP": "Number"
+			},
+			"id": "BRIDGE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATBRG": "String",
+				"HORCLR": "Number",
+				"OBJNAM": "String",
+				"VERCCL": "Number",
+				"VERCLR": "Mixed",
+				"VERCOP": "Number"
+			},
+			"id": "BRIDGE_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "BUAARE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"ANGLE": "Number",
+				"FUNCTN": "String",
+				"OBJNAM": "String"
+			},
+			"id": "BUISGL",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATCBL": "Number"
+			},
+			"id": "CBLARE_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATCBL": "Number",
+				"VERCLR": "Mixed",
+				"VERCSA": "Number"
+			},
+			"id": "CBLOHD",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATCBL": "Number"
+			},
+			"id": "CBLSUB",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "COALNE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"VERCLR": "Number"
+			},
+			"id": "CONVYR",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATCRN": "Number",
+				"LIFCAP": "Number"
+			},
+			"id": "CRANES",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {
+				"MAX_SPEED": "String"
+			},
+			"id": "CTNARE",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATCTR": "Number"
+			},
+			"id": "CTRPNT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATDAM": "Number"
+			},
+			"id": "DAMCON",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {
+				"COUNTRY_CODE": "String",
+				"DRVAL1": "Number",
+				"DRVAL2": "Number"
+			},
+			"id": "DEPARE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"COUNTRY_CODE": "String",
+				"VALDCO": "Number"
+			},
+			"id": "DEPCNT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATDPG": "String"
+			},
+			"id": "DMPGRD_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATDPG": "String"
+			},
+			"id": "DMPGRD_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "DRGARE_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"DRVAL1": "Number",
+				"SORDAT": "String"
+			},
+			"id": "DRGARE_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "DRYDOC",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "DWRTPT_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"DRVAL1": "Number",
+				"ORIENT": "Number",
+				"TRAFIC": "Number"
+			},
+			"id": "DWRTPT_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"DRVAL1": "Number"
+			},
+			"id": "FAIRWY",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATFRY": "Number"
+			},
+			"id": "FERYRT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "FLODOC",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATFIF": "Number"
+			},
+			"id": "FSHFAC_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATFIF": "Number"
+			},
+			"id": "FSHFAC_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATGAT": "Number",
+				"OBJNAM": "String"
+			},
+			"id": "GATCON",
+			"maxzoom": 13,
+			"minzoom": 7
+		},
+		{
+			"description": "",
+			"fields": {
+				"TYPE": "String"
+			},
+			"id": "HG_BOUNDS",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"DRVAL1": "Number",
+				"SYMBOL": "String"
+			},
+			"id": "HG_DEPARE",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {
+				"VALDCO": "Number"
+			},
+			"id": "HG_DEPCNT",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATHAF": "String",
+				"OBJNAM": "String"
+			},
+			"id": "HRBFAC",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"OBJNAM": "String"
+			},
+			"id": "HULKES_AREA",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "HULKES_POINT",
+			"maxzoom": 13,
+			"minzoom": 12
+		},
+		{
+			"description": "",
+			"fields": {
+				"OBJNAM": "String"
+			},
+			"id": "LAKARE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"COLOUR_TEXT": "String",
+				"HAS_TOPMARK": "Boolean",
+				"LIGHTS_TEXT": "String",
+				"OBJNAM": "String"
+			},
+			"id": "LIGHTHOUSES",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATLIT": "String",
+				"COLOUR": "String",
+				"LITCHR": "Number",
+				"SIGGRP": "String",
+				"SIGPER": "Number",
+				"STATUS": "String"
+			},
+			"id": "LIGHTS",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"COLOUR": "String",
+				"TYPE": "String",
+				"VALNMR": "Number"
+			},
+			"id": "LIGHT_SECTORS",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"COUNTRY_CODE": "String",
+				"PRIO": "Number"
+			},
+			"id": "LNDARE",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "LNDELV_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"ELEVAT": "Number"
+			},
+			"id": "LNDELV_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATLMK": "String",
+				"COLOUR": "String",
+				"COLOUR_TEXT": "String",
+				"FUNCTN": "String",
+				"LIGHTS_TEXT": "String",
+				"OBJNAM": "String"
+			},
+			"id": "LNDMRK",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"OBJNAM": "String"
+			},
+			"id": "LNDRGN",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "LOGPON",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "LOGPON_POINT",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "MARCUL_LINE",
+			"maxzoom": 13,
+			"minzoom": 4
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATMFA": "Number"
+			},
+			"id": "MARCUL_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATMPA": "String",
+				"RESTRN": "String"
+			},
+			"id": "MIPARE_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATMOR": "Number",
+				"COLOUR_TEXT": "String",
+				"LIGHTS_TEXT": "String",
+				"OBJNAM": "String"
+			},
+			"id": "MORFAC",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATNAV": "Number",
+				"ORIENT": "Number"
+			},
+			"id": "NAVLNE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATOBS": "Number",
+				"PRIO": "Number",
+				"VALSOU": "Number"
+			},
+			"id": "OBSTRN",
+			"maxzoom": 13,
+			"minzoom": 12
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATOFP": "String",
+				"LIGHTS_TEXT": "String",
+				"OBJNAM": "String"
+			},
+			"id": "OFSPLF",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATOLB": "Number"
+			},
+			"id": "OILBAR",
+			"maxzoom": 13,
+			"minzoom": 12
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATPRA": "Number",
+				"RESTRN": "String"
+			},
+			"id": "OSPARE_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATPRA": "Number",
+				"OBJNAM": "String",
+				"RESTRN": "String"
+			},
+			"id": "OSPARE_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"OBJNAM": "String"
+			},
+			"id": "PILBOP",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATPLE": "Number",
+				"LIGHTS_TEXT": "String",
+				"OBJNAM": "String"
+			},
+			"id": "PILPNT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "PIPARE_LINE",
+			"maxzoom": 13,
+			"minzoom": 4
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "PIPSOL",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATPOI": "String",
+				"SYMBOL": "String"
+			},
+			"id": "POINTR",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "PONTON",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "PRCARE_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "PRCARE_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATPYL": "Number"
+			},
+			"id": "PYLONS",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "RAILWY",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"ORIENT": "Number"
+			},
+			"id": "RCTLPT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"COMCHA": "String",
+				"OBJNAM": "String",
+				"ORIENT": "Number",
+				"TRAFIC": "Number"
+			},
+			"id": "RDOCAL",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATTRK": "Number",
+				"DRVAL1": "Number",
+				"ORIENT": "Number",
+				"TRAFIC": "Number"
+			},
+			"id": "RECTRC",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATREA": "String",
+				"INFORM": "String",
+				"RESTRN": "String",
+				"SORDAT": "String"
+			},
+			"id": "RESARE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATREA": "String",
+				"INFORM": "String",
+				"RENDER_GROUP": "String",
+				"RESTRN": "String",
+				"SORDAT": "String"
+			},
+			"id": "RESARE_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATREA": "String",
+				"INFORM": "String",
+				"PERENDDAY": "Number",
+				"PERENDMONTH": "Number",
+				"PERSTADAY": "Number",
+				"PERSTAMONTH": "Number",
+				"RENDER_GROUP": "String",
+				"RESTRN": "String",
+				"SORDAT": "String"
+			},
+			"id": "RESARE_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "RIVERS",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATROD": "Number"
+			},
+			"id": "ROADWY",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATRTB": "Number",
+				"MASTER": "Boolean"
+			},
+			"id": "RTPBCN",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "RUNWAY_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"TEXT": "String"
+			},
+			"id": "SBDARE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"OBJNAM": "String"
+			},
+			"id": "SEAARE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATSIL": "Number",
+				"LIGHTS_TEXT": "String",
+				"OBJNAM": "String"
+			},
+			"id": "SILTNK",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATSIT": "String",
+				"OBJNAM": "String"
+			},
+			"id": "SISTAT",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATSLC": "Number",
+				"COUNTRY_CODE": "String",
+				"NATCON": "String",
+				"OBJNAM": "String"
+			},
+			"id": "SLCONS",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"ANGLE": "Number",
+				"CATSCF": "Mixed",
+				"SYMBOL": "String"
+			},
+			"id": "SMCFAC",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {
+				"ZVALUE": "Mixed",
+				"clustered": "Boolean",
+				"point_count": "Number",
+				"point_count_abbreviated": "String",
+				"sqrt_point_count": "Number"
+			},
+			"id": "SOUNDG",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "SWPARE_LINE",
+			"maxzoom": 13,
+			"minzoom": 4
+		},
+		{
+			"description": "",
+			"fields": {
+				"DRVAL1": "Number",
+				"SORDAT": "String"
+			},
+			"id": "SWPARE_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"BCNSHP": "Number",
+				"BOYSHP": "Number",
+				"TOPSHP": "Number"
+			},
+			"id": "TOPMAR",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "TSELNE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "TSEZNE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "TSSBND",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATTSS": "Number",
+				"ORIENT": "Number"
+			},
+			"id": "TSSLPT_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "TUNNEL",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"TRAFIC": "Number"
+			},
+			"id": "TWRTPT_LINE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"DRVAL1": "Number",
+				"ORIENT": "Number",
+				"TRAFIC": "Number"
+			},
+			"id": "TWRTPT_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "UNSARE",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"COUNTRY_CODE": "String",
+				"PRIO": "Number",
+				"VALSOU": "Number",
+				"WATLEV": "Number"
+			},
+			"id": "UWTROC",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATVEG": "Mixed"
+			},
+			"id": "VEGATN",
+			"maxzoom": 13,
+			"minzoom": 9
+		},
+		{
+			"description": "",
+			"fields": {},
+			"id": "WEDKLP",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
+				"CATWRK": "Number",
+				"VALSOU": "Number"
+			},
+			"id": "WRECKS",
+			"maxzoom": 13,
+			"minzoom": 2
+		}
+	],
+	"version": "2"
+}

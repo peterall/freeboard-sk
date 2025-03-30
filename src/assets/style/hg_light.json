@@ -1,18 +1,14 @@
 {
   "version": 8,
-  "name": "Nautical light theme",
+  "name": "Hydrographica light",
   "sources": {
     "osm": {
       "type": "vector",
-      "url": "/signalk/v1/api/resources/charts/osm_20250214"
+      "url": "osm_20250214.json"
     },
     "nautical": {
       "type": "vector",
-      "tiles": [
-        "/signalk/v1/api/resources/charts/se_s57_20250315/{z}/{x}/{y}"
-      ],
-      "minzoom": 4,
-      "maxzoom": 13
+      "url": "hg_20250221.json"
     }
   },
   "sprite": "../sprite/light/sprite",
@@ -161,6 +157,217 @@
       }
     },
     {
+      "id": "small_places",
+      "type": "symbol",
+      "source": "osm",
+      "source-layer": "small_places",
+      "minzoom": 6,
+      "maxzoom": 9,
+      "filter": [
+        "!=",
+        [
+          "get",
+          "fclass"
+        ],
+        "town"
+      ],
+      "layout": {
+        "text-field": [
+          "get",
+          "name"
+        ],
+        "text-font": [
+          "Roboto"
+        ],
+        "text-size": 11,
+        "text-variable-anchor": [
+          "top",
+          "bottom",
+          "top-left",
+          "bottom-left",
+          "top-right",
+          "bottom-right"
+        ],
+        "text-offset": [
+          0.1,
+          0.1
+        ],
+        "text-justify": "auto",
+        "text-padding": 20
+      },
+      "paint": {
+        "text-color": "hsl(0, 0%, 0%)"
+      }
+    },
+    {
+      "id": "small_places_town",
+      "type": "symbol",
+      "source": "osm",
+      "source-layer": "small_places",
+      "minzoom": 6,
+      "maxzoom": 9,
+      "filter": [
+        "==",
+        [
+          "get",
+          "fclass"
+        ],
+        "town"
+      ],
+      "layout": {
+        "text-field": [
+          "get",
+          "name"
+        ],
+        "text-font": [
+          "Roboto"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          11,
+          9,
+          11
+        ],
+        "text-variable-anchor": [
+          "top",
+          "bottom",
+          "top-left",
+          "bottom-left",
+          "top-right",
+          "bottom-right"
+        ],
+        "text-offset": [
+          0.1,
+          0.1
+        ],
+        "text-justify": "auto",
+        "text-padding": 15
+      },
+      "paint": {
+        "text-color": "hsl(0, 0%, 0%)"
+      }
+    },
+    {
+      "id": "large_places_city",
+      "type": "symbol",
+      "source": "osm",
+      "source-layer": "large_places",
+      "minzoom": 3,
+      "maxzoom": 9,
+      "filter": [
+        "==",
+        [
+          "get",
+          "fclass"
+        ],
+        "city"
+      ],
+      "layout": {
+        "text-field": [
+          "get",
+          "name"
+        ],
+        "text-font": [
+          "Roboto Medium"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          3,
+          11,
+          6,
+          13,
+          9,
+          15
+        ],
+        "text-variable-anchor": [
+          "top",
+          "bottom",
+          "top-left",
+          "bottom-left",
+          "top-right",
+          "bottom-right"
+        ],
+        "text-offset": [
+          0.1,
+          0.1
+        ],
+        "text-justify": "auto",
+        "text-padding": 5
+      },
+      "paint": {
+        "text-color": "hsl(0, 0%, 0%)"
+      }
+    },
+    {
+      "id": "large_places_national_capital",
+      "type": "symbol",
+      "source": "osm",
+      "source-layer": "large_places",
+      "minzoom": 1,
+      "maxzoom": 9,
+      "filter": [
+        "==",
+        [
+          "get",
+          "fclass"
+        ],
+        "national_capital"
+      ],
+      "layout": {
+        "text-field": [
+          "get",
+          "name"
+        ],
+        "text-font": [
+          "Roboto Bold"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          0,
+          13,
+          3,
+          15,
+          6,
+          18
+        ],
+        "text-variable-anchor": [
+          "top",
+          "bottom",
+          "top-left",
+          "bottom-left",
+          "top-right",
+          "bottom-right"
+        ],
+        "text-offset": [
+          0.1,
+          0.1
+        ],
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "hsl(0, 0%, 0%)"
+      }
+    },
+    {
       "id": "HG_DEPARE >3m",
       "type": "fill",
       "source": "nautical",
@@ -184,7 +391,7 @@
         ]
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "fill-color": "hsl(210, 100%, 100%)"
@@ -222,7 +429,7 @@
         ]
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "fill-color": "hsl(210, 100%, 85%)"
@@ -260,7 +467,7 @@
         ]
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "fill-color": "hsl(210, 100%, 75%)"
@@ -290,7 +497,7 @@
         ]
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "fill-color": "hsl(210, 100%, 85%)"
@@ -320,7 +527,7 @@
         ]
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "fill-color": "hsl(210, 100%, 100%)"
@@ -350,7 +557,7 @@
         ]
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "fill-color": "hsl(210, 100%, 85%)"
@@ -380,7 +587,7 @@
         ]
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "fill-color": "hsl(210, 100%, 75%)"
@@ -691,10 +898,10 @@
       }
     },
     {
-      "id": "LNDARE_POLYGON",
+      "id": "LNDARE",
       "type": "fill",
       "source": "nautical",
-      "source-layer": "LNDARE_POLYGON",
+      "source-layer": "LNDARE",
       "filter": [
         "==",
         [
@@ -771,7 +978,7 @@
       }
     },
     {
-      "id": "DEPCNT-DK >= 10m",
+      "id": "DEPCNT-DK",
       "type": "line",
       "source": "nautical",
       "source-layer": "DEPCNT",
@@ -784,59 +991,6 @@
             "COUNTRY_CODE"
           ],
           "DK"
-        ],
-        [
-          ">=",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
-        ]
-      ],
-      "minzoom": 11,
-      "layout": {},
-      "paint": {
-        "line-width": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          0,
-          11,
-          0.25,
-          14,
-          0.75
-        ],
-        "line-color": "hsl(210, 100%, 85%)"
-      }
-    },
-    {
-      "id": "DEPCNT-DK < 10m",
-      "type": "line",
-      "source": "nautical",
-      "source-layer": "DEPCNT",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "DK"
-        ],
-        [
-          "<",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
         ],
         [
           ">",
@@ -869,28 +1023,17 @@
       }
     },
     {
-      "id": "DEPCNT-SE >= 10m",
+      "id": "DEPCNT-SE",
       "type": "line",
       "source": "nautical",
       "source-layer": "DEPCNT",
       "filter": [
-        "all",
+        "==",
         [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "SE"
+          "get",
+          "COUNTRY_CODE"
         ],
-        [
-          ">=",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
-        ]
+        "SE"
       ],
       "minzoom": 11,
       "layout": {},
@@ -914,52 +1057,7 @@
       }
     },
     {
-      "id": "DEPCNT-SE < 10m",
-      "type": "line",
-      "source": "nautical",
-      "source-layer": "DEPCNT",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "SE"
-        ],
-        [
-          "<",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
-        ]
-      ],
-      "minzoom": 11,
-      "layout": {},
-      "paint": {
-        "line-width": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          0,
-          11,
-          0.25,
-          14,
-          0.75
-        ],
-        "line-color": "hsl(210, 100%, 85%)"
-      }
-    },
-    {
-      "id": "DEPCNT-FI-solid >= 10m",
+      "id": "DEPCNT-FI-dashed-3m",
       "type": "line",
       "source": "nautical",
       "source-layer": "DEPCNT",
@@ -974,12 +1072,12 @@
           "FI"
         ],
         [
-          ">=",
+          "<=",
           [
             "get",
             "VALDCO"
           ],
-          10
+          3
         ]
       ],
       "minzoom": 11,
@@ -1000,60 +1098,11 @@
           14,
           0.75
         ],
-        "line-color": "hsl(210, 100%, 85%)"
-      }
-    },
-    {
-      "id": "DEPCNT-FI-solid < 10m",
-      "type": "line",
-      "source": "nautical",
-      "source-layer": "DEPCNT",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "FI"
-        ],
-        [
-          ">",
-          [
-            "get",
-            "VALDCO"
-          ],
-          6
-        ],
-        [
-          "<",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
+        "line-color": "hsl(210, 100%, 60%)",
+        "line-dasharray": [
+          2,
+          2
         ]
-      ],
-      "minzoom": 11,
-      "layout": {},
-      "paint": {
-        "line-width": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          0,
-          11,
-          0.25,
-          14,
-          0.75
-        ],
-        "line-color": "hsl(210, 100%, 85%)"
       }
     },
     {
@@ -1114,7 +1163,7 @@
       }
     },
     {
-      "id": "DEPCNT-FI-dashed-3m",
+      "id": "DEPCNT-FI-solid",
       "type": "line",
       "source": "nautical",
       "source-layer": "DEPCNT",
@@ -1129,61 +1178,12 @@
           "FI"
         ],
         [
-          "<=",
+          ">",
           [
             "get",
             "VALDCO"
           ],
-          3
-        ]
-      ],
-      "minzoom": 11,
-      "layout": {},
-      "paint": {
-        "line-width": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          0,
-          11,
-          0.25,
-          14,
-          0.75
-        ],
-        "line-color": "hsl(210, 100%, 60%)",
-        "line-dasharray": [
-          2,
-          2
-        ]
-      }
-    },
-    {
-      "id": "DEPCNT-NO >= 10m",
-      "type": "line",
-      "source": "nautical",
-      "source-layer": "DEPCNT",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "NO"
-        ],
-        [
-          ">=",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
+          6
         ]
       ],
       "minzoom": 11,
@@ -1208,28 +1208,17 @@
       }
     },
     {
-      "id": "DEPCNT-NO < 10m",
+      "id": "DEPCNT-NO",
       "type": "line",
       "source": "nautical",
       "source-layer": "DEPCNT",
       "filter": [
-        "all",
+        "==",
         [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "NO"
+          "get",
+          "COUNTRY_CODE"
         ],
-        [
-          "<",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
-        ]
+        "NO"
       ],
       "minzoom": 11,
       "layout": {},
@@ -1274,21 +1263,13 @@
       }
     },
     {
-      "id": "HG_DEPCNT >= 10m",
+      "id": "HG_DEPCNT",
       "type": "line",
       "source": "nautical",
       "source-layer": "HG_DEPCNT",
-      "filter": [
-        ">=",
-        [
-          "get",
-          "VALDCO"
-        ],
-        10
-      ],
       "minzoom": 11,
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "line-width": [
@@ -1306,90 +1287,19 @@
           14,
           0.75
         ],
-        "line-color": "hsl(210, 100%, 85%)"
-      }
-    },
-    {
-      "id": "HG_DEPCNT 2-10m",
-      "type": "line",
-      "source": "nautical",
-      "source-layer": "HG_DEPCNT",
-      "filter": [
-        "all",
-        [
-          "<",
+        "line-color": [
+          "case",
           [
-            "get",
-            "VALDCO"
+            "<=",
+            [
+              "get",
+              "VALDCO"
+            ],
+            2
           ],
-          10
-        ],
-        [
-          ">",
-          [
-            "get",
-            "VALDCO"
-          ],
-          2
+          "hsl(336, 90%, 65%)",
+          "hsl(210, 100%, 85%)"
         ]
-      ],
-      "minzoom": 11,
-      "layout": {
-        "visibility": "none"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          0,
-          11,
-          0.25,
-          14,
-          0.75
-        ],
-        "line-color": "hsl(210, 100%, 85%)"
-      }
-    },
-    {
-      "id": "HG_DEPCNT <= 2m",
-      "type": "line",
-      "source": "nautical",
-      "source-layer": "HG_DEPCNT",
-      "filter": [
-        "<=",
-        [
-          "get",
-          "VALDCO"
-        ],
-        2
-      ],
-      "minzoom": 11,
-      "layout": {
-        "visibility": "none"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          0,
-          11,
-          0.25,
-          14,
-          0.75
-        ],
-        "line-color": "hsl(336, 90%, 65%)"
       }
     },
     {
@@ -3062,7 +2972,7 @@
         "CHART_BBOX"
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "line-width": 2,
@@ -3085,7 +2995,7 @@
         "CHART_BOUNDS"
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "line-width": [
@@ -3151,7 +3061,7 @@
         "CHARTLET_BOUNDS"
       ],
       "layout": {
-        "visibility": "none"
+        "visibility": "visible"
       },
       "paint": {
         "line-width": [
@@ -3344,37 +3254,6 @@
       }
     },
     {
-      "id": "LNDMRK-area",
-      "minzoom": 12,
-      "type": "fill",
-      "source": "nautical",
-      "source-layer": "LNDMRK",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "geometry-type"
-          ],
-          "Polygon"
-        ],
-        [
-          "match",
-          [
-            "get",
-            "CATLMK"
-          ],
-          "[2]",
-          true,
-          false
-        ]
-      ],
-      "layout": {},
-      "paint": {
-        "fill-pattern": "E19_Cemetery"
-      }
-    },
-    {
       "id": "TSSBND",
       "minzoom": 9,
       "type": "line",
@@ -3513,35 +3392,16 @@
       "source": "nautical",
       "source-layer": "LIGHT_SECTORS",
       "filter": [
-        "all",
+        "match",
         [
-          "match",
-          [
-            "get",
-            "TYPE"
-          ],
-          [
-            "sector"
-          ],
-          true,
-          false
+          "get",
+          "TYPE"
         ],
         [
-          ">=",
-          [
-            "zoom"
-          ],
-          [
-            "match",
-            [
-              "get",
-              "COUNTRY_CODE"
-            ],
-            "FI",
-            10,
-            9
-          ]
-        ]
+          "sector"
+        ],
+        true,
+        false
       ],
       "layout": {},
       "paint": {
@@ -3576,35 +3436,16 @@
       "source": "nautical",
       "source-layer": "LIGHT_SECTORS",
       "filter": [
-        "all",
+        "match",
         [
-          "match",
-          [
-            "get",
-            "TYPE"
-          ],
-          [
-            "ray"
-          ],
-          true,
-          false
+          "get",
+          "TYPE"
         ],
         [
-          ">=",
-          [
-            "zoom"
-          ],
-          [
-            "match",
-            [
-              "get",
-              "COUNTRY_CODE"
-            ],
-            "FI",
-            10,
-            9
-          ]
-        ]
+          "ray"
+        ],
+        true,
+        false
       ],
       "layout": {},
       "paint": {
@@ -3679,12 +3520,19 @@
       "source": "nautical",
       "source-layer": "RESARE_LINE",
       "filter": [
-        "==",
+        "all",
         [
-          "get",
-          "RENDER_GROUP"
+          "==",
+          [
+            "get",
+            "RENDER_GROUP"
+          ],
+          "INFO"
         ],
-        "INFO"
+        [
+          "has",
+          "INFORM"
+        ]
       ],
       "layout": {},
       "paint": {
@@ -3774,7 +3622,7 @@
           [
             "[27]"
           ],
-          "N2_1_RestrictedArea",
+          "NO_LINE_PATTERN",
           [
             "match",
             [
@@ -3871,6 +3719,819 @@
       }
     },
     {
+      "id": "SOUNDG",
+      "minzoom": 10,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "SOUNDG",
+      "layout": {
+        "text-field": [
+          "case",
+          [
+            "==",
+            [
+              "typeof",
+              [
+                "get",
+                "ZVALUE"
+              ]
+            ],
+            "number"
+          ],
+          [
+            "number-format",
+            [
+              "get",
+              "ZVALUE"
+            ],
+            {
+              "locale": "sv-se",
+              "min-fraction-digits": 0,
+              "max-fraction-digits": 1
+            }
+          ],
+          [
+            "get",
+            "ZVALUE"
+          ]
+        ],
+        "text-size": 11,
+        "text-font": [
+          "Roboto Italic"
+        ],
+        "text-padding": [
+          "step",
+          [
+            "zoom"
+          ],
+          10,
+          13,
+          0
+        ]
+      },
+      "paint": {
+        "text-color": [
+          "case",
+          [
+            "<=",
+            [
+              "number",
+              [
+                "get",
+                "ZVALUE"
+              ],
+              2
+            ],
+            2
+          ],
+          "hsl(210, 20%, 50%)",
+          [
+            "<=",
+            [
+              "number",
+              [
+                "get",
+                "ZVALUE"
+              ],
+              3
+            ],
+            3
+          ],
+          "hsl(210, 20%, 55%)",
+          "hsl(210, 20%, 60%)"
+        ]
+      }
+    },
+    {
+      "id": "SBDARE",
+      "minzoom": 10,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "SBDARE",
+      "layout": {
+        "text-field": [
+          "get",
+          "TEXT"
+        ],
+        "text-font": [
+          "Roboto Italic"
+        ],
+        "text-size": 11,
+        "text-padding": [
+          "step",
+          [
+            "zoom"
+          ],
+          10,
+          13,
+          0
+        ]
+      },
+      "paint": {
+        "text-color": "hsl(210, 20%, 60%)"
+      }
+    },
+    {
+      "id": "DEPCNT-text-DK",
+      "minzoom": 10,
+      "type": "symbol",
+      "source": "nautical",
+      "filter": [
+        "all",
+        [
+          "==",
+          [
+            "get",
+            "COUNTRY_CODE"
+          ],
+          "DK"
+        ],
+        [
+          ">",
+          [
+            "get",
+            "VALDCO"
+          ],
+          0
+        ]
+      ],
+      "source-layer": "DEPCNT",
+      "layout": {
+        "text-font": [
+          "Roboto"
+        ],
+        "text-field": [
+          "to-string",
+          [
+            "get",
+            "VALDCO"
+          ]
+        ],
+        "text-size": 11,
+        "text-keep-upright": true,
+        "symbol-placement": "line",
+        "symbol-spacing": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          0,
+          200,
+          17,
+          200,
+          18,
+          150
+        ]
+      },
+      "paint": {
+        "text-color": "hsl(210, 20%, 60%)",
+        "text-halo-color": [
+          "case",
+          [
+            "<=",
+            [
+              "get",
+              "VALDCO"
+            ],
+            2
+          ],
+          "hsl(210, 100%, 85%)",
+          [
+            "<",
+            [
+              "get",
+              "VALDCO"
+            ],
+            6
+          ],
+          "hsl(210, 100%, 95%)",
+          "hsl(210, 100%, 100%)"
+        ],
+        "text-halo-blur": 0,
+        "text-halo-width": 2
+      }
+    },
+    {
+      "id": "DEPCNT-text-SE",
+      "minzoom": 10,
+      "type": "symbol",
+      "source": "nautical",
+      "filter": [
+        "==",
+        [
+          "get",
+          "COUNTRY_CODE"
+        ],
+        "SE"
+      ],
+      "source-layer": "DEPCNT",
+      "layout": {
+        "text-font": [
+          "Roboto"
+        ],
+        "text-field": [
+          "to-string",
+          [
+            "get",
+            "VALDCO"
+          ]
+        ],
+        "text-size": 11,
+        "text-keep-upright": true,
+        "symbol-placement": "line",
+        "symbol-spacing": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          0,
+          200,
+          17,
+          200,
+          18,
+          150
+        ]
+      },
+      "paint": {
+        "text-color": "hsl(210, 20%, 60%)",
+        "text-halo-color": [
+          "case",
+          [
+            ">",
+            [
+              "get",
+              "VALDCO"
+            ],
+            3
+          ],
+          "hsl(210, 100%, 100%)",
+          "hsl(210, 100%, 95%)"
+        ],
+        "text-halo-blur": 0,
+        "text-halo-width": 2
+      }
+    },
+    {
+      "id": "DEPCNT-text-FI",
+      "minzoom": 10,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "DEPCNT",
+      "filter": [
+        "==",
+        [
+          "get",
+          "COUNTRY_CODE"
+        ],
+        "FI"
+      ],
+      "layout": {
+        "text-font": [
+          "Roboto"
+        ],
+        "text-field": [
+          "to-string",
+          [
+            "get",
+            "VALDCO"
+          ]
+        ],
+        "text-size": 11,
+        "text-keep-upright": true,
+        "symbol-placement": "line",
+        "symbol-spacing": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          0,
+          200,
+          17,
+          200,
+          18,
+          150
+        ]
+      },
+      "paint": {
+        "text-color": "hsl(210, 20%, 60%)",
+        "text-halo-color": [
+          "case",
+          [
+            ">=",
+            [
+              "get",
+              "VALDCO"
+            ],
+            6
+          ],
+          "hsl(210, 100%, 100%)",
+          "hsl(210, 100%, 95%)"
+        ],
+        "text-halo-blur": 0,
+        "text-halo-width": 2
+      }
+    },
+    {
+      "id": "DEPCNT-text-NO",
+      "minzoom": 10,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "DEPCNT",
+      "filter": [
+        "==",
+        [
+          "get",
+          "COUNTRY_CODE"
+        ],
+        "NO"
+      ],
+      "layout": {
+        "text-font": [
+          "Roboto"
+        ],
+        "text-field": [
+          "to-string",
+          [
+            "get",
+            "VALDCO"
+          ]
+        ],
+        "text-size": 11,
+        "text-keep-upright": true,
+        "symbol-placement": "line",
+        "symbol-spacing": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          0,
+          200,
+          17,
+          200,
+          18,
+          150
+        ]
+      },
+      "paint": {
+        "text-color": [
+          "case",
+          [
+            "<=",
+            [
+              "get",
+              "VALDCO"
+            ],
+            0.5
+          ],
+          "hsl(210, 20%, 40%)",
+          "hsl(210, 20%, 60%)"
+        ],
+        "text-halo-color": [
+          "case",
+          [
+            "<=",
+            [
+              "get",
+              "VALDCO"
+            ],
+            0.5
+          ],
+          "hsla(120, 35%, 75%, 100%)",
+          [
+            "<=",
+            [
+              "get",
+              "VALDCO"
+            ],
+            3
+          ],
+          "hsl(210, 100%, 85%)",
+          [
+            "<=",
+            [
+              "get",
+              "VALDCO"
+            ],
+            5
+          ],
+          "hsl(210, 100%, 95%)",
+          "hsl(210, 100%, 100%)"
+        ],
+        "text-halo-blur": 0,
+        "text-halo-width": 2
+      }
+    },
+    {
+      "id": "HG_DEPCNT-text",
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "HG_DEPCNT",
+      "minzoom": 11,
+      "layout": {
+        "visibility": "visible",
+        "text-font": [
+          "Roboto"
+        ],
+        "text-field": [
+          "to-string",
+          [
+            "get",
+            "VALDCO"
+          ]
+        ],
+        "text-size": 11,
+        "text-keep-upright": true,
+        "symbol-placement": "line",
+        "symbol-spacing": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          0,
+          200,
+          17,
+          200,
+          18,
+          150
+        ]
+      },
+      "paint": {
+        "text-color": [
+          "case",
+          [
+            ">",
+            [
+              "get",
+              "VALDCO"
+            ],
+            2
+          ],
+          "hsl(210, 20%, 60%)",
+          "hsl(336, 90%, 65%)"
+        ],
+        "text-halo-color": [
+          "case",
+          [
+            ">",
+            [
+              "get",
+              "VALDCO"
+            ],
+            2
+          ],
+          "hsl(210, 100%, 100%)",
+          "hsl(210, 100%, 85%)"
+        ],
+        "text-halo-blur": 0,
+        "text-halo-width": 2
+      }
+    },
+    {
+      "id": "LAKARE-Text",
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "LAKARE",
+      "minzoom": 9,
+      "layout": {
+        "text-field": [
+          "to-string",
+          [
+            "get",
+            "OBJNAM"
+          ]
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          13,
+          11,
+          15,
+          13
+        ],
+        "text-font": [
+          "Roboto Italic"
+        ],
+        "text-variable-anchor": [
+          "step",
+          [
+            "zoom"
+          ],
+          [
+            "center"
+          ],
+          13,
+          [
+            "center",
+            "top-right",
+            "top-left",
+            "bottom-right",
+            "bottom-left"
+          ]
+        ],
+        "text-padding": [
+          "step",
+          [
+            "zoom"
+          ],
+          10,
+          13,
+          0
+        ],
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "hsl(213, 59%, 43%)"
+      }
+    },
+    {
+      "id": "SEAARE",
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "SEAARE",
+      "minzoom": 9,
+      "maxzoom": 22,
+      "layout": {
+        "text-field": [
+          "to-string",
+          [
+            "get",
+            "OBJNAM"
+          ]
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          13,
+          11,
+          15,
+          13
+        ],
+        "text-font": [
+          "Roboto Italic"
+        ],
+        "text-variable-anchor": [
+          "step",
+          [
+            "zoom"
+          ],
+          [
+            "center"
+          ],
+          13,
+          [
+            "center",
+            "top-right",
+            "top-left",
+            "bottom-right",
+            "bottom-left"
+          ]
+        ],
+        "text-padding": [
+          "step",
+          [
+            "zoom"
+          ],
+          10,
+          13,
+          0
+        ],
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "hsl(213, 59%, 43%)"
+      }
+    },
+    {
+      "id": "LNDRGN",
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "LNDRGN",
+      "minzoom": 9,
+      "maxzoom": 22,
+      "layout": {
+        "text-field": [
+          "to-string",
+          [
+            "get",
+            "OBJNAM"
+          ]
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          13,
+          11,
+          15,
+          13
+        ],
+        "text-font": [
+          "Roboto Bold"
+        ],
+        "text-variable-anchor": [
+          "step",
+          [
+            "zoom"
+          ],
+          [
+            "center"
+          ],
+          13,
+          [
+            "center",
+            "top-right",
+            "top-left",
+            "bottom-right",
+            "bottom-left"
+          ]
+        ],
+        "text-padding": [
+          "step",
+          [
+            "zoom"
+          ],
+          10,
+          13,
+          0
+        ],
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "hsl(0, 0%, 0%)"
+      }
+    },
+    {
+      "id": "HULKES_POINT",
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "HULKES_POINT",
+      "minzoom": 15,
+      "layout": {
+        "icon-image": "F34_Hulk",
+        "icon-size": 1,
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "text-font": [
+          "Roboto"
+        ],
+        "text-field": [
+          "case",
+          [
+            "has",
+            "OBJNAM"
+          ],
+          [
+            "get",
+            "OBJNAM"
+          ],
+          "Hulk"
+        ],
+        "text-size": 11,
+        "text-variable-anchor": [
+          "top-right",
+          "top-left",
+          "bottom-right",
+          "bottom-left"
+        ],
+        "text-offset": [
+          0.75,
+          0.75
+        ],
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "hsl(0, 0%, 0%)"
+      }
+    },
+    {
+      "id": "HULKES_AREA_text",
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "HULKES_AREA",
+      "minzoom": 14,
+      "layout": {
+        "text-font": [
+          "Roboto"
+        ],
+        "text-field": [
+          "case",
+          [
+            "has",
+            "OBJNAM"
+          ],
+          [
+            "get",
+            "OBJNAM"
+          ],
+          "Hulk"
+        ],
+        "text-size": 11,
+        "text-variable-anchor": [
+          "center",
+          "top-right",
+          "top-left",
+          "bottom-right",
+          "bottom-left"
+        ],
+        "text-offset": [
+          0,
+          0
+        ],
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "hsl(0, 0%, 0%)"
+      }
+    },
+    {
+      "id": "OILBAR_text",
+      "minzoom": 12,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "OILBAR",
+      "layout": {
+        "text-font": [
+          "Roboto"
+        ],
+        "text-size": 11,
+        "text-field": "Floating barrier",
+        "symbol-placement": "line-center",
+        "text-offset": [
+          0,
+          0.75
+        ]
+      },
+      "paint": {
+        "text-color": "hsl(0, 0%, 0%)"
+      }
+    },
+    {
+      "id": "MIPARE_LINE-Text",
+      "minzoom": 10,
+      "type": "symbol",
+      "source": "nautical",
+      "filter": [
+        "match",
+        [
+          "get",
+          "CATMPA"
+        ],
+        [
+          "[3]"
+        ],
+        true,
+        false
+      ],
+      "source-layer": "MIPARE_LINE",
+      "layout": {
+        "text-field": "Submarine excercise area",
+        "text-font": [
+          "Roboto"
+        ],
+        "text-size": 11,
+        "symbol-placement": "line",
+        "text-rotation-alignment": "map",
+        "text-offset": [
+          0,
+          1
+        ],
+        "symbol-spacing": 250,
+        "text-keep-upright": true
+      },
+      "paint": {
+        "text-color": "hsl(336, 91%, 65%)"
+      }
+    },
+    {
       "id": "PIPSOL",
       "minzoom": 10,
       "type": "line",
@@ -3960,43 +4621,67 @@
       }
     },
     {
-      "id": "HULKES_POINT",
+      "id": "FERYRT-text",
+      "minzoom": 10,
       "type": "symbol",
       "source": "nautical",
-      "source-layer": "HULKES_POINT",
-      "minzoom": 15,
+      "source-layer": "FERYRT",
+      "filter": [
+        "match",
+        [
+          "get",
+          "CATFRY"
+        ],
+        [
+          2
+        ],
+        true,
+        false
+      ],
       "layout": {
-        "icon-image": "F34_Hulk",
-        "icon-size": 1,
-        "icon-allow-overlap": true,
-        "icon-ignore-placement": true,
         "text-font": [
           "Roboto"
         ],
-        "text-field": [
-          "case",
-          [
-            "has",
-            "OBJNAM"
-          ],
-          [
-            "get",
-            "OBJNAM"
-          ],
-          "Hulk"
+        "text-size": 11,
+        "text-field": "Cable ferry",
+        "symbol-placement": "line-center",
+        "text-offset": [
+          0,
+          1.5
+        ]
+      },
+      "paint": {
+        "text-color": "hsl(0, 0%, 0%)"
+      }
+    },
+    {
+      "id": "DAMCON_text",
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "DAMCON",
+      "filter": [
+        "match",
+        [
+          "geometry-type"
+        ],
+        [
+          "LineString"
+        ],
+        true,
+        false
+      ],
+      "minzoom": 12,
+      "layout": {
+        "text-font": [
+          "Roboto"
         ],
         "text-size": 11,
-        "text-variable-anchor": [
-          "top-right",
-          "top-left",
-          "bottom-right",
-          "bottom-left"
-        ],
+        "text-field": "Flood barrage",
+        "symbol-placement": "line-center",
         "text-offset": [
-          0.75,
-          0.75
-        ],
-        "text-justify": "auto"
+          0,
+          1.5
+        ]
       },
       "paint": {
         "text-color": "hsl(0, 0%, 0%)"
@@ -4362,29 +5047,39 @@
       }
     },
     {
-      "id": "LNDARE_POINT",
+      "id": "LNDARE-point",
       "minzoom": 12,
       "type": "symbol",
       "source": "nautical",
-      "source-layer": "LNDARE_POINT",
+      "source-layer": "LNDARE",
       "filter": [
-        ">=",
+        "all",
         [
-          "zoom"
+          "==",
+          [
+            "geometry-type"
+          ],
+          "Point"
         ],
         [
-          "match",
+          ">=",
           [
-            "get",
-            "PRIO"
+            "zoom"
           ],
-          1,
-          12,
-          2,
-          13,
-          3,
-          14,
-          15
+          [
+            "match",
+            [
+              "get",
+              "PRIO"
+            ],
+            1,
+            12,
+            2,
+            13,
+            3,
+            14,
+            15
+          ]
         ]
       ],
       "layout": {
@@ -4963,2055 +5658,6 @@
           0.15
         ],
         "text-justify": "auto"
-      },
-      "paint": {
-        "text-color": "hsl(0, 0%, 0%)"
-      }
-    },
-    {
-      "id": "LAKARE_POINT-text",
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "LAKARE_POINT",
-      "filter": [
-        ">=",
-        [
-          "zoom"
-        ],
-        [
-          "match",
-          [
-            "get",
-            "PRIO"
-          ],
-          1,
-          1,
-          2,
-          10,
-          11
-        ]
-      ],
-      "minzoom": 9,
-      "layout": {
-        "text-field": [
-          "to-string",
-          [
-            "get",
-            "OBJNAM"
-          ]
-        ],
-        "text-size": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          13,
-          11,
-          15,
-          13
-        ],
-        "text-font": [
-          "Roboto Italic"
-        ],
-        "text-variable-anchor": [
-          "center",
-          "top",
-          "top-left",
-          "left",
-          "bottom-left",
-          "bottom",
-          "bottom-right",
-          "right",
-          "top-right"
-        ],
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          5,
-          13,
-          0
-        ],
-        "text-justify": "auto"
-      },
-      "paint": {
-        "text-color": "hsl(213, 59%, 43%)"
-      }
-    },
-    {
-      "id": "SEAARE_POINT",
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SEAARE_POINT",
-      "filter": [
-        ">=",
-        [
-          "zoom"
-        ],
-        [
-          "match",
-          [
-            "get",
-            "PRIO"
-          ],
-          1,
-          1,
-          2,
-          10,
-          11
-        ]
-      ],
-      "minzoom": 9,
-      "layout": {
-        "text-field": [
-          "to-string",
-          [
-            "get",
-            "OBJNAM"
-          ]
-        ],
-        "text-size": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          13,
-          11,
-          15,
-          13
-        ],
-        "text-font": [
-          "Roboto Italic"
-        ],
-        "text-variable-anchor": [
-          "center",
-          "top",
-          "top-left",
-          "left",
-          "bottom-left",
-          "bottom",
-          "bottom-right",
-          "right",
-          "top-right"
-        ],
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          5,
-          13,
-          0
-        ],
-        "text-justify": "auto"
-      },
-      "paint": {
-        "text-color": "hsl(213, 59%, 43%)"
-      }
-    },
-    {
-      "id": "LNDRGN_POINT",
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "LNDRGN_POINT",
-      "filter": [
-        ">=",
-        [
-          "zoom"
-        ],
-        [
-          "match",
-          [
-            "get",
-            "PRIO"
-          ],
-          1,
-          1,
-          2,
-          10,
-          11
-        ]
-      ],
-      "minzoom": 9,
-      "layout": {
-        "text-field": [
-          "to-string",
-          [
-            "get",
-            "OBJNAM"
-          ]
-        ],
-        "text-size": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          13,
-          11,
-          15,
-          13
-        ],
-        "text-font": [
-          "Roboto Bold"
-        ],
-        "text-variable-anchor": [
-          "center",
-          "top",
-          "top-left",
-          "left",
-          "bottom-left",
-          "bottom",
-          "bottom-right",
-          "right",
-          "top-right"
-        ],
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          5,
-          13,
-          0
-        ],
-        "text-justify": "auto",
-        "symbol-sort-key": [
-          "get",
-          "PRIO"
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(0, 0%, 0%)"
-      }
-    },
-    {
-      "id": "small_places_village",
-      "type": "symbol",
-      "source": "osm",
-      "source-layer": "small_places",
-      "minzoom": 8,
-      "maxzoom": 9,
-      "filter": [
-        "==",
-        [
-          "get",
-          "fclass"
-        ],
-        "village"
-      ],
-      "layout": {
-        "text-field": [
-          "get",
-          "name"
-        ],
-        "text-font": [
-          "Roboto"
-        ],
-        "text-size": 11,
-        "text-variable-anchor": [
-          "center",
-          "top",
-          "top-left",
-          "left",
-          "bottom-left",
-          "bottom",
-          "bottom-right",
-          "right",
-          "top-right"
-        ],
-        "text-offset": [
-          0,
-          0
-        ],
-        "text-justify": "auto",
-        "text-padding": 15
-      },
-      "paint": {
-        "text-color": "hsl(0, 0%, 0%)"
-      }
-    },
-    {
-      "id": "small_places_town",
-      "type": "symbol",
-      "source": "osm",
-      "source-layer": "small_places",
-      "minzoom": 6,
-      "maxzoom": 9,
-      "filter": [
-        "==",
-        [
-          "get",
-          "fclass"
-        ],
-        "town"
-      ],
-      "layout": {
-        "text-field": [
-          "get",
-          "name"
-        ],
-        "text-font": [
-          "Roboto"
-        ],
-        "text-size": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          6,
-          11,
-          9,
-          11
-        ],
-        "text-variable-anchor": [
-          "center",
-          "top",
-          "top-left",
-          "left",
-          "bottom-left",
-          "bottom",
-          "bottom-right",
-          "right",
-          "top-right"
-        ],
-        "text-offset": [
-          0,
-          0
-        ],
-        "text-justify": "auto",
-        "text-padding": 10
-      },
-      "paint": {
-        "text-color": "hsl(0, 0%, 0%)"
-      }
-    },
-    {
-      "id": "large_places_city",
-      "type": "symbol",
-      "source": "osm",
-      "source-layer": "large_places",
-      "minzoom": 3,
-      "maxzoom": 9,
-      "filter": [
-        "==",
-        [
-          "get",
-          "fclass"
-        ],
-        "city"
-      ],
-      "layout": {
-        "text-field": [
-          "get",
-          "name"
-        ],
-        "text-font": [
-          "Roboto Medium"
-        ],
-        "text-size": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          3,
-          11,
-          6,
-          13,
-          9,
-          15
-        ],
-        "text-variable-anchor": [
-          "center",
-          "top",
-          "top-left",
-          "left",
-          "bottom-left",
-          "bottom",
-          "bottom-right",
-          "right",
-          "top-right"
-        ],
-        "text-offset": [
-          0.25,
-          0.25
-        ],
-        "text-justify": "auto",
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          5,
-          5,
-          0
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(0, 0%, 0%)"
-      }
-    },
-    {
-      "id": "large_places_national_capital",
-      "type": "symbol",
-      "source": "osm",
-      "source-layer": "large_places",
-      "minzoom": 1,
-      "maxzoom": 9,
-      "filter": [
-        "==",
-        [
-          "get",
-          "fclass"
-        ],
-        "national_capital"
-      ],
-      "layout": {
-        "text-field": [
-          "get",
-          "name"
-        ],
-        "text-font": [
-          "Roboto Bold"
-        ],
-        "text-size": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          13,
-          3,
-          15,
-          6,
-          18
-        ],
-        "text-variable-anchor": [
-          "center",
-          "top",
-          "top-left",
-          "left",
-          "bottom-left",
-          "bottom",
-          "bottom-right",
-          "right",
-          "top-right"
-        ],
-        "text-offset": [
-          0.25,
-          0.25
-        ],
-        "text-justify": "auto"
-      },
-      "paint": {
-        "text-color": "hsl(0, 0%, 0%)"
-      }
-    },
-    {
-      "id": "SOUNDG-DK < 4m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SOUNDG",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "DK"
-        ],
-        [
-          "<",
-          [
-            "get",
-            "ZVALUE"
-          ],
-          4
-        ]
-      ],
-      "layout": {
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "ZVALUE"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-font": [
-          "Roboto Italic"
-        ],
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          10,
-          13,
-          0
-        ]
-      },
-      "paint": {
-        "text-color": [
-          "case",
-          [
-            "<=",
-            [
-              "get",
-              "ZVALUE"
-            ],
-            2
-          ],
-          "hsl(210, 20%, 50%)",
-          [
-            "<=",
-            [
-              "get",
-              "ZVALUE"
-            ],
-            3
-          ],
-          "hsl(210, 20%, 55%)",
-          "hsl(210, 20%, 60%)"
-        ]
-      }
-    },
-    {
-      "id": "SOUNDG-DK >= 4m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SOUNDG",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "DK"
-        ],
-        [
-          ">=",
-          [
-            "get",
-            "ZVALUE"
-          ],
-          4
-        ]
-      ],
-      "layout": {
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "ZVALUE"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-font": [
-          "Roboto Italic"
-        ],
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          10,
-          13,
-          0
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)"
-      }
-    },
-    {
-      "id": "SOUNDG-FI < 10m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SOUNDG",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "FI"
-        ],
-        [
-          "<",
-          [
-            "get",
-            "ZVALUE"
-          ],
-          10
-        ]
-      ],
-      "layout": {
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "ZVALUE"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-font": [
-          "Roboto Italic"
-        ],
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          10,
-          13,
-          0
-        ]
-      },
-      "paint": {
-        "text-color": [
-          "case",
-          [
-            "<=",
-            [
-              "get",
-              "ZVALUE"
-            ],
-            2
-          ],
-          "hsl(210, 20%, 50%)",
-          [
-            "<=",
-            [
-              "get",
-              "ZVALUE"
-            ],
-            3
-          ],
-          "hsl(210, 20%, 55%)",
-          "hsl(210, 20%, 60%)"
-        ]
-      }
-    },
-    {
-      "id": "SOUNDG-FI >= 10m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SOUNDG",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "FI"
-        ],
-        [
-          ">=",
-          [
-            "get",
-            "ZVALUE"
-          ],
-          10
-        ]
-      ],
-      "layout": {
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "ZVALUE"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-font": [
-          "Roboto Italic"
-        ],
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          10,
-          13,
-          0
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)"
-      }
-    },
-    {
-      "id": "SOUNDG-NO < 5m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SOUNDG",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "NO"
-        ],
-        [
-          "<",
-          [
-            "get",
-            "ZVALUE"
-          ],
-          5
-        ]
-      ],
-      "layout": {
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "ZVALUE"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-font": [
-          "Roboto Italic"
-        ],
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          10,
-          13,
-          0
-        ]
-      },
-      "paint": {
-        "text-color": [
-          "case",
-          [
-            "<=",
-            [
-              "get",
-              "ZVALUE"
-            ],
-            2
-          ],
-          "hsl(210, 20%, 50%)",
-          [
-            "<=",
-            [
-              "get",
-              "ZVALUE"
-            ],
-            3
-          ],
-          "hsl(210, 20%, 55%)",
-          "hsl(210, 20%, 60%)"
-        ]
-      }
-    },
-    {
-      "id": "SOUNDG-NO >= 5m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SOUNDG",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "NO"
-        ],
-        [
-          ">=",
-          [
-            "get",
-            "ZVALUE"
-          ],
-          5
-        ]
-      ],
-      "layout": {
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "ZVALUE"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-font": [
-          "Roboto Italic"
-        ],
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          10,
-          13,
-          0
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)"
-      }
-    },
-    {
-      "id": "SOUNDG-SE < 3m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SOUNDG",
-      "filter": [
-        "all",
-        [
-          "any",
-          [
-            "==",
-            [
-              "get",
-              "COUNTRY_CODE"
-            ],
-            "SE"
-          ],
-          [
-            "!",
-            [
-              "has",
-              "COUNTRY_CODE"
-            ]
-          ]
-        ],
-        [
-          "<",
-          [
-            "number",
-            [
-              "get",
-              "ZVALUE"
-            ],
-            10
-          ],
-          3
-        ]
-      ],
-      "layout": {
-        "text-field": [
-          "case",
-          [
-            "==",
-            [
-              "typeof",
-              [
-                "get",
-                "ZVALUE"
-              ]
-            ],
-            "number"
-          ],
-          [
-            "number-format",
-            [
-              "get",
-              "ZVALUE"
-            ],
-            {
-              "locale": "sv-se",
-              "min-fraction-digits": 0,
-              "max-fraction-digits": 1
-            }
-          ],
-          [
-            "get",
-            "ZVALUE"
-          ]
-        ],
-        "text-size": 11,
-        "text-font": [
-          "Roboto Italic"
-        ],
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          10,
-          13,
-          0
-        ]
-      },
-      "paint": {
-        "text-color": [
-          "case",
-          [
-            "<=",
-            [
-              "number",
-              [
-                "get",
-                "ZVALUE"
-              ],
-              2
-            ],
-            2
-          ],
-          "hsl(210, 20%, 50%)",
-          [
-            "<=",
-            [
-              "number",
-              [
-                "get",
-                "ZVALUE"
-              ],
-              3
-            ],
-            3
-          ],
-          "hsl(210, 20%, 55%)",
-          "hsl(210, 20%, 60%)"
-        ]
-      }
-    },
-    {
-      "id": "SOUNDG-SE >= 3m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SOUNDG",
-      "filter": [
-        "all",
-        [
-          "any",
-          [
-            "==",
-            [
-              "get",
-              "COUNTRY_CODE"
-            ],
-            "SE"
-          ],
-          [
-            "!",
-            [
-              "has",
-              "COUNTRY_CODE"
-            ]
-          ]
-        ],
-        [
-          ">=",
-          [
-            "number",
-            [
-              "get",
-              "ZVALUE"
-            ],
-            10
-          ],
-          3
-        ]
-      ],
-      "layout": {
-        "text-field": [
-          "case",
-          [
-            "==",
-            [
-              "typeof",
-              [
-                "get",
-                "ZVALUE"
-              ]
-            ],
-            "number"
-          ],
-          [
-            "number-format",
-            [
-              "get",
-              "ZVALUE"
-            ],
-            {
-              "locale": "sv-se",
-              "min-fraction-digits": 0,
-              "max-fraction-digits": 1
-            }
-          ],
-          [
-            "get",
-            "ZVALUE"
-          ]
-        ],
-        "text-size": 11,
-        "text-font": [
-          "Roboto Italic"
-        ],
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          10,
-          13,
-          0
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)"
-      }
-    },
-    {
-      "id": "SBDARE",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SBDARE",
-      "layout": {
-        "text-field": [
-          "get",
-          "TEXT"
-        ],
-        "text-font": [
-          "Roboto Italic"
-        ],
-        "text-size": 11,
-        "text-padding": [
-          "step",
-          [
-            "zoom"
-          ],
-          10,
-          13,
-          0
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)"
-      }
-    },
-    {
-      "id": "DEPCNT-text-DK >= 10m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "DK"
-        ],
-        [
-          ">=",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
-        ]
-      ],
-      "source-layer": "DEPCNT",
-      "layout": {
-        "text-font": [
-          "Roboto"
-        ],
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "VALDCO"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-keep-upright": true,
-        "symbol-placement": "line",
-        "symbol-spacing": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          200,
-          17,
-          200,
-          18,
-          150
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)",
-        "text-halo-color": "hsl(210, 100%, 100%)",
-        "text-halo-blur": 0,
-        "text-halo-width": 2
-      }
-    },
-    {
-      "id": "DEPCNT-text-DK < 10m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "DK"
-        ],
-        [
-          "<",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
-        ],
-        [
-          ">",
-          [
-            "get",
-            "VALDCO"
-          ],
-          0
-        ]
-      ],
-      "source-layer": "DEPCNT",
-      "layout": {
-        "text-font": [
-          "Roboto"
-        ],
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "VALDCO"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-keep-upright": true,
-        "symbol-placement": "line",
-        "symbol-spacing": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          200,
-          17,
-          200,
-          18,
-          150
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)",
-        "text-halo-color": [
-          "case",
-          [
-            "<=",
-            [
-              "get",
-              "VALDCO"
-            ],
-            2
-          ],
-          "hsl(210, 100%, 85%)",
-          [
-            "<",
-            [
-              "get",
-              "VALDCO"
-            ],
-            6
-          ],
-          "hsl(210, 100%, 95%)",
-          "hsl(210, 100%, 100%)"
-        ],
-        "text-halo-blur": 0,
-        "text-halo-width": 2
-      }
-    },
-    {
-      "id": "DEPCNT-text-SE >= 10m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "SE"
-        ],
-        [
-          ">=",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
-        ]
-      ],
-      "source-layer": "DEPCNT",
-      "layout": {
-        "text-font": [
-          "Roboto"
-        ],
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "VALDCO"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-keep-upright": true,
-        "symbol-placement": "line",
-        "symbol-spacing": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          200,
-          17,
-          200,
-          18,
-          150
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)",
-        "text-halo-color": [
-          "case",
-          [
-            ">",
-            [
-              "get",
-              "VALDCO"
-            ],
-            3
-          ],
-          "hsl(210, 100%, 100%)",
-          "hsl(210, 100%, 95%)"
-        ],
-        "text-halo-blur": 0,
-        "text-halo-width": 2
-      }
-    },
-    {
-      "id": "DEPCNT-text-SE < 10m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "SE"
-        ],
-        [
-          "<",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
-        ]
-      ],
-      "source-layer": "DEPCNT",
-      "layout": {
-        "text-font": [
-          "Roboto"
-        ],
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "VALDCO"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-keep-upright": true,
-        "symbol-placement": "line",
-        "symbol-spacing": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          200,
-          17,
-          200,
-          18,
-          150
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)",
-        "text-halo-color": [
-          "case",
-          [
-            ">",
-            [
-              "get",
-              "VALDCO"
-            ],
-            3
-          ],
-          "hsl(210, 100%, 100%)",
-          "hsl(210, 100%, 95%)"
-        ],
-        "text-halo-blur": 0,
-        "text-halo-width": 2
-      }
-    },
-    {
-      "id": "DEPCNT-text-FI >= 10m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "DEPCNT",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "FI"
-        ],
-        [
-          ">=",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
-        ]
-      ],
-      "layout": {
-        "text-font": [
-          "Roboto"
-        ],
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "VALDCO"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-keep-upright": true,
-        "symbol-placement": "line",
-        "symbol-spacing": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          200,
-          17,
-          200,
-          18,
-          150
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)",
-        "text-halo-color": [
-          "case",
-          [
-            ">=",
-            [
-              "get",
-              "VALDCO"
-            ],
-            6
-          ],
-          "hsl(210, 100%, 100%)",
-          "hsl(210, 100%, 95%)"
-        ],
-        "text-halo-blur": 0,
-        "text-halo-width": 2
-      }
-    },
-    {
-      "id": "DEPCNT-text-FI < 10m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "DEPCNT",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "FI"
-        ],
-        [
-          "<",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
-        ]
-      ],
-      "layout": {
-        "text-font": [
-          "Roboto"
-        ],
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "VALDCO"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-keep-upright": true,
-        "symbol-placement": "line",
-        "symbol-spacing": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          200,
-          17,
-          200,
-          18,
-          150
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)",
-        "text-halo-color": [
-          "case",
-          [
-            ">=",
-            [
-              "get",
-              "VALDCO"
-            ],
-            6
-          ],
-          "hsl(210, 100%, 100%)",
-          "hsl(210, 100%, 95%)"
-        ],
-        "text-halo-blur": 0,
-        "text-halo-width": 2
-      }
-    },
-    {
-      "id": "DEPCNT-text-NO >= 10m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "DEPCNT",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "NO"
-        ],
-        [
-          ">=",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
-        ]
-      ],
-      "layout": {
-        "text-font": [
-          "Roboto"
-        ],
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "VALDCO"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-keep-upright": true,
-        "symbol-placement": "line",
-        "symbol-spacing": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          200,
-          17,
-          200,
-          18,
-          150
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)",
-        "text-halo-color": "hsl(210, 100%, 100%)",
-        "text-halo-blur": 0,
-        "text-halo-width": 2
-      }
-    },
-    {
-      "id": "DEPCNT-text-NO < 10m",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "DEPCNT",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "NO"
-        ],
-        [
-          "<",
-          [
-            "get",
-            "VALDCO"
-          ],
-          10
-        ]
-      ],
-      "layout": {
-        "text-font": [
-          "Roboto"
-        ],
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "VALDCO"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-keep-upright": true,
-        "symbol-placement": "line",
-        "symbol-spacing": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          200,
-          17,
-          200,
-          18,
-          150
-        ]
-      },
-      "paint": {
-        "text-color": [
-          "case",
-          [
-            "<=",
-            [
-              "get",
-              "VALDCO"
-            ],
-            0.5
-          ],
-          "hsl(210, 20%, 40%)",
-          "hsl(210, 20%, 60%)"
-        ],
-        "text-halo-color": [
-          "case",
-          [
-            "<=",
-            [
-              "get",
-              "VALDCO"
-            ],
-            0.5
-          ],
-          "hsla(120, 35%, 75%, 100%)",
-          [
-            "<=",
-            [
-              "get",
-              "VALDCO"
-            ],
-            3
-          ],
-          "hsl(210, 100%, 85%)",
-          [
-            "<=",
-            [
-              "get",
-              "VALDCO"
-            ],
-            5
-          ],
-          "hsl(210, 100%, 95%)",
-          "hsl(210, 100%, 100%)"
-        ],
-        "text-halo-blur": 0,
-        "text-halo-width": 2
-      }
-    },
-    {
-      "id": "HG_DEPCNT-text >= 10m",
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "HG_DEPCNT",
-      "filter": [
-        ">=",
-        [
-          "get",
-          "VALDCO"
-        ],
-        10
-      ],
-      "minzoom": 11,
-      "layout": {
-        "visibility": "none",
-        "text-font": [
-          "Roboto"
-        ],
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "VALDCO"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-keep-upright": true,
-        "symbol-placement": "line",
-        "symbol-spacing": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          200,
-          17,
-          200,
-          18,
-          150
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(210, 20%, 60%)",
-        "text-halo-color": "hsl(210, 100%, 100%)",
-        "text-halo-blur": 0,
-        "text-halo-width": 2
-      }
-    },
-    {
-      "id": "HG_DEPCNT-text < 10m",
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "HG_DEPCNT",
-      "filter": [
-        "<",
-        [
-          "get",
-          "VALDCO"
-        ],
-        10
-      ],
-      "minzoom": 11,
-      "layout": {
-        "visibility": "none",
-        "text-font": [
-          "Roboto"
-        ],
-        "text-field": [
-          "number-format",
-          [
-            "get",
-            "VALDCO"
-          ],
-          {
-            "locale": "sv-se",
-            "min-fraction-digits": 0,
-            "max-fraction-digits": 1
-          }
-        ],
-        "text-size": 11,
-        "text-keep-upright": true,
-        "symbol-placement": "line",
-        "symbol-spacing": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          200,
-          17,
-          200,
-          18,
-          150
-        ]
-      },
-      "paint": {
-        "text-color": [
-          "case",
-          [
-            ">",
-            [
-              "get",
-              "VALDCO"
-            ],
-            2
-          ],
-          "hsl(210, 20%, 60%)",
-          "hsl(336, 90%, 65%)"
-        ],
-        "text-halo-color": [
-          "case",
-          [
-            ">",
-            [
-              "get",
-              "VALDCO"
-            ],
-            2
-          ],
-          "hsl(210, 100%, 100%)",
-          "hsl(210, 100%, 85%)"
-        ],
-        "text-halo-blur": 0,
-        "text-halo-width": 2
-      }
-    },
-    {
-      "id": "HULKES_AREA_text",
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "HULKES_AREA",
-      "minzoom": 14,
-      "layout": {
-        "text-font": [
-          "Roboto"
-        ],
-        "text-field": [
-          "case",
-          [
-            "has",
-            "OBJNAM"
-          ],
-          [
-            "get",
-            "OBJNAM"
-          ],
-          "Hulk"
-        ],
-        "text-size": 11,
-        "text-variable-anchor": [
-          "center",
-          "top-right",
-          "top-left",
-          "bottom-right",
-          "bottom-left"
-        ],
-        "text-offset": [
-          0,
-          0
-        ],
-        "text-justify": "auto"
-      },
-      "paint": {
-        "text-color": "hsl(0, 0%, 0%)"
-      }
-    },
-    {
-      "id": "OILBAR_text",
-      "minzoom": 12,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "OILBAR",
-      "layout": {
-        "text-font": [
-          "Roboto"
-        ],
-        "text-size": 11,
-        "text-field": "Floating barrier",
-        "symbol-placement": "line-center",
-        "text-offset": [
-          0,
-          0.75
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(0, 0%, 0%)"
-      }
-    },
-    {
-      "id": "MIPARE_LINE-Text",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "filter": [
-        "match",
-        [
-          "get",
-          "CATMPA"
-        ],
-        [
-          "[3]"
-        ],
-        true,
-        false
-      ],
-      "source-layer": "MIPARE_LINE",
-      "layout": {
-        "text-field": "Submarine excercise area",
-        "text-font": [
-          "Roboto"
-        ],
-        "text-size": 11,
-        "symbol-placement": "line",
-        "text-rotation-alignment": "map",
-        "text-offset": [
-          0,
-          1
-        ],
-        "symbol-spacing": 250,
-        "text-keep-upright": true
-      },
-      "paint": {
-        "text-color": "hsl(336, 91%, 65%)"
-      }
-    },
-    {
-      "id": "FERYRT-text",
-      "minzoom": 10,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "FERYRT",
-      "filter": [
-        "match",
-        [
-          "get",
-          "CATFRY"
-        ],
-        [
-          2
-        ],
-        true,
-        false
-      ],
-      "layout": {
-        "text-font": [
-          "Roboto"
-        ],
-        "text-size": 11,
-        "text-field": "Cable ferry",
-        "symbol-placement": "line-center",
-        "text-offset": [
-          0,
-          1.5
-        ]
-      },
-      "paint": {
-        "text-color": "hsl(0, 0%, 0%)"
-      }
-    },
-    {
-      "id": "DAMCON_text",
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "DAMCON",
-      "filter": [
-        "match",
-        [
-          "geometry-type"
-        ],
-        [
-          "LineString"
-        ],
-        true,
-        false
-      ],
-      "minzoom": 12,
-      "layout": {
-        "text-font": [
-          "Roboto"
-        ],
-        "text-size": 11,
-        "text-field": "Flood barrage",
-        "symbol-placement": "line-center",
-        "text-offset": [
-          0,
-          1.5
-        ]
       },
       "paint": {
         "text-color": "hsl(0, 0%, 0%)"
@@ -8287,6 +6933,37 @@
       }
     },
     {
+      "id": "LNDMRK-area",
+      "minzoom": 12,
+      "type": "fill",
+      "source": "nautical",
+      "source-layer": "LNDMRK",
+      "filter": [
+        "all",
+        [
+          "==",
+          [
+            "geometry-type"
+          ],
+          "Polygon"
+        ],
+        [
+          "match",
+          [
+            "get",
+            "CATLMK"
+          ],
+          "[2]",
+          true,
+          false
+        ]
+      ],
+      "layout": {},
+      "paint": {
+        "fill-pattern": "E19_Cemetery"
+      }
+    },
+    {
       "id": "DMPGRD_POINT",
       "minzoom": 10,
       "type": "symbol",
@@ -8384,7 +7061,7 @@
     },
     {
       "id": "RESARE_POINT_text",
-      "minzoom": 14,
+      "minzoom": 12,
       "type": "symbol",
       "source": "nautical",
       "source-layer": "RESARE_POINT",
@@ -8419,6 +7096,11 @@
               [
                 "get",
                 "INFORM"
+              ],
+              " ",
+              [
+                "get",
+                "SORDAT"
               ],
               "\n"
             ],
@@ -8575,43 +7257,7 @@
                 ],
                 "Dec",
                 ""
-              ],
-              "\n"
-            ],
-            ""
-          ],
-          [
-            "case",
-            [
-              "any",
-              [
-                "has",
-                "DATSTA"
-              ],
-              [
-                "has",
-                "DATEND"
               ]
-            ],
-            [
-              "concat",
-              "(",
-              [
-                "to-string",
-                [
-                  "get",
-                  "DATSTA"
-                ]
-              ],
-              "–",
-              [
-                "to-string",
-                [
-                  "get",
-                  "DATEND"
-                ]
-              ],
-              ")"
             ],
             ""
           ]
@@ -8644,7 +7290,7 @@
     },
     {
       "id": "RESARE_POINT_text_no_icon",
-      "minzoom": 14,
+      "minzoom": 12,
       "type": "symbol",
       "source": "nautical",
       "source-layer": "RESARE_POINT",
@@ -8656,9 +7302,7 @@
         ],
         [
           "[4]",
-          "[14]",
-          "[25]",
-          "[26]"
+          "[14]"
         ],
         true,
         false
@@ -8689,14 +7333,6 @@
             "[14]"
           ],
           "Mine field",
-          [
-            "[25]"
-          ],
-          "Swinging area",
-          [
-            "[26]"
-          ],
-          "Water skiing area",
           "Nature reserve"
         ]
       },
@@ -9639,411 +8275,6 @@
       }
     },
     {
-      "id": "POINTR-icon",
-      "minzoom": 14,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "POINTR",
-      "layout": {
-        "icon-image": [
-          "match",
-          [
-            "get",
-            "SYMBOL"
-          ],
-          "391.121",
-          "Swimming",
-          "391.107",
-          "Antiquities",
-          "391.002",
-          "D18_Heliport",
-          "NO_SYMBOL"
-        ],
-        "icon-size": 1,
-        "icon-allow-overlap": true,
-        "icon-ignore-placement": true
-      }
-    },
-    {
-      "id": "SMCFAC-point-berth-longside",
-      "minzoom": 16,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SMCFAC",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "geometry-type"
-          ],
-          "Point"
-        ],
-        [
-          "==",
-          [
-            "get",
-            "CATSCF"
-          ],
-          1
-        ],
-        [
-          "match",
-          [
-            "get",
-            "SYMBOL"
-          ],
-          [
-            "392.002"
-          ],
-          true,
-          false
-        ]
-      ],
-      "layout": {
-        "icon-image": [
-          "match",
-          [
-            "get",
-            "SYMBOL"
-          ],
-          [
-            "392.002"
-          ],
-          "Berth_longside",
-          "NO_SYMBOL"
-        ],
-        "icon-rotate": [
-          "*",
-          -1,
-          [
-            "get",
-            "ANGLE"
-          ]
-        ],
-        "icon-rotation-alignment": "map",
-        "icon-size": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          16,
-          0.5,
-          17,
-          1
-        ],
-        "icon-allow-overlap": true,
-        "icon-ignore-placement": false
-      }
-    },
-    {
-      "id": "SMCFAC-point-berth-front",
-      "minzoom": 15,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SMCFAC",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "geometry-type"
-          ],
-          "Point"
-        ],
-        [
-          "==",
-          [
-            "get",
-            "CATSCF"
-          ],
-          1
-        ],
-        [
-          "match",
-          [
-            "get",
-            "SYMBOL"
-          ],
-          [
-            "392.002"
-          ],
-          false,
-          true
-        ]
-      ],
-      "layout": {
-        "icon-image": [
-          "match",
-          [
-            "get",
-            "SYMBOL"
-          ],
-          [
-            "391.502"
-          ],
-          "Visitors_Berth_piles",
-          [
-            "391.504"
-          ],
-          "Visitors_Berth_Y-booms",
-          [
-            "391.508"
-          ],
-          "Visitors_Berth_buoy_from_the_stern",
-          [
-            "391.509"
-          ],
-          "Visitors_Berth_mooring_line",
-          [
-            "391.512"
-          ],
-          "Visitors_Berth_anchor_from_the_stern",
-          [
-            "391.602"
-          ],
-          "Assigned_Berth_piles",
-          [
-            "391.604"
-          ],
-          "Assigned_Berth_Y-booms",
-          [
-            "391.608"
-          ],
-          "Assigned_Berth_buoy_from_the_stern",
-          [
-            "391.609"
-          ],
-          "Assigned_Berth_mooring_line",
-          [
-            "391.612"
-          ],
-          "Assigned_Berth_anchor_from_the_stern",
-          [
-            "392.002"
-          ],
-          "Berth_longside",
-          "NO_SYMBOL"
-        ],
-        "icon-rotate": [
-          "*",
-          -1,
-          [
-            "get",
-            "ANGLE"
-          ]
-        ],
-        "icon-rotation-alignment": "map",
-        "icon-size": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          15,
-          0.5,
-          16,
-          1
-        ],
-        "icon-allow-overlap": true,
-        "icon-ignore-placement": false,
-        "icon-offset": [
-          "interpolate",
-          [
-            "exponential",
-            2
-          ],
-          [
-            "zoom"
-          ],
-          16,
-          [
-            0,
-            5
-          ],
-          20,
-          [
-            0,
-            -160
-          ]
-        ]
-      }
-    },
-    {
-      "id": "SMCFAC-point-berth-side",
-      "minzoom": 15,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SMCFAC",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "geometry-type"
-          ],
-          "Point"
-        ],
-        [
-          "==",
-          [
-            "get",
-            "CATSCF"
-          ],
-          1
-        ],
-        [
-          "match",
-          [
-            "get",
-            "SYMBOL"
-          ],
-          [
-            "391.5",
-            "391.6"
-          ],
-          true,
-          false
-        ]
-      ],
-      "layout": {
-        "icon-image": [
-          "match",
-          [
-            "get",
-            "SYMBOL"
-          ],
-          [
-            "391.5"
-          ],
-          "Visitors_Berth_alongside",
-          [
-            "391.6"
-          ],
-          "Assigned_Berth_alongside",
-          "NO_SYMBOL"
-        ],
-        "icon-rotate": [
-          "*",
-          -1,
-          [
-            "get",
-            "ANGLE"
-          ]
-        ],
-        "icon-rotation-alignment": "map",
-        "icon-size": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          15,
-          0.5,
-          16,
-          1
-        ],
-        "icon-allow-overlap": true,
-        "icon-ignore-placement": false,
-        "icon-offset": [
-          "interpolate",
-          [
-            "exponential",
-            2
-          ],
-          [
-            "zoom"
-          ],
-          16,
-          [
-            -5,
-            0
-          ],
-          20,
-          [
-            100,
-            0
-          ]
-        ]
-      }
-    },
-    {
-      "id": "SMCFAC-point-simple",
-      "minzoom": 14,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "SMCFAC",
-      "filter": [
-        "all",
-        [
-          "==",
-          [
-            "geometry-type"
-          ],
-          "Point"
-        ],
-        [
-          "!=",
-          [
-            "get",
-            "CATSCF"
-          ],
-          1
-        ]
-      ],
-      "layout": {
-        "icon-image": [
-          "match",
-          [
-            "get",
-            "SYMBOL"
-          ],
-          [
-            "392.0"
-          ],
-          "Mountain_loop",
-          [
-            "390.005"
-          ],
-          "Q40a_Mooring_buoy",
-          [
-            "359.0"
-          ],
-          "U26_2_Sewerage_pump_out_station_on_water",
-          [
-            "359.003"
-          ],
-          "U26_Sewerage_pump_out_station",
-          [
-            "391.027"
-          ],
-          "U23_Public_toilet",
-          [
-            "391.005"
-          ],
-          "Dry_toilet",
-          [
-            "391.047"
-          ],
-          "U18_Fuel_station",
-          [
-            "391.073"
-          ],
-          "F53_1_Crane",
-          "NO_SYMBOL"
-        ],
-        "icon-allow-overlap": true,
-        "icon-ignore-placement": false
-      }
-    },
-    {
       "id": "TOPMAR",
       "minzoom": 12,
       "type": "symbol",
@@ -10821,74 +9052,13 @@
       }
     },
     {
-      "id": "LIGHTHOUSES-icon",
+      "id": "LIGHTHOUSES",
       "minzoom": 8,
       "type": "symbol",
       "source": "nautical",
       "source-layer": "LIGHTHOUSES",
-      "filter": [
-        ">=",
-        [
-          "zoom"
-        ],
-        [
-          "match",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "FI",
-          10,
-          9
-        ]
-      ],
       "layout": {
-        "icon-image": [
-          "step",
-          [
-            "zoom"
-          ],
-          "P1_Light-fixed",
-          12,
-          [
-            "case",
-            [
-              "get",
-              "HAS_TOPMARK"
-            ],
-            "P1_Light-fixed_topmark",
-            "P1_Light-fixed"
-          ]
-        ],
-        "icon-size": 1,
-        "icon-allow-overlap": true,
-        "icon-ignore-placement": true
-      },
-      "paint": {}
-    },
-    {
-      "id": "LIGHTHOUSES-text",
-      "minzoom": 9,
-      "type": "symbol",
-      "source": "nautical",
-      "source-layer": "LIGHTHOUSES",
-      "filter": [
-        ">=",
-        [
-          "zoom"
-        ],
-        [
-          "match",
-          [
-            "get",
-            "COUNTRY_CODE"
-          ],
-          "FI",
-          10,
-          9
-        ]
-      ],
-      "layout": {
+        "text-optional": true,
         "text-font": [
           "Roboto"
         ],
@@ -10925,10 +9095,427 @@
             "get",
             "LIGHTS_TEXT"
           ]
-        ]
+        ],
+        "icon-image": [
+          "case",
+          [
+            "get",
+            "HAS_TOPMARK"
+          ],
+          "P1_Light-fixed_topmark",
+          "P1_Light-fixed"
+        ],
+        "icon-size": 1,
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true
       },
       "paint": {
         "text-color": "hsl(0, 0%, 0%)"
+      }
+    },
+    {
+      "id": "POINTR-icon",
+      "minzoom": 14,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "POINTR",
+      "layout": {
+        "icon-image": [
+          "match",
+          [
+            "get",
+            "SYMBOL"
+          ],
+          "391.121",
+          "Swimming",
+          "391.107",
+          "Antiquities",
+          "391.002",
+          "D18_Heliport",
+          "NO_SYMBOL"
+        ],
+        "icon-size": 1,
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true
+      }
+    },
+    {
+      "id": "SMCFAC-point-berth-longside",
+      "minzoom": 16,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "SMCFAC",
+      "filter": [
+        "all",
+        [
+          "==",
+          [
+            "geometry-type"
+          ],
+          "Point"
+        ],
+        [
+          "==",
+          [
+            "get",
+            "CATSCF"
+          ],
+          1
+        ],
+        [
+          "match",
+          [
+            "get",
+            "SYMBOL"
+          ],
+          [
+            "392.002"
+          ],
+          true,
+          false
+        ]
+      ],
+      "layout": {
+        "icon-image": [
+          "match",
+          [
+            "get",
+            "SYMBOL"
+          ],
+          [
+            "392.002"
+          ],
+          "Berth_longside",
+          "NO_SYMBOL"
+        ],
+        "icon-rotate": [
+          "*",
+          -1,
+          [
+            "get",
+            "ANGLE"
+          ]
+        ],
+        "icon-rotation-alignment": "map",
+        "icon-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          16,
+          0.5,
+          17,
+          1
+        ],
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": false
+      }
+    },
+    {
+      "id": "SMCFAC-point-berth-front",
+      "minzoom": 15,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "SMCFAC",
+      "filter": [
+        "all",
+        [
+          "==",
+          [
+            "geometry-type"
+          ],
+          "Point"
+        ],
+        [
+          "==",
+          [
+            "get",
+            "CATSCF"
+          ],
+          1
+        ],
+        [
+          "match",
+          [
+            "get",
+            "SYMBOL"
+          ],
+          [
+            "392.002"
+          ],
+          false,
+          true
+        ]
+      ],
+      "layout": {
+        "icon-image": [
+          "match",
+          [
+            "get",
+            "SYMBOL"
+          ],
+          [
+            "391.502"
+          ],
+          "Visitors_Berth_piles",
+          [
+            "391.504"
+          ],
+          "Visitors_Berth_Y-booms",
+          [
+            "391.508"
+          ],
+          "Visitors_Berth_buoy_from_the_stern",
+          [
+            "391.509"
+          ],
+          "Visitors_Berth_mooring_line",
+          [
+            "391.512"
+          ],
+          "Visitors_Berth_anchor_from_the_stern",
+          [
+            "391.602"
+          ],
+          "Assigned_Berth_piles",
+          [
+            "391.604"
+          ],
+          "Assigned_Berth_Y-booms",
+          [
+            "391.608"
+          ],
+          "Assigned_Berth_buoy_from_the_stern",
+          [
+            "391.609"
+          ],
+          "Assigned_Berth_mooring_line",
+          [
+            "391.612"
+          ],
+          "Assigned_Berth_anchor_from_the_stern",
+          [
+            "392.002"
+          ],
+          "Berth_longside",
+          "NO_SYMBOL"
+        ],
+        "icon-rotate": [
+          "*",
+          -1,
+          [
+            "get",
+            "ANGLE"
+          ]
+        ],
+        "icon-rotation-alignment": "map",
+        "icon-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          15,
+          0.5,
+          16,
+          1
+        ],
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": false,
+        "icon-offset": [
+          "interpolate",
+          [
+            "exponential",
+            2
+          ],
+          [
+            "zoom"
+          ],
+          16,
+          [
+            0,
+            5
+          ],
+          20,
+          [
+            0,
+            -160
+          ]
+        ]
+      }
+    },
+    {
+      "id": "SMCFAC-point-berth-side",
+      "minzoom": 15,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "SMCFAC",
+      "filter": [
+        "all",
+        [
+          "==",
+          [
+            "geometry-type"
+          ],
+          "Point"
+        ],
+        [
+          "==",
+          [
+            "get",
+            "CATSCF"
+          ],
+          1
+        ],
+        [
+          "match",
+          [
+            "get",
+            "SYMBOL"
+          ],
+          [
+            "391.5",
+            "391.6"
+          ],
+          true,
+          false
+        ]
+      ],
+      "layout": {
+        "icon-image": [
+          "match",
+          [
+            "get",
+            "SYMBOL"
+          ],
+          [
+            "391.5"
+          ],
+          "Visitors_Berth_alongside",
+          [
+            "391.6"
+          ],
+          "Assigned_Berth_alongside",
+          "NO_SYMBOL"
+        ],
+        "icon-rotate": [
+          "*",
+          -1,
+          [
+            "get",
+            "ANGLE"
+          ]
+        ],
+        "icon-rotation-alignment": "map",
+        "icon-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          15,
+          0.5,
+          16,
+          1
+        ],
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": false,
+        "icon-offset": [
+          "interpolate",
+          [
+            "exponential",
+            2
+          ],
+          [
+            "zoom"
+          ],
+          16,
+          [
+            -5,
+            0
+          ],
+          20,
+          [
+            100,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "id": "SMCFAC-point-simple",
+      "minzoom": 14,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "SMCFAC",
+      "filter": [
+        "all",
+        [
+          "==",
+          [
+            "geometry-type"
+          ],
+          "Point"
+        ],
+        [
+          "!=",
+          [
+            "get",
+            "CATSCF"
+          ],
+          1
+        ]
+      ],
+      "layout": {
+        "icon-image": [
+          "match",
+          [
+            "get",
+            "SYMBOL"
+          ],
+          [
+            "392.0"
+          ],
+          "Mountain_loop",
+          [
+            "390.005"
+          ],
+          "Q40a_Mooring_buoy",
+          [
+            "359.0"
+          ],
+          "U26_2_Sewerage_pump_out_station_on_water",
+          [
+            "359.003"
+          ],
+          "U26_Sewerage_pump_out_station",
+          [
+            "391.027"
+          ],
+          "U23_Public_toilet",
+          [
+            "391.005"
+          ],
+          "Dry_toilet",
+          [
+            "391.047"
+          ],
+          "U18_Fuel_station",
+          [
+            "391.073"
+          ],
+          "F53_1_Crane",
+          "NO_SYMBOL"
+        ],
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": false
       }
     },
     {

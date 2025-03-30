@@ -1,0 +1,120 @@
+{
+    "tilejson": "3.0.0",
+    "scheme": "xyz",
+    "tiles": [
+        "/signalk/v1/api/resources/charts/osm_20250214/{z}/{x}/{y}"
+    ],
+    "vector_layers": [
+        {
+            "description": "",
+            "fields": {},
+            "id": "borders",
+            "maxzoom": 9,
+            "minzoom": 0
+        },
+        {
+            "description": "",
+            "fields": {
+                "representative_point": "String",
+                "tags": "String",
+                "timestamp": "Number"
+            },
+            "id": "countries",
+            "maxzoom": 9,
+            "minzoom": 0
+        },
+        {
+            "description": "",
+            "fields": {
+                "x": "Number",
+                "y": "Number"
+            },
+            "id": "land_polygons",
+            "maxzoom": 9,
+            "minzoom": 0
+        },
+        {
+            "description": "",
+            "fields": {},
+            "id": "landuse",
+            "maxzoom": 9,
+            "minzoom": 6
+        },
+        {
+            "description": "",
+            "fields": {
+                "code": "Number",
+                "fclass": "String",
+                "name": "String",
+                "osm_id": "String",
+                "population": "Number"
+            },
+            "id": "large_places",
+            "maxzoom": 9,
+            "minzoom": 0
+        },
+        {
+            "description": "",
+            "fields": {},
+            "id": "large_roads",
+            "maxzoom": 9,
+            "minzoom": 0
+        },
+        {
+            "description": "",
+            "fields": {
+                "area": "Number",
+                "fclass": "String"
+            },
+            "id": "large_water",
+            "maxzoom": 9,
+            "minzoom": 0
+        },
+        {
+            "description": "",
+            "fields": {
+                "code": "Number",
+                "fclass": "String",
+                "name": "String",
+                "osm_id": "String",
+                "population": "Number"
+            },
+            "id": "small_places",
+            "maxzoom": 9,
+            "minzoom": 6
+        },
+        {
+            "description": "",
+            "fields": {},
+            "id": "small_roads",
+            "maxzoom": 9,
+            "minzoom": 6
+        },
+        {
+            "description": "",
+            "fields": {
+                "area": "Number",
+                "fclass": "String"
+            },
+            "id": "small_water",
+            "maxzoom": 9,
+            "minzoom": 6
+        }
+    ],
+    "description": "out/mbtiles/land_polygons_clipped.mbtiles",
+    "name": "out/mbtiles/land_polygons.mbtiles + out/mbtiles/large_places.mbtiles + out/mbtiles/large_water.mbtiles + out/mbtiles/small_water.mbtiles + out/mbtiles/borders.mbtiles + out/mbtiles/landuse.mbtiles + out/mbtiles/large_roads.mbtiles",
+    "version": "2",
+    "bounds": [
+        -180,
+        -85.051129,
+        180,
+        83.676943
+    ],
+    "center": [
+        20.742188,
+        60.064374,
+        9
+    ],
+    "minzoom": 0,
+    "maxzoom": 9
+}
