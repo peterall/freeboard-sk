@@ -9,7 +9,6 @@ export const mapInteractions = [
   { name: 'keyboardzoom' },
   { name: 'mousewheelzoom' },
   { name: 'pinchzoom' },
-  { name: 'longtouch' },
 ];
 
 export const mapControls = [

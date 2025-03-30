@@ -37,8 +37,6 @@ export class InteractionsDirective implements OnInit {
   @Input()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   set olInteractions(value: any[]) {
-    console.log('olInteractions', value);
-    console.trace();
     this.interactions = value;
     this.setInteractions();
   }
