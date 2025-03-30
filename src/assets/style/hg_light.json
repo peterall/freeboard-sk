@@ -4551,18 +4551,7 @@
       "source-layer": "CBLARE_LINE",
       "layout": {},
       "paint": {
-        "line-pattern": [
-          "match",
-          [
-            "get",
-            "CATCBL"
-          ],
-          [
-            1
-          ],
-          "L31_2_PowerCable_Area",
-          "L30_2_Cable_Area"
-        ],
+        "line-dasharray": [2, 2],
         "line-width": 10
       }
     },
@@ -4574,22 +4563,7 @@
       "source-layer": "CBLSUB",
       "layout": {},
       "paint": {
-        "line-pattern": [
-          "match",
-          [
-            "get",
-            "CATCBL"
-          ],
-          [
-            1
-          ],
-          "L31_1_PowerCable",
-          [
-            4
-          ],
-          "L30_Cable",
-          "L30_Cable"
-        ],
+        "line-dasharray": [2, 2],
         "line-width": 10
       }
     },
@@ -9338,13 +9312,11 @@
           ],
           16,
           [
-            0,
-            5
+            "literal", [0, 5]
           ],
           20,
           [
-            0,
-            -160
+            "literal", [0, -160]
           ]
         ]
       }
@@ -9438,13 +9410,11 @@
           ],
           16,
           [
-            -5,
-            0
+            "literal", [-5, 0]
           ],
           20,
           [
-            100,
-            0
+            "literal", [100, 0]
           ]
         ]
       }

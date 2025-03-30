@@ -82,7 +82,7 @@
     "ng-packagr": "^18.1.0",
     "ngeohash": "^0.6.3",
     "ol": "^10.2.1",
-    "ol-mapbox-style": "^12.3.5",
+    "ol-mapbox-style": "^12.5.0",
     "pmtiles": "^2.7.0",
     "prettier": "^2.5.1",
     "prettier-plugin-organize-attributes": "^0.0.5",
