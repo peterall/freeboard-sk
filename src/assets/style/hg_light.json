@@ -3619,58 +3619,100 @@
         "RED"
       ],
       "paint": {
-        "line-pattern": [
+        "line-dasharray": [0.2, 2],
+        "line-color": "hsl(336, 91%, 51%)",
+        "line-width": 6
+      }
+    },
+    {
+      "id": "RESARE_LINE_red_cross",
+      "minzoom": 10,
+      "type": "line",
+      "source": "nautical",
+      "source-layer": "RESARE_LINE",
+      "filter": [
+        "==",
+        [
+          "get",
+          "RENDER_GROUP"
+        ],
+        "RED"
+      ],
+      "paint": {
+        "line-dasharray": [6, 7.2],
+        "line-color": "hsl(336, 91%, 51%)",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "RESARE_LINE_red-Text",
+      "minzoom": 14,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "RESARE_LINE",
+      "filter": [
+        "==",
+        [
+          "get",
+          "RENDER_GROUP"
+        ],
+        "RED"
+      ],
+      "layout": {
+        "text-field": [
           "match",
-          [
-            "get",
-            "RESTRN"
-          ],
-          [
-            "[1]",
-            "[3]",
-            "[5]",
-            "[7]",
-            "[8]",
-            "[11]",
-            "[14]",
-            "[1,3]",
-            "[1,5]",
-            "[1,7]",
-            "[1,11]",
-            "[1,3,11]",
-            "[1,3,7,11]",
-            "[1,3,5,8,11]",
-            "[1,3,5,9,18,20,24]",
-            "[2,4,6,10,19,21]",
-            "[3,7]",
-            "[3,8]",
-            "[5,24]"
-          ],
-          "N2_1_RestrictedArea",
-          [
-            "[27]"
-          ],
-          "NO_LINE_PATTERN",
+          ["get", "RESTRN"],
+          ["[1]"], "Ankring förbjuden",
+          ["[2]"], "Ankring begränsad",
+          ["[3]"], "Fiske förbjudet",
+          ["[4]"], "Fiske begränsat",
+          ["[5]"], "Trålning förbjuden",
+          ["[6]"], "Trålning begränsad",
+          ["[7]"], "Tillträde förbjudet",
+          ["[8]"], "Tillträde begränsat",
+          ["[9]"], "Muddring förbjuden",
+          ["[10]"], "Muddring begränsad",
+          ["[11]"], "Dykning förbjuden",
+          ["[12]"], "Dykning begränsad",
+          ["[1,3]"], "Ankring och fiske förbjudet",
+          ["[1,5]"], "Ankring och trålning förbjudet",
+          ["[1,7]"], "Ankring förbjuden, tillträde förbjudet",
+          ["[1,11]"], "Ankring och dykning förbjuden",
+          ["[1,3,11]"], "Ankring, fiske och dykning förbjudet",
+          ["[1,3,7,11]"], "Ankring, fiske, tillträde och dykning förbjudet",
+          ["[1,3,5,8,11]"], "Ankring, fiske, trålning förbjudet; tillträde begränsat; dykning förbjuden",
+          ["[1,3,5,9,18,20,24]"], "Flera restriktioner gäller",
+          ["[2,4,6,10,19,21]"], "Flera begränsningar gäller",
+          ["[3,7]"], "Fiske förbjudet; tillträde förbjudet",
+          ["[3,8]"], "Fiske förbjudet; tillträde begränsat",
+          ["[5,24]"], "Trålning förbjuden; särskilt område",
+          ["[27]"],
           [
             "match",
-            [
-              "get",
-              "CATREA"
-            ],
-            [
-              "[9]",
-              "[14]"
-            ],
-            "N2_1_RestrictedArea",
-            [
-              "[27]",
-              "[28]"
-            ],
-            "N22_Environmentally_Sensitive_Sea_Areas",
-            "N2_1_RestrictedArea"
-          ]
+            ["get", "CATREA"],
+            ["[9]"], "Dykområde",
+            ["[14]"], "Särskilt ankringsområde",
+            ["[27]"], "Kabelområde",
+            ["[28]"], "Rörområde",
+            "Begränsat område"
+          ],
+          "Okänd restriktion"
         ],
-        "line-width": 10
+        "text-font": [
+          "Mulish"
+        ],
+        "text-size": 10,
+        "symbol-placement": "line",
+        "text-rotation-alignment": "map",
+        "text-offset": [
+          0,
+          1
+        ],
+        "symbol-spacing": 250,
+        "text-keep-upright": true
+      },
+      "paint": {
+        "text-color": "hsl(336, 91%, 65%)"
       }
     },
     {
@@ -4523,7 +4565,7 @@
           "Mulish"
         ],
         "text-size": 11,
-        "text-field": "Floating barrier",
+        "text-field": "Flytande barriär",
         "symbol-placement": "line-center",
         "text-offset": [
           0,
@@ -4553,7 +4595,7 @@
       ],
       "source-layer": "MIPARE_LINE",
       "layout": {
-        "text-field": "Submarine excercise area",
+        "text-field": "Ubåtsövningsområde",
         "text-font": [
           "Mulish"
         ],
@@ -4579,7 +4621,7 @@
       "source-layer": "PIPSOL",
       "layout": {},
       "paint": {
-        "line-dasharray": [6, 1, 1, 2],
+        "line-dasharray": [6, 1, 1, 4],
         "line-color": "hsl(336, 91%, 60%)",
         "line-width": 2
       }
@@ -4591,7 +4633,7 @@
       "source": "nautical",
       "source-layer": "PIPSOL",
       "layout": {
-        "text-field": "Pipeline",
+        "text-field": "Rörledning",
         "text-font": [
           "Mulish"
         ],
@@ -4624,12 +4666,12 @@
     },
     {
       "id": "CBLARE-Text",
-      "minzoom": 10,
+      "minzoom": 14,
       "type": "symbol",
       "source": "nautical",
       "source-layer": "CBLARE_LINE",
       "layout": {
-        "text-field": "Cable area",
+        "text-field": "Kabelområde",
         "text-font": [
           "Mulish"
         ],
@@ -4667,7 +4709,7 @@
       "source": "nautical",
       "source-layer": "CBLSUB",
       "layout": {
-        "text-field": "Cable",
+        "text-field": "Kabel",
         "text-font": [
           "Mulish"
         ],
@@ -4735,7 +4777,7 @@
           "Mulish"
         ],
         "text-size": 11,
-        "text-field": "Cable ferry",
+        "text-field": "Linfärja",
         "symbol-placement": "line-center",
         "text-offset": [
           0,
@@ -4768,7 +4810,7 @@
           "Mulish"
         ],
         "text-size": 11,
-        "text-field": "Flood barrage",
+        "text-field": "Översvämningsbarriär",
         "symbol-placement": "line-center",
         "text-offset": [
           0,
@@ -4799,7 +4841,7 @@
       "source": "nautical",
       "source-layer": "CBLOHD",
       "layout": {
-        "text-field": "Cable (overhead)",
+        "text-field": "Luftledning",
         "text-font": [
           "Mulish"
         ],
@@ -6218,7 +6260,7 @@
         "text-font": [
           "Mulish"
         ],
-        "text-field": "Precautionary Area",
+        "text-field": "Försiktighetsområde",
         "text-size": 11,
         "text-offset": [
           1.1,
@@ -7156,7 +7198,7 @@
           "bottom"
         ],
         "text-justify": "auto",
-        "text-field": "Log Pond"
+        "text-field": "Timmerbassäng"
       },
       "paint": {
         "text-color": "hsl(0, 0%, 0%)"
@@ -7435,8 +7477,8 @@
           [
             "[14]"
           ],
-          "Mine field",
-          "Nature reserve"
+          "Minfält",
+          "Naturreservat"
         ]
       },
       "paint": {
