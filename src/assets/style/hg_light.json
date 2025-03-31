@@ -3353,8 +3353,8 @@
       "source-layer": "NAVLNE",
       "layout": {},
       "paint": {
-        "line-width": 1,
-        "line-color": "hsl(60, 1%, 50%)",
+        "line-width": 1.5,
+        "line-color": "hsl(60, 0%, 20%)",
         "line-dasharray": [
           3,
           3
@@ -3619,7 +3619,7 @@
         "RED"
       ],
       "paint": {
-        "line-dasharray": [0.2, 2],
+        "line-dasharray": [0.2, 2.8],
         "line-color": "hsl(336, 91%, 51%)",
         "line-width": 6
       }
@@ -3639,7 +3639,7 @@
         "RED"
       ],
       "paint": {
-        "line-dasharray": [6, 7.2],
+        "line-dasharray": [10, 8],
         "line-color": "hsl(336, 91%, 51%)",
         "line-width": 1
       }
@@ -4621,9 +4621,23 @@
       "source-layer": "PIPSOL",
       "layout": {},
       "paint": {
-        "line-dasharray": [6, 1, 1, 4],
+        "line-dasharray": [10, 5],
         "line-color": "hsl(336, 91%, 60%)",
-        "line-width": 2
+        "line-width": 1
+      }
+    },
+    {
+      "id": "PIPSOL-dot",
+      "minzoom": 10,
+      "type": "line",
+      "source": "nautical",
+      "source-layer": "PIPSOL",
+      "layout": {},
+      "paint": {
+        "line-dasharray": [1, 5],
+        "line-color": "hsl(336, 91%, 60%)",
+        "line-width": 2.5,
+        "line-cap": "round"
       }
     },
     {
@@ -4729,29 +4743,40 @@
     },
     {
       "id": "FERYRT",
-      "minzoom": 10,
+      "minzoom": 13,
       "type": "line",
       "source": "nautical",
       "source-layer": "FERYRT",
       "layout": {},
       "paint": {
-        "line-pattern": [
-          "match",
-          [
-            "get",
-            "CATFRY"
-          ],
-          [
-            1
-          ],
-          "M50_Ferry",
-          [
-            2
-          ],
-          "M51_Cable_ferry",
-          "NO_LINE_PATTERN"
+        "line-dasharray": [4, 4],
+        "line-color": "hsl(240, 11%, 41%)",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "FERYRT-Text",
+      "minzoom": 13,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "FERYRT",
+      "layout": {
+        "text-field": "Färjelinje",
+        "text-font": [
+          "Mulish"
         ],
-        "line-width": 10
+        "text-size": 10,
+        "symbol-placement": "line",
+        "text-rotation-alignment": "map",
+        "text-offset": [
+          0,
+          1
+        ],
+        "symbol-spacing": 125,
+        "text-keep-upright": true
+      },
+      "paint": {
+        "text-color": "hsl(240, 11%, 41%)"
       }
     },
     {
@@ -7470,15 +7495,13 @@
         "text-justify": "auto",
         "text-field": [
           "match",
+          ["get", "CATREA"],
+          ["[14]"], "Minfält",
           [
-            "get",
-            "CATREA"
-          ],
-          [
-            "[14]"
-          ],
-          "Minfält",
-          "Naturreservat"
+            "coalesce",
+            ["get", "INFORM"],
+            "Naturreservat"
+          ]
         ]
       },
       "paint": {
