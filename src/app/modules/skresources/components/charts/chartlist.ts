@@ -27,6 +27,7 @@ import {
 import { AppFacade } from 'src/app/app.facade';
 import { ChartPropertiesDialog } from './chart-properties-dialog';
 import { FBCharts, FBChart, FBResourceSelect } from 'src/app/types';
+import { SKChart } from 'src/app/modules/skresources/resource-classes';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { WMTSDialog } from './wmts-dialog';
@@ -74,7 +75,7 @@ import { SignalKClient } from 'signalk-client-angular';
                   [style.cursor]="i > 0 ? 'pointer' : 'initial'"
                 >
                   <div style="width:35px;">
-                    <mat-icon color="">{{ isLocal(ch[1].url) }}</mat-icon>
+                    <mat-icon color="">{{ getIcon(ch[1]) }}</mat-icon>
                   </div>
                   <div
                     style="flex: 1 1 auto;text-overflow: ellipsis;
@@ -167,8 +168,14 @@ export class ChartLayers implements OnInit {
     this.changed.emit(this.app.config.selections.chartOrder);
   }
 
-  isLocal(url: string) {
-    return url && url.indexOf('signalk') !== -1 ? 'map' : 'language';
+  getIcon(chart: SKChart) {
+    if (chart.type === 'mapboxstyle') {
+      return 'map';
+    } else if (chart.url && chart.url.indexOf('signalk') !== -1) {
+      return 'image'
+    } else {
+      return 'language';
+    }
   }
 }
 
@@ -258,8 +265,14 @@ export class ChartListComponent {
     });
   }
 
-  isLocal(url: string) {
-    return url && url.indexOf(this.app.hostName) !== -1 ? 'map' : 'language';
+  getIcon(chart: SKChart) {
+    if (chart.type === 'mapboxstyle') {
+      return 'map';
+    } else if (chart.url && chart.url.indexOf('signalk') !== -1) {
+      return 'image'
+    } else {
+      return 'language';
+    }
   }
 
   toggleChartBoundaries() {

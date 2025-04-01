@@ -1316,6 +1316,9 @@ export class SKResources {
         if (r.length > 0) {
           // ** process attributes
           r.forEach((i) => {
+            if (i[1].format === 'pbf') {
+              return;
+            }
             // v1->2 alignment
             if (i[1].tilemapUrl) {
               i[1].url = i[1].tilemapUrl;
@@ -1398,7 +1401,11 @@ export class SKResources {
   // ** sort charts by scale descending .
   private sortByScaleDesc() {
     this.app.data.charts.sort((a: [string, SKChart], b: [string, SKChart]) => {
-      return b[1].scale - a[1].scale;
+      let comp = b[1].scale - a[1].scale;
+      if (comp === 0) {
+        comp = a[1].name.localeCompare(b[1].name);
+      }
+      return comp
     });
   }
 
