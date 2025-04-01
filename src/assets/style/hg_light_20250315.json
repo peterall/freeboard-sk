@@ -3739,58 +3739,100 @@
         "RED"
       ],
       "paint": {
-        "line-pattern": [
+        "line-dasharray": [0.2, 2.8],
+        "line-color": "hsl(336, 91%, 51%)",
+        "line-width": 6
+      }
+    },
+    {
+      "id": "RESARE_LINE_red_cross",
+      "minzoom": 10,
+      "type": "line",
+      "source": "nautical",
+      "source-layer": "RESARE_LINE",
+      "filter": [
+        "==",
+        [
+          "get",
+          "RENDER_GROUP"
+        ],
+        "RED"
+      ],
+      "paint": {
+        "line-dasharray": [10, 8],
+        "line-color": "hsl(336, 91%, 51%)",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "RESARE_LINE_red-Text",
+      "minzoom": 14,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "RESARE_LINE",
+      "filter": [
+        "==",
+        [
+          "get",
+          "RENDER_GROUP"
+        ],
+        "RED"
+      ],
+      "layout": {
+        "text-field": [
           "match",
-          [
-            "get",
-            "RESTRN"
-          ],
-          [
-            "[1]",
-            "[3]",
-            "[5]",
-            "[7]",
-            "[8]",
-            "[11]",
-            "[14]",
-            "[1,3]",
-            "[1,5]",
-            "[1,7]",
-            "[1,11]",
-            "[1,3,11]",
-            "[1,3,7,11]",
-            "[1,3,5,8,11]",
-            "[1,3,5,9,18,20,24]",
-            "[2,4,6,10,19,21]",
-            "[3,7]",
-            "[3,8]",
-            "[5,24]"
-          ],
-          "N2_1_RestrictedArea",
-          [
-            "[27]"
-          ],
-          "N2_1_RestrictedArea",
+          ["get", "RESTRN"],
+          ["[1]"], "Ankring förbjuden",
+          ["[2]"], "Ankring begränsad",
+          ["[3]"], "Fiske förbjudet",
+          ["[4]"], "Fiske begränsat",
+          ["[5]"], "Trålning förbjuden",
+          ["[6]"], "Trålning begränsad",
+          ["[7]"], "Tillträde förbjudet",
+          ["[8]"], "Tillträde begränsat",
+          ["[9]"], "Muddring förbjuden",
+          ["[10]"], "Muddring begränsad",
+          ["[11]"], "Dykning förbjuden",
+          ["[12]"], "Dykning begränsad",
+          ["[1,3]"], "Ankring och fiske förbjudet",
+          ["[1,5]"], "Ankring och trålning förbjudet",
+          ["[1,7]"], "Ankring förbjuden, tillträde förbjudet",
+          ["[1,11]"], "Ankring och dykning förbjuden",
+          ["[1,3,11]"], "Ankring, fiske och dykning förbjudet",
+          ["[1,3,7,11]"], "Ankring, fiske, tillträde och dykning förbjudet",
+          ["[1,3,5,8,11]"], "Ankring, fiske, trålning förbjudet; tillträde begränsat; dykning förbjuden",
+          ["[1,3,5,9,18,20,24]"], "Flera restriktioner gäller",
+          ["[2,4,6,10,19,21]"], "Flera begränsningar gäller",
+          ["[3,7]"], "Fiske förbjudet; tillträde förbjudet",
+          ["[3,8]"], "Fiske förbjudet; tillträde begränsat",
+          ["[5,24]"], "Trålning förbjuden; särskilt område",
+          ["[27]"],
           [
             "match",
-            [
-              "get",
-              "CATREA"
-            ],
-            [
-              "[9]",
-              "[14]"
-            ],
-            "N2_1_RestrictedArea",
-            [
-              "[27]",
-              "[28]"
-            ],
-            "N22_Environmentally_Sensitive_Sea_Areas",
-            "N2_1_RestrictedArea"
-          ]
+            ["get", "CATREA"],
+            ["[9]"], "Dykområde",
+            ["[14]"], "Särskilt ankringsområde",
+            ["[27]"], "Kabelområde",
+            ["[28]"], "Rörområde",
+            "Begränsat område"
+          ],
+          "Okänd restriktion"
         ],
-        "line-width": 10
+        "text-font": [
+          "Mulish"
+        ],
+        "text-size": 10,
+        "symbol-placement": "line",
+        "text-rotation-alignment": "map",
+        "text-offset": [
+          0,
+          1
+        ],
+        "symbol-spacing": 250,
+        "text-keep-upright": true
+      },
+      "paint": {
+        "text-color": "hsl(336, 91%, 65%)"
       }
     },
     {
@@ -3874,8 +3916,48 @@
       "source-layer": "PIPSOL",
       "layout": {},
       "paint": {
-        "line-pattern": "L40_pipeline_supply",
-        "line-width": 10
+        "line-dasharray": [10, 5],
+        "line-color": "hsl(336, 91%, 60%)",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "PIPSOL-dot",
+      "minzoom": 10,
+      "type": "line",
+      "source": "nautical",
+      "source-layer": "PIPSOL",
+      "layout": {},
+      "paint": {
+        "line-dasharray": [1, 5],
+        "line-color": "hsl(336, 91%, 60%)",
+        "line-width": 2.5,
+        "line-cap": "round"
+      }
+    },
+    {
+      "id": "PIPSOL-Text",
+      "minzoom": 14,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "PIPSOL",
+      "layout": {
+        "text-field": "Rörledning",
+        "text-font": [
+          "Mulish"
+        ],
+        "text-size": 10,
+        "symbol-placement": "line",
+        "text-rotation-alignment": "map",
+        "text-offset": [
+          0,
+          1
+        ],
+        "symbol-spacing": 250,
+        "text-keep-upright": true
+      },
+      "paint": {
+        "text-color": "hsl(336, 91%, 65%)"
       }
     },
     {
@@ -3886,19 +3968,34 @@
       "source-layer": "CBLARE_LINE",
       "layout": {},
       "paint": {
-        "line-pattern": [
-          "match",
-          [
-            "get",
-            "CATCBL"
-          ],
-          [
-            1
-          ],
-          "L31_2_PowerCable_Area",
-          "L30_2_Cable_Area"
+        "line-dasharray": [10, 10],
+        "line-color": "hsl(336, 91%, 51%)",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "CBLARE-Text",
+      "minzoom": 14,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "CBLARE_LINE",
+      "layout": {
+        "text-field": "Kabelområde",
+        "text-font": [
+          "Mulish"
         ],
-        "line-width": 10
+        "text-size": 10,
+        "symbol-placement": "line",
+        "text-rotation-alignment": "map",
+        "text-offset": [
+          0,
+          1
+        ],
+        "symbol-spacing": 250,
+        "text-keep-upright": true
+      },
+      "paint": {
+        "text-color": "hsl(336, 91%, 65%)"
       }
     },
     {
@@ -3909,50 +4006,72 @@
       "source-layer": "CBLSUB",
       "layout": {},
       "paint": {
-        "line-pattern": [
-          "match",
-          [
-            "get",
-            "CATCBL"
-          ],
-          [
-            1
-          ],
-          "L31_1_PowerCable",
-          [
-            4
-          ],
-          "L30_Cable",
-          "L30_Cable"
+        "line-dasharray": [10, 10],
+        "line-color": "hsl(336, 91%, 51%)",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "CBLSUB-Text",
+      "minzoom": 14,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "CBLSUB",
+      "layout": {
+        "text-field": "Kabel",
+        "text-font": [
+          "Mulish"
         ],
-        "line-width": 10
+        "text-size": 10,
+        "symbol-placement": "line",
+        "text-rotation-alignment": "map",
+        "text-offset": [
+          0,
+          1
+        ],
+        "symbol-spacing": 250,
+        "text-keep-upright": true
+      },
+      "paint": {
+        "text-color": "hsl(336, 91%, 65%)"
       }
     },
     {
       "id": "FERYRT",
-      "minzoom": 10,
+      "minzoom": 13,
       "type": "line",
       "source": "nautical",
       "source-layer": "FERYRT",
       "layout": {},
       "paint": {
-        "line-pattern": [
-          "match",
-          [
-            "get",
-            "CATFRY"
-          ],
-          [
-            1
-          ],
-          "M50_Ferry",
-          [
-            2
-          ],
-          "M51_Cable_ferry",
-          "NO_LINE_PATTERN"
+        "line-dasharray": [4, 4],
+        "line-color": "hsl(240, 11%, 41%)",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "FERYRT-Text",
+      "minzoom": 13,
+      "type": "symbol",
+      "source": "nautical",
+      "source-layer": "FERYRT",
+      "layout": {
+        "text-field": "Färjelinje",
+        "text-font": [
+          "Mulish"
         ],
-        "line-width": 10
+        "text-size": 10,
+        "symbol-placement": "line",
+        "text-rotation-alignment": "map",
+        "text-offset": [
+          0,
+          1
+        ],
+        "symbol-spacing": 125,
+        "text-keep-upright": true
+      },
+      "paint": {
+        "text-color": "hsl(240, 11%, 41%)"
       }
     },
     {
@@ -3967,7 +4086,7 @@
         "icon-allow-overlap": true,
         "icon-ignore-placement": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "case",
@@ -4496,7 +4615,7 @@
           ""
         ],
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-optional": true,
         "text-size": 11,
@@ -4608,7 +4727,7 @@
         "icon-allow-overlap": true,
         "icon-ignore-placement": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "get",
@@ -4904,7 +5023,7 @@
         "icon-allow-overlap": true,
         "icon-ignore-placement": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -4946,7 +5065,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-variable-anchor": [
           "top-right",
@@ -5010,7 +5129,7 @@
           13
         ],
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-variable-anchor": [
           "center",
@@ -5084,7 +5203,7 @@
           13
         ],
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-variable-anchor": [
           "center",
@@ -5158,7 +5277,7 @@
           13
         ],
         "text-font": [
-          "Roboto Bold"
+          "Mulish Bold"
         ],
         "text-variable-anchor": [
           "center",
@@ -5211,7 +5330,7 @@
           "name"
         ],
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-variable-anchor": [
@@ -5262,15 +5381,15 @@
             "zoom"
           ],
           [
-            "literal", ["Roboto"]
+            "literal", ["Mulish"]
           ],
           0,
           [
-            "literal", ["Roboto"]
+            "literal", ["Mulish"]
           ],
           8,
           [
-            "literal", ["Roboto Bold"]
+            "literal", ["Mulish Bold"]
           ]
         ],
         "text-size": [
@@ -5334,15 +5453,15 @@
             "zoom"
           ],
           [
-            "literal", ["Roboto Medium"]
+            "literal", ["Mulish Medium"]
           ],
           0,
           [
-            "literal", ["Roboto Medium"]
+            "literal", ["Mulish Medium"]
           ],
           6,
           [
-            "literal", ["Roboto Bold"]
+            "literal", ["Mulish Bold"]
           ]
         ],
         "text-size": [
@@ -5411,7 +5530,7 @@
           "name"
         ],
         "text-font": [
-          "Roboto Bold"
+          "Mulish Bold"
         ],
         "text-size": [
           "interpolate",
@@ -5489,7 +5608,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-padding": [
           "step",
@@ -5566,7 +5685,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-padding": [
           "step",
@@ -5622,7 +5741,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-padding": [
           "step",
@@ -5699,7 +5818,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-padding": [
           "step",
@@ -5755,7 +5874,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-padding": [
           "step",
@@ -5832,7 +5951,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-padding": [
           "step",
@@ -5920,7 +6039,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-padding": [
           "step",
@@ -6037,7 +6156,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-padding": [
           "step",
@@ -6065,7 +6184,7 @@
           "TEXT"
         ],
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-size": 11,
         "text-padding": [
@@ -6109,7 +6228,7 @@
       "source-layer": "DEPCNT",
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "number-format",
@@ -6184,7 +6303,7 @@
       "source-layer": "DEPCNT",
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "number-format",
@@ -6272,7 +6391,7 @@
       "source-layer": "DEPCNT",
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "number-format",
@@ -6351,7 +6470,7 @@
       "source-layer": "DEPCNT",
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "number-format",
@@ -6430,7 +6549,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "number-format",
@@ -6509,7 +6628,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "number-format",
@@ -6588,7 +6707,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "number-format",
@@ -6655,7 +6774,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "number-format",
@@ -6754,7 +6873,7 @@
       "layout": {
         "visibility": "visible",
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "number-format",
@@ -6811,7 +6930,7 @@
       "layout": {
         "visibility": "visible",
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "number-format",
@@ -6883,7 +7002,7 @@
       "minzoom": 14,
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "case",
@@ -6923,7 +7042,7 @@
       "source-layer": "OILBAR",
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-field": "Floating barrier",
@@ -6958,7 +7077,7 @@
       "layout": {
         "text-field": "Submarine excercise area",
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "symbol-placement": "line",
@@ -6994,7 +7113,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-field": "Cable ferry",
@@ -7027,7 +7146,7 @@
       "minzoom": 12,
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-field": "Flood barrage",
@@ -7050,7 +7169,7 @@
       "layout": {
         "text-field": "Wd",
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-size": 11
       },
@@ -7070,7 +7189,7 @@
       "minzoom": 14,
       "layout": {
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-field": [
           "concat",
@@ -7131,7 +7250,7 @@
       "minzoom": 14,
       "layout": {
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-field": [
           "concat",
@@ -7175,7 +7294,7 @@
         "icon-ignore-placement": true,
         "text-optional": false,
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-field": [
           "number-format",
@@ -7211,7 +7330,7 @@
       "source-layer": "CTNARE",
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-field": [
@@ -7253,7 +7372,7 @@
         "icon-rotation-alignment": "viewport",
         "text-optional": false,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "case",
@@ -7318,7 +7437,7 @@
         "icon-rotation-alignment": "viewport",
         "text-optional": false,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "number-format",
@@ -7365,7 +7484,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-field": [
@@ -7414,7 +7533,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "concat",
@@ -7455,7 +7574,7 @@
         ],
         "icon-rotation-alignment": "map",
         "text-font": [
-          "Roboto Bold"
+          "Mulish Bold"
         ],
         "text-field": [
           "concat",
@@ -7491,9 +7610,9 @@
         "icon-allow-overlap": true,
         "icon-ignore-placement": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
-        "text-field": "Precautionary Area",
+        "text-field": "Försiktighetsområde",
         "text-size": 11,
         "text-offset": [
           1.1,
@@ -7530,7 +7649,7 @@
         ],
         "icon-rotation-alignment": "map",
         "text-font": [
-          "Roboto Bold"
+          "Mulish Bold"
         ],
         "text-field": [
           "concat",
@@ -7607,7 +7726,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "concat",
@@ -7673,7 +7792,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-offset": [
           1.1,
@@ -7738,7 +7857,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-offset": [
           0.75,
@@ -7808,7 +7927,7 @@
         ],
         "text-size": 10,
         "text-font": [
-          "Roboto Bold"
+          "Mulish Bold"
         ],
         "text-variable-anchor": [
           "center"
@@ -7917,7 +8036,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-offset": [
           0,
@@ -7959,7 +8078,7 @@
         ],
         "text-size": 11,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-variable-anchor": [
           "top-right",
@@ -8018,7 +8137,7 @@
       "layout": {
         "text-optional": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -8053,7 +8172,7 @@
       "layout": {
         "text-optional": false,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -8094,7 +8213,7 @@
         "icon-ignore-placement": true,
         "text-optional": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -8135,7 +8254,7 @@
       "layout": {
         "text-optional": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -8269,7 +8388,7 @@
         "icon-ignore-placement": true,
         "text-optional": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -8318,7 +8437,7 @@
       "source-layer": "DMPGRD_POINT",
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-variable-anchor": [
@@ -8387,7 +8506,7 @@
       "source-layer": "LOGPON_POINT",
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-variable-anchor": [
@@ -8400,7 +8519,7 @@
           "bottom"
         ],
         "text-justify": "auto",
-        "text-field": "Log Pond"
+        "text-field": "Timmerbassäng"
       },
       "paint": {
         "text-color": "hsl(0, 0%, 0%)"
@@ -8408,13 +8527,13 @@
     },
     {
       "id": "RESARE_POINT_text",
-      "minzoom": 14,
+      "minzoom": 12,
       "type": "symbol",
       "source": "nautical",
       "source-layer": "RESARE_POINT",
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -8668,7 +8787,7 @@
     },
     {
       "id": "RESARE_POINT_text_no_icon",
-      "minzoom": 14,
+      "minzoom": 12,
       "type": "symbol",
       "source": "nautical",
       "source-layer": "RESARE_POINT",
@@ -8689,7 +8808,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -8712,16 +8831,20 @@
           [
             "[14]"
           ],
-          "Mine field",
+          "Minfält",
           [
             "[25]"
           ],
-          "Swinging area",
+          "Svängområde",
           [
             "[26]"
           ],
-          "Water skiing area",
-          "Nature reserve"
+          "Vattenskidområde",
+          [
+            "coalesce",
+            ["get", "INFORM"],
+            "Naturreservat"
+          ]
         ]
       },
       "paint": {
@@ -8762,7 +8885,7 @@
         "icon-ignore-placement": true,
         "text-field": "Pyl",
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -8844,7 +8967,7 @@
           ]
         ],
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -8927,7 +9050,7 @@
           ]
         ],
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-optional": true,
         "text-size": 11,
@@ -9021,7 +9144,7 @@
           "Obstn"
         ],
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-optional": true,
         "text-size": 11,
@@ -9088,7 +9211,7 @@
           ")"
         ],
         "text-font": [
-          "Roboto Italic"
+          "Mulish Italic"
         ],
         "text-optional": true,
         "text-size": 11,
@@ -9152,7 +9275,7 @@
         "icon-ignore-placement": true,
         "text-optional": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -9202,7 +9325,7 @@
       "layout": {
         "text-optional": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -9237,7 +9360,7 @@
       "layout": {
         "text-optional": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -9307,7 +9430,7 @@
       "source-layer": "BEACONS",
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-field": [
@@ -9341,7 +9464,7 @@
       "layout": {
         "text-optional": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -9429,7 +9552,7 @@
       "layout": {
         "text-optional": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -9464,7 +9587,7 @@
       "layout": {
         "text-optional": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -10399,7 +10522,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "match",
@@ -10450,7 +10573,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "get",
@@ -10488,7 +10611,7 @@
         "icon-anchor": "top",
         "text-optional": false,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "number-format",
@@ -10531,7 +10654,7 @@
         "icon-anchor": "center",
         "text-optional": false,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "concat",
@@ -10579,7 +10702,7 @@
         "icon-anchor": "left",
         "text-optional": false,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "concat",
@@ -10627,7 +10750,7 @@
         "icon-anchor": "bottom",
         "text-optional": false,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-field": [
           "concat",
@@ -10768,7 +10891,7 @@
         "icon-ignore-placement": true,
         "text-optional": false,
         "text-font": [
-          "Roboto Medium"
+          "Mulish Medium"
         ],
         "text-size": 11,
         "text-offset": [
@@ -10814,7 +10937,7 @@
       "layout": {
         "text-optional": true,
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -10910,7 +11033,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-offset": [
@@ -10990,7 +11113,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-variable-anchor": [
@@ -11076,7 +11199,7 @@
       ],
       "layout": {
         "text-font": [
-          "Roboto"
+          "Mulish"
         ],
         "text-size": 11,
         "text-field": [

@@ -32,7 +32,7 @@ import { PipesModule } from 'src/app/lib/pipes';
     <div class="_ap-chartinfo">
       <mat-toolbar style="background-color: transparent">
         <span class="dialog-icon"
-          ><mat-icon>{{ isLocal(data['url']) }}</mat-icon></span
+          ><mat-icon>{{ getIcon(data) }}</mat-icon></span
         >
         <span style="flex: 1 1 auto; text-align: center">Chart Properties</span>
         <span style="text-align: right">
@@ -163,7 +163,13 @@ export class ChartPropertiesDialog {
     @Inject(MAT_DIALOG_DATA) public data: SKChart
   ) {}
 
-  isLocal(url: string) {
-    return url && url.indexOf('signalk') !== -1 ? 'map' : 'language';
+  getIcon(chart: SKChart) {
+    if (chart.type === 'mapboxstyle') {
+      return 'map';
+    } else if (chart.url && chart.url.indexOf('signalk') !== -1) {
+      return 'image'
+    } else {
+      return 'language';
+    }
   }
 }
