@@ -13,11 +13,11 @@
 	"description": "/data/out/hg/mbtiles/berthing-rest.mbtiles",
 	"maxzoom": 13,
 	"minzoom": 2,
-	"name": "/data/out/hg/mbtiles/general.mbtiles + /data/out/hg/mbtiles/coastal.mbtiles + /data/out/hg/mbtiles/approach-rocks.mbtiles + /data/out/hg/mbtiles/approach-lighthouses.mbtiles + /data/out/hg/mbtiles/approach-soundings.mbtiles",
+	"name": "/data/out/hg/mbtiles/general.mbtiles + /data/out/hg/mbtiles/coastal-soundings.mbtiles + /data/out/hg/mbtiles/coastal-rest.mbtiles + /data/out/hg/mbtiles/approach-lighthouses.mbtiles + /data/out/hg/mbtiles/approach-soundings.mbtiles",
 	"scheme": "xyz",
 	"tilejson": "3.0.0",
 	"tiles": [
-		"/signalk/v1/api/resources/charts/hg_20250221/{z}/{x}/{y}"
+		"/signalk/v1/api/resources/charts/hg_20250315/{z}/{x}/{y}"
 	],
 	"vector_layers": [
 		{
@@ -124,7 +124,7 @@
 				"CATBRG": "String",
 				"HORCLR": "Number",
 				"VERCCL": "Number",
-				"VERCLR": "Mixed",
+				"VERCLR": "Number",
 				"VERCOP": "Number"
 			},
 			"id": "BRIDGE",
@@ -138,7 +138,7 @@
 				"HORCLR": "Number",
 				"OBJNAM": "String",
 				"VERCCL": "Number",
-				"VERCLR": "Mixed",
+				"VERCLR": "Number",
 				"VERCOP": "Number"
 			},
 			"id": "BRIDGE_POINT",
@@ -176,7 +176,7 @@
 			"description": "",
 			"fields": {
 				"CATCBL": "Number",
-				"VERCLR": "Mixed",
+				"VERCLR": "Number",
 				"VERCSA": "Number"
 			},
 			"id": "CBLOHD",
@@ -435,9 +435,7 @@
 		},
 		{
 			"description": "",
-			"fields": {
-				"OBJNAM": "String"
-			},
+			"fields": {},
 			"id": "LAKARE",
 			"maxzoom": 13,
 			"minzoom": 2
@@ -445,7 +443,18 @@
 		{
 			"description": "",
 			"fields": {
+				"OBJNAM": "String",
+				"PRIO": "Number"
+			},
+			"id": "LAKARE_POINT",
+			"maxzoom": 13,
+			"minzoom": 2
+		},
+		{
+			"description": "",
+			"fields": {
 				"COLOUR_TEXT": "String",
+				"COUNTRY_CODE": "String",
 				"HAS_TOPMARK": "Boolean",
 				"LIGHTS_TEXT": "String",
 				"OBJNAM": "String"
@@ -472,6 +481,7 @@
 			"description": "",
 			"fields": {
 				"COLOUR": "String",
+				"COUNTRY_CODE": "String",
 				"TYPE": "String",
 				"VALNMR": "Number"
 			},
@@ -485,9 +495,18 @@
 				"COUNTRY_CODE": "String",
 				"PRIO": "Number"
 			},
-			"id": "LNDARE",
+			"id": "LNDARE_POINT",
 			"maxzoom": 13,
-			"minzoom": 9
+			"minzoom": 12
+		},
+		{
+			"description": "",
+			"fields": {
+				"COUNTRY_CODE": "String"
+			},
+			"id": "LNDARE_POLYGON",
+			"maxzoom": 13,
+			"minzoom": 2
 		},
 		{
 			"description": "",
@@ -522,9 +541,10 @@
 		{
 			"description": "",
 			"fields": {
-				"OBJNAM": "String"
+				"OBJNAM": "String",
+				"PRIO": "Number"
 			},
-			"id": "LNDRGN",
+			"id": "LNDRGN_POINT",
 			"maxzoom": 13,
 			"minzoom": 2
 		},
@@ -760,6 +780,8 @@
 			"description": "",
 			"fields": {
 				"CATREA": "String",
+				"DATEND": "String",
+				"DATSTA": "String",
 				"INFORM": "String",
 				"RESTRN": "String",
 				"SORDAT": "String"
@@ -772,6 +794,8 @@
 			"description": "",
 			"fields": {
 				"CATREA": "String",
+				"DATEND": "String",
+				"DATSTA": "String",
 				"INFORM": "String",
 				"RENDER_GROUP": "String",
 				"RESTRN": "String",
@@ -785,6 +809,8 @@
 			"description": "",
 			"fields": {
 				"CATREA": "String",
+				"DATEND": "String",
+				"DATSTA": "String",
 				"INFORM": "String",
 				"PERENDDAY": "Number",
 				"PERENDMONTH": "Number",
@@ -843,9 +869,10 @@
 		{
 			"description": "",
 			"fields": {
-				"OBJNAM": "String"
+				"OBJNAM": "String",
+				"PRIO": "Number"
 			},
-			"id": "SEAARE",
+			"id": "SEAARE_POINT",
 			"maxzoom": 13,
 			"minzoom": 2
 		},
@@ -896,6 +923,7 @@
 		{
 			"description": "",
 			"fields": {
+				"COUNTRY_CODE": "String",
 				"ZVALUE": "Mixed",
 				"clustered": "Boolean",
 				"point_count": "Number",
@@ -1009,7 +1037,7 @@
 			},
 			"id": "UWTROC",
 			"maxzoom": 13,
-			"minzoom": 9
+			"minzoom": 12
 		},
 		{
 			"description": "",
